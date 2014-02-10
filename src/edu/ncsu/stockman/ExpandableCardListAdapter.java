@@ -92,11 +92,11 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 		shareNameTextView.setText(shareName);
 		TextView priceChangeTextView = (TextView) convertView.findViewById(R.id.price_change);
 		priceChangeTextView.setText(shareHeader.get(shareName));
-		/*ImageView priceChangeIndicator = (ImageView)(convertView.findViewById(R.id.price_change_indicator));
-		if(Integer.parseInt(shareHeader.get(shareName)) > 0)
+		ImageView priceChangeIndicator = (ImageView)(convertView.findViewById(R.id.price_change_indicator));
+		if(Double.parseDouble(shareHeader.get(shareName)) > 0)
 			priceChangeIndicator.setImageResource(R.drawable.up_arrow);
 		else
-			priceChangeIndicator.setImageResource(R.drawable.down_arrow);*/
+			priceChangeIndicator.setImageResource(R.drawable.down_arrow);
 		return convertView;
 	}
 

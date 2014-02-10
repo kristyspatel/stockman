@@ -42,6 +42,7 @@
         </activity>
         <activity
             android:name="edu.ncsu.stockman.SellSharesActivity"
+            android:parentActivityName="edu.ncsu.stockman.MainGameActivity"
             android:label="@string/title_activity_sell_shares" >
         </activity>
     </application>

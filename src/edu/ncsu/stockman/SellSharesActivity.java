@@ -18,15 +18,15 @@ public class SellSharesActivity extends Activity {
     	super.onCreate(savedInstanceState);
     	LinkedHashMap<String,String> listDataHeader; 
     	ArrayList<String> listDataChild;
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sell_shares);
         ExpandableListView expListView = (ExpandableListView) findViewById(R.id.shares);
         
         // preparing list data
         listDataHeader = new LinkedHashMap<String, String>();
         listDataHeader.put("Maroon", "0.05");
         listDataHeader.put("Blue", "0.5");
-        listDataHeader.put("pink", "0.95");
-        listDataHeader.put("yellow", "0.35");
+        listDataHeader.put("pink", "-0.95");
+        listDataHeader.put("yellow", "-0.35");
         listDataChild = new ArrayList<String>();
         listDataChild.add("Maroon");
  
