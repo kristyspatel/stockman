@@ -27,5 +27,10 @@ public class MainGameActivity extends Activity {
 		Intent intent = new Intent(this, ChooseHangFriendActivity.class);
 		startActivity(intent);		
 	}
+	
+	public void stockMarket(View view) {
+		Intent intent = new Intent(this, SellSharesActivity.class);
+		startActivity(intent);
+	}
 
 }

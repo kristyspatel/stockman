@@ -11,6 +11,14 @@
     <string name="title_activity_main_game">Game XXX</string>
     <!-- activity title -->
     <string name="title_activity_settings">SettingsActivity</string>
+    <!-- activity title -->
+    <string name="title_activity_sell_shares">Stock Market</string>
+    <!-- activity title -->
+    <string name="title_activity_new_game">Create Game</string>
+    <!-- activity title -->
+    <string name="title_activity_splash_screen">StockMan</string>
+    <!-- activity title -->
+    <string name="title_activity_timeline">StockMan</string>
 
     <!-- app name -->
     <string name="app_name">Stockman</string>
@@ -35,9 +43,10 @@
     <!-- button -->
     <string name="generate_word">Generate</string>
     
-    
-    <!-- fields -->
+    <string name="graph">Graph</string>
+    <string name="price_change_indicator">price_change_indicator</string>
+    <string name="stockmanlogo">StockMan</string>
     <string name="field_name">Name</string>
+    <string name="sell">Sell</string>
     
-
 </resources>
