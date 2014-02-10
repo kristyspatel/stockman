@@ -9,7 +9,7 @@
     tools:context=".PickWordActivity" >
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/pick_myword"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -19,7 +19,7 @@
         android:orientation="horizontal" >
 
         <EditText
-            android:id="@+id/letter5"
+            android:id="@+id/letter1"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -27,7 +27,7 @@
             android:text="P" />
 
         <EditText
-            android:id="@+id/letter4"
+            android:id="@+id/letter2"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -43,7 +43,7 @@
             android:text="A" />
 
         <EditText
-            android:id="@+id/letter2"
+            android:id="@+id/letter4"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,7 +51,7 @@
             android:text="Y" />
 
         <EditText
-            android:id="@+id/letter0"
+            android:id="@+id/letter5"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -59,7 +59,7 @@
             android:text="E" />
 
         <EditText
-            android:id="@+id/letter1"
+            android:id="@+id/letter6"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -74,7 +74,7 @@
         android:id="@+id/cashText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/linearLayout1"
+        android:layout_alignBottom="@+id/pick_myword"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="49dp"
         android:text="@string/pick_word_desc"
@@ -84,16 +84,16 @@
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/linearLayout1"
-        android:layout_below="@+id/linearLayout1"
+        android:layout_alignRight="@+id/pick_myword"
+        android:layout_below="@+id/pick_myword"
         android:text="@string/submit" />
 
     <Button
         android:id="@+id/generate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_below="@+id/linearLayout1"
+        android:layout_alignLeft="@+id/pick_myword"
+        android:layout_below="@+id/pick_myword"
         android:text="@string/generate_word" />
 
 </RelativeLayout>

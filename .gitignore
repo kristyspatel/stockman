@@ -1,0 +1,4 @@
+bin/
+gen/
+gen/edu/ncsu/stockman/BuildConfig.java
+gen/edu/ncsu/stockman/R.java
