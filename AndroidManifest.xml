@@ -22,6 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="edu.ncsu.stockman.SellSharesActivity"
+            android:label="@string/title_activity_sell_shares" >
+        </activity>
     </application>
 
 </manifest>
