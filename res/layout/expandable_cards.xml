@@ -10,16 +10,17 @@
         android:id="@+id/share_card"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="30dp"
         android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/kulur_beige"
         android:textSize="22sp" />
 
     <ImageView
         android:id="@+id/price_change_indicator"
         android:layout_width="25dp"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
+        android:gravity="left"
         android:contentDescription="@string/price_change_indicator"
         android:src="@drawable/up_arrow" />
 
@@ -27,7 +28,8 @@
         android:id="@+id/price_change"
         android:layout_width="50dp"
         android:layout_height="match_parent"
-        android:paddingTop="8dp"
+        android:gravity="center"
+        android:textColor="@color/kulur_beige"
         android:textSize="22sp" />
 
 </LinearLayout>

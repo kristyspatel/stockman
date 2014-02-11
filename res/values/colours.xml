@@ -1,4 +1,9 @@
 <resources>
 <color name="background">#B0171F</color>
 <color name="button">#a4c639</color>
+<color name="kulur_purple">#6A2159</color>
+<color name="kulur_purple_dark">#3D1737</color>
+<color name="kulur_green">#88B351</color>
+<color name="kulur_beige">#DEDCBB</color>
+<color name="kulur_white">#FFFFFF</color>
 </resources>

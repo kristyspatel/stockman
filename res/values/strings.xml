@@ -1,24 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Stockman</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="price_change_indicator">price_change_indicator</string>
-    <string name="sell">Sell</string>
-    <string name="graph">Graph</string>
-    <string name="title_activity_sell_shares">Sell Shares</string>
+    <!-- activity title -->
     <string name="title_activity_pick_word">Pick A Word</string>
-    <string name="generate_word">Generate</string>
-    <string name="pick_word_desc">Pick a word of six letters</string>
+    <!-- activity title -->
     <string name="title_activity_hang_friend">Friends To Hang</string>
-    <string name="hang_friend_desc">XXX Word is:</string>
-    <string name="player_pic">Player Picture</string>
+    <!-- activity title -->
     <string name="title_activity_choose_hang_friend">Hanging XXX</string>
-    <string name="player_status">Player Status</string>
+    <!-- activity title -->
     <string name="title_activity_main_game">Game XXX</string>
+    <!-- activity title -->
+    <string name="title_activity_settings">SettingsActivity</string>
+    <!-- activity title -->
+    <string name="title_activity_sell_shares">Stock Market</string>
+    <!-- activity title -->
+    <string name="title_activity_new_game">Create Game</string>
+    <!-- activity title -->
+    <string name="title_activity_splash_screen">StockMan</string>
+    <!-- activity title -->
+    <string name="title_activity_timeline">StockMan</string>
+
+    <!-- app name -->
+    <string name="app_name">Stockman</string>
+    <!-- action -->
+    <string name="action_settings">Settings</string>
+
+    <!-- descrition in screens -->
+    <string name="pick_word_desc">Pick a word of six letters</string>
+    <!-- descrition in screens -->
+    <string name="hang_friend_desc">XXX Word is:</string>
+
+    <!-- image description (alternative) -->
+    <string name="player_pic">Player Picture</string>
+    <!-- image description (alternative) -->
+    <string name="player_status">Player Status</string>
+
+    <!-- icon -->
+    <string name="hang_friends_icon">Hang Friends</string>
+
+    <!-- button -->
     <string name="submit">Submit</string>
+    <!-- button -->
+    <string name="generate_word">Generate</string>
+    
+    <string name="graph">Graph</string>
+    <string name="price_change_indicator">price_change_indicator</string>
+    <string name="stockmanlogo">StockMan</string>
+    <string name="field_name">Name</string>
+    <string name="sell">Sell</string>
     <string name="title_activity_buy_share">Buy Shares</string>
     <string name="title_activity_stock_market">Stock Market</string>
-
 </resources>
