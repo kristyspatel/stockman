@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="14"
         android:targetSdkVersion="17" />
 
     <application
@@ -28,13 +28,13 @@
         </activity>
         <activity
             android:name="edu.ncsu.stockman.HangFriendActivity"
-            android:parentActivityName="edu.ncsu.stockman.ChooseHangFriendActivity"
-            android:label="@string/title_activity_hang_friend" >
+            android:label="@string/title_activity_hang_friend"
+            android:parentActivityName="edu.ncsu.stockman.ChooseHangFriendActivity" >
         </activity>
         <activity
             android:name="edu.ncsu.stockman.ChooseHangFriendActivity"
-            android:parentActivityName="edu.ncsu.stockman.MainGameActivity"
-            android:label="@string/title_activity_choose_hang_friend" >
+            android:label="@string/title_activity_choose_hang_friend"
+            android:parentActivityName="edu.ncsu.stockman.MainGameActivity" >
         </activity>
         <activity
             android:name="edu.ncsu.stockman.MainActivity"
@@ -42,8 +42,24 @@
         </activity>
         <activity
             android:name="edu.ncsu.stockman.SellSharesActivity"
-            android:parentActivityName="edu.ncsu.stockman.MainGameActivity"
-            android:label="@string/title_activity_sell_shares" >
+            android:label="@string/title_activity_sell_shares"
+            android:parentActivityName="edu.ncsu.stockman.MainGameActivity" >
+        </activity>
+        <activity
+            android:name="edu.ncsu.stockman.BuySharesActivity"
+            android:label="@string/title_activity_buy_share"
+            android:parentActivityName="edu.ncsu.stockman.MainGameActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.ncsu.stockman.MainGameActivity" />
+        </activity>
+        <activity
+            android:name="edu.ncsu.stockman.StockMarketActivity"
+            android:label="@string/title_activity_stock_market"
+            android:parentActivityName="edu.ncsu.stockman.MainGameActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.ncsu.stockman.MainGameActivity" />
         </activity>
     </application>
 

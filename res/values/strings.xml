@@ -8,7 +8,7 @@
     <string name="sell">Sell</string>
     <string name="graph">Graph</string>
     <string name="title_activity_sell_shares">Sell Shares</string>
-	<string name="title_activity_pick_word">Pick A Word</string>
+    <string name="title_activity_pick_word">Pick A Word</string>
     <string name="generate_word">Generate</string>
     <string name="pick_word_desc">Pick a word of six letters</string>
     <string name="title_activity_hang_friend">Friends To Hang</string>
@@ -18,5 +18,7 @@
     <string name="player_status">Player Status</string>
     <string name="title_activity_main_game">Game XXX</string>
     <string name="submit">Submit</string>
-    
+    <string name="title_activity_buy_share">Buy Shares</string>
+    <string name="title_activity_stock_market">Stock Market</string>
+
 </resources>

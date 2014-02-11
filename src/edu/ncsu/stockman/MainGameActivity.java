@@ -29,7 +29,7 @@ public class MainGameActivity extends Activity {
 	}
 	
 	public void stockMarket(View view) {
-		Intent intent = new Intent(this, SellSharesActivity.class);
+		Intent intent = new Intent(this, StockMarketActivity.class);
 		startActivity(intent);
 	}
 
