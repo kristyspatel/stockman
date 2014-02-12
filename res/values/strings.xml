@@ -55,5 +55,6 @@
     <string name="stockmanlogo">StockMan</string>
 
     <string name="sell">Sell</string>
-    
+    <string name="title_activity_buy_share">Buy Shares</string>
+    <string name="title_activity_stock_market">Stock Market</string>
 </resources>

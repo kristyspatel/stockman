@@ -3,7 +3,6 @@ package edu.ncsu.stockman;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
