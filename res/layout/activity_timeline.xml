@@ -69,56 +69,50 @@
          tools:ignore="HardcodedText" 
          android:onClick="open_game"/>
 
-    <EditText
+    <TextView
         android:id="@+id/editText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/seekBar1"
         android:layout_alignRight="@+id/seekBar1"
-          android:layout_marginRight="15dp"
         android:layout_below="@+id/seekBar1"
+        android:layout_marginRight="15dp"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:inputType="textMultiLine" 
-        
-        android:text="Kristy guessed Gati's word in Girls. Gati's word is now _ _ V _ _ S."
-        android:textColor="#ffffff"
-        tools:ignore="HardcodedText"/>
-
-         
+        android:inputType="textMultiLine"
+        android:text="Kristy guessed Gati&apos;s word in Girls. Gati&apos;s word is now _ _ V _ _ S."
+        android:textColor="#000000"
+        tools:ignore="HardcodedText" />
    
-    <EditText
+    <TextView
         android:id="@+id/editText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/editText2"
         android:layout_alignRight="@+id/editText2"
-         
         android:layout_below="@+id/editText2"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textMultiLine"
-      
-         android:text="Ali guessed Kristy's word in Friends. Kristy's word is now _ P P _ _ S."
-        android:textColor="#ffffff"
-        tools:ignore="HardcodedText"/>
+        android:text="Ali guessed Kristy&apos;s word in Friends. Kristy&apos;s word is now _ P P _ _ S."
+        android:textColor="#000000"
+        tools:ignore="HardcodedText" />
        
-    <EditText
+    <TextView
         android:id="@+id/editText4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/editText3"
         android:layout_alignRight="@+id/editText3"
-        
         android:layout_below="@+id/editText3"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:inputType="textMultiLine" 
+        android:inputType="textMultiLine"
         android:text="David has invited you to a new game Brothers."
-        android:textColor="#ffffff"
-        tools:ignore="HardcodedText"/>
+        android:textColor="#000000"
+        tools:ignore="HardcodedText" />
 
-    <EditText
+    <TextView
         android:id="@+id/editText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -127,11 +121,10 @@
         android:layout_below="@+id/editText1"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:inputType="textMultiLine" 
-       
+        android:inputType="textMultiLine"
         android:text="Kristy is dead in Sisters"
-        android:textColor="#ffffff"
-        tools:ignore="HardcodedText"/>
+        android:textColor="#000000"
+        tools:ignore="HardcodedText" />
 
     <SeekBar
         android:id="@+id/seekBar1"

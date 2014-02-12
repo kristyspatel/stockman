@@ -19,6 +19,7 @@
         android:paddingTop="5dp"
         android:text="Your Balance is 105$"
         android:textAlignment="center"
+        android:textColor="@color/button"
         android:textSize="25sp" />
 
     <LinearLayout
