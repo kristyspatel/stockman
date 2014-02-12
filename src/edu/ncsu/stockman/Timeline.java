@@ -54,7 +54,7 @@ public class Timeline extends Activity {
 		//Main.current_game = Main.games.get(Main.current_user.games.get(1).id);
 	}
 	public void logout(MenuItem c){
-		SettingsActivity.logout(this);
+		//SettingsActivity.logout(this);
 	}
 
 }
