@@ -18,21 +18,23 @@ public class Timeline extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
-
+		addGames();
+	}
+	
+	public void addGames() {
+		super.onStart();
 		//TODO clean this mess
-		/*LinearLayout main = (LinearLayout)findViewById(R.id.games_list);
+		LinearLayout main = (LinearLayout)findViewById(R.id.games_list);
 		for (int i = 0; i < Main.current_user.games.size(); i++) {
 			Game g = Main.current_user.games.valueAt(i);
 			View v = getLayoutInflater().inflate(R.layout.game_in_timeline, main,false);
 			Button b = (Button) v.findViewById(R.id.game_item);
+			b.setTag(g);
 			b.setText(g.name.charAt(0)+"");
 			TextView t = (TextView) v.findViewById(R.id.game_desc);
 			t.setText(g.name);
 			main.addView(v);
-		}*/
-		
-		
-
+		}
 	}
 
 	@Override
@@ -51,10 +53,15 @@ public class Timeline extends Activity {
 	public void open_game(View v){
 		Intent intent = new Intent(this, MainGameActivity.class);
 		startActivity(intent);
-		//Main.current_game = Main.games.get(Main.current_user.games.get(1).id);
+		System.out.println(v.getTag());
+		Main.current_game = (Game) v.getTag();
+		Main.current_player = Main.current_game.players.get(Main.current_user.id);
 	}
 	public void logout(MenuItem c){
-		//SettingsActivity.logout(this);
+		SettingsActivity.logout(this);
+	}
+	public void goToSettings(MenuItem c){
+		SettingsActivity.goToSettings(this);
 	}
 
 }

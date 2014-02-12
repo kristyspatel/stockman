@@ -14,7 +14,7 @@ We simply embed this for each player in the game
                 android:orientation="vertical" >
 
                 <ImageButton
-                    android:id="@+id/player_status1"
+                    android:id="@+id/player_choose_button"
                     style="@style/AppBaseTheme"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
@@ -23,10 +23,9 @@ We simply embed this for each player in the game
                     android:src="@android:drawable/btn_star" />
 
                 <TextView
-                    android:id="@+id/cashText"
+                    android:id="@+id/player_choose_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Abdul"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/kulur_beige"
                     android:textSize="20sp" />

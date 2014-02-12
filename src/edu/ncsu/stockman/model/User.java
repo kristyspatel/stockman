@@ -30,6 +30,8 @@ public class User {
 		if (u == null)
 			return false;
 		Main.current_user = u;
+		
+		//add user's games
 		for (int i = 0; i < Main.games.size(); i++) {
 			Game g = Main.games.valueAt(i);
 			if (g.players.get(u.id)!=null)

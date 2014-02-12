@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  
+This layout is for player in the chooseHangActivity
+We simply embed this for each player in the game
+ -->
+ 
+ <LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <Button
+                        android:id="@+id/game_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#a4c639"
+                        android:clickable="true"
+                        android:onClick="open_game"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:textSize="25sp"/>
+
+                    <TextView
+                        android:id="@+id/game_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/kulur_beige" />
+
+                </LinearLayout>
+                
+ 

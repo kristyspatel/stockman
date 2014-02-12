@@ -57,7 +57,7 @@
                     android:background="@color/kulur_beige"
                     android:onClick="hangFriends"
                     android:scaleType="fitEnd"
-                    android:src="@drawable/ic_action_hang_friends" />
+                    android:src="@drawable/icon_hang2" />
 
                 <TextView
                     android:id="@+id/textView2"
@@ -86,7 +86,7 @@
                     android:background="@color/kulur_beige"
                     android:onClick="stockMarket"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_action_stock_market" />
+                    android:src="@drawable/icon_stock" />
 
                 <TextView
                     android:id="@+id/textView3"

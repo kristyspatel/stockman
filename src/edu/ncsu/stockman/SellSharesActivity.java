@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
@@ -43,5 +44,13 @@ public class SellSharesActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+    
+	public void logout(MenuItem c){
+		SettingsActivity.logout(this);
+	}
+	public void goToSettings(MenuItem c){
+		SettingsActivity.goToSettings(this);
+	}
+
     
 }

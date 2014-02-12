@@ -24,6 +24,8 @@
     <string name="app_name">Stockman</string>
     <!-- action -->
     <string name="action_settings">Settings</string>
+    <!-- action -->
+    <string name="action_logout">Logout</string>
 
     <!-- descrition in screens -->
     <string name="pick_word_desc">Pick a word of six letters</string>
@@ -43,10 +45,15 @@
     <!-- button -->
     <string name="generate_word">Generate</string>
     
+    <!-- Field -->
+    <string name="field_name">Name</string>
+    <!-- Field -->
+    <string name="field_email">Email</string>
+    
     <string name="graph">Graph</string>
     <string name="price_change_indicator">price_change_indicator</string>
     <string name="stockmanlogo">StockMan</string>
-    <string name="field_name">Name</string>
+
     <string name="sell">Sell</string>
     
 </resources>

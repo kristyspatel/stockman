@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 public class MainGameActivity extends Activity {
@@ -31,6 +32,13 @@ public class MainGameActivity extends Activity {
 	public void stockMarket(View view) {
 		Intent intent = new Intent(this, SellSharesActivity.class);
 		startActivity(intent);
+	}
+	
+	public void logout(MenuItem c){
+		SettingsActivity.logout(this);
+	}
+	public void goToSettings(MenuItem c){
+		SettingsActivity.goToSettings(this);
 	}
 
 }

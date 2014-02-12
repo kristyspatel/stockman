@@ -31,9 +31,8 @@ public class Splash_screen extends Activity {
 	 */
 	public void login(View v){
 		Intent intent = new Intent(this, Timeline.class);
-		//User.login(new Random().nextInt(3)+1);
+		User.login(new Random().nextInt(3)+1);
 		startActivity(intent);
 	}
-	
 
 }

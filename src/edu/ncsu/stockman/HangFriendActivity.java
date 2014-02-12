@@ -3,6 +3,7 @@ package edu.ncsu.stockman;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.MenuItem;
 
 public class HangFriendActivity extends Activity {
 
@@ -17,6 +18,12 @@ public class HangFriendActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.hang_friend, menu);
 		return true;
+	}
+	public void logout(MenuItem c){
+		SettingsActivity.logout(this);
+	}
+	public void goToSettings(MenuItem c){
+		SettingsActivity.goToSettings(this);
 	}
 
 }

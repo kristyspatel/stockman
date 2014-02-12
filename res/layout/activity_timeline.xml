@@ -49,9 +49,7 @@
                         android:text="New Game"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/kulur_beige" />
-
                 </LinearLayout>
-
             </LinearLayout>
 
             <SeekBar
@@ -60,7 +58,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -112,7 +109,6 @@
                 android:textColor="#ffffff"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

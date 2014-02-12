@@ -62,6 +62,10 @@
             android:parentActivityName="edu.ncsu.stockman.Timeline"
             android:label="@string/title_activity_new_game" >
         </activity>
+        <activity
+            android:name="edu.ncsu.stockman.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
         
     </application>
 
