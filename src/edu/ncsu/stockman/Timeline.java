@@ -2,9 +2,12 @@ package edu.ncsu.stockman;
 
 import edu.ncsu.stockman.model.Game;
 import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.Notification;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +22,24 @@ public class Timeline extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
 		addGames();
+		addNotifications();
+		
+		TextView welcome = (TextView) findViewById(R.id.welcome);
+		welcome.setText("Welcome: "+Main.current_user.name);
 	}
 	
+	public void addNotifications() {
+		LinearLayout l = (LinearLayout) findViewById(R.id.notification_list);
+		
+		for(Notification n: Main.current_user.notifications){
+			TextView t = new TextView(l.getContext());
+			t.setText(n.text);
+			t.setTextSize(20);
+			t.setPadding(0,5,0,5);
+			t.setTextColor(Color.parseColor("#ffffff"));
+			l.addView(t,new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
+		}
+	}
 	public void addGames() {
 		super.onStart();
 		//TODO clean this mess

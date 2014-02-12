@@ -19,6 +19,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Welcome:"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/kulur_beige" />
+
             <LinearLayout
                 android:id="@+id/games_list"
                 android:layout_width="match_parent"
@@ -58,56 +66,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1" />
+
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/notification_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/editText1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="16dp"
-                android:ems="10"
-                android:text="Kristy guessed Gati&apos;s word in Girls. Gati&apos;s word is now _ _ V _ _ S."
-                android:textColor="#ffffff"
-                tools:ignore="HardcodedText" >
-
-                <requestFocus />
-            </TextView>
-
-            <TextView
-                android:id="@+id/editText3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:ems="10"
-                android:text="Ali guessed Kristy&apos;s word in Friends. Kristy&apos;s word is now _ P P _ _ S."
-                android:textColor="#ffffff"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/editText4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:ems="10"
-                android:text="David has invited you to a new game Brothers."
-                android:textColor="#ffffff"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/editText2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:ems="10"
-                android:text="Kristy is dead in Sisters"
-                android:textColor="#ffffff"
-                tools:ignore="HardcodedText" />
+            
         </LinearLayout>
     </LinearLayout>
 

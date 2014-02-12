@@ -119,5 +119,11 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
 		// TODO Auto-generated method stub
 		
 	}
+	public void goToSettings(MenuItem c){
+		SettingsActivity.goToSettings(this);
+	}
 
+	public void logout(MenuItem c){
+		SettingsActivity.logout(this);
+	}
 }

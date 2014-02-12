@@ -1,11 +1,16 @@
 package edu.ncsu.stockman;
 
+import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.Notification;
 import android.os.Bundle;
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainGameActivity extends Activity {
 
@@ -13,6 +18,18 @@ public class MainGameActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_game);
+		
+		TextView cashText = (TextView) findViewById(R.id.cashText);
+		cashText.setText("$"+Main.current_player.cash);
+		
+		((TextView) findViewById(R.id.main_game_letter0)).setText(Main.current_player.word[0]+"");
+		((TextView) findViewById(R.id.main_game_letter1)).setText(Main.current_player.word[1]+"");
+		((TextView) findViewById(R.id.main_game_letter2)).setText(Main.current_player.word[2]+"");
+		((TextView) findViewById(R.id.main_game_letter3)).setText(Main.current_player.word[3]+"");
+		((TextView) findViewById(R.id.main_game_letter4)).setText(Main.current_player.word[4]+"");
+		((TextView) findViewById(R.id.main_game_letter5)).setText(Main.current_player.word[5]+"");
+		
+		
 	}
 
 	@Override

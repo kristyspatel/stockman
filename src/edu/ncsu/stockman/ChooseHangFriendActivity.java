@@ -17,10 +17,10 @@ public class ChooseHangFriendActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_choose_hang_friend);
+		addPlayers();
 	}
 
-	@Override
-	protected void onStart() {
+	private void addPlayers() {
 		super.onStart();
 		// dynamic adding of a layout
 		// TODO clean this mess

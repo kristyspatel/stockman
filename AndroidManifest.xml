@@ -59,20 +59,14 @@
             android:label="@string/title_activity_new_game" >
         </activity>
         <activity
-<<<<<<< HEAD
             android:name="edu.ncsu.stockman.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-        
-=======
+        <activity
             android:name="edu.ncsu.stockman.StockMarketActivity"
             android:label="@string/title_activity_stock_market"
             android:parentActivityName="edu.ncsu.stockman.MainGameActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ncsu.stockman.MainGameActivity" />
         </activity>
->>>>>>> 1f691916b865ed26286df1b66807d8efed3cc20a
     </application>
 
 </manifest>

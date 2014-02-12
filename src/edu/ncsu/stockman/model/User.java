@@ -11,7 +11,8 @@ public class User {
 	public SparseArray<Game> games; 
 	public int id;
 	public SparseArray<User> friends;
-	public ArrayList<String> notifications;
+	public ArrayList<Notification> notifications;
+
 	
 	public User(String email, String name, int id) {
 		super();
@@ -21,7 +22,7 @@ public class User {
 		
 		this.games = new SparseArray<Game>();
 		this.friends = new SparseArray<User>();
-		this.notifications = new ArrayList<String>();
+		this.notifications = new ArrayList<Notification>();
 	}
 	
 	public static boolean login(int id) // TODO change id to email and password
@@ -31,12 +32,6 @@ public class User {
 			return false;
 		Main.current_user = u;
 		
-		//add user's games
-		for (int i = 0; i < Main.games.size(); i++) {
-			Game g = Main.games.valueAt(i);
-			if (g.players.get(u.id)!=null)
-				u.games.put(g.id, g);
-		}
 		return true;
 	}
 }

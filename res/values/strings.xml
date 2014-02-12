@@ -4,9 +4,9 @@
     <!-- activity title -->
     <string name="title_activity_pick_word">Pick A Word</string>
     <!-- activity title -->
-    <string name="title_activity_hang_friend">Friends To Hang</string>
+    <string name="title_activity_hang_friend">Hanging XXX</string>
     <!-- activity title -->
-    <string name="title_activity_choose_hang_friend">Hanging XXX</string>
+    <string name="title_activity_choose_hang_friend">Friends To Hang</string>
     <!-- activity title -->
     <string name="title_activity_main_game">Game XXX</string>
     <!-- activity title -->
