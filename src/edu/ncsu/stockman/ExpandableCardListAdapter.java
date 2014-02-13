@@ -91,7 +91,7 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 		String shareName = (new ArrayList<String>(shareHeader.keySet())).get(groupPosition);
 		shareNameTextView.setText(shareName);
 		TextView priceChangeTextView = (TextView) convertView.findViewById(R.id.price_change);
-		priceChangeTextView.setText(shareHeader.get(shareName));
+		priceChangeTextView.setText(shareHeader.get(shareName) + "%");
 		ImageView priceChangeIndicator = (ImageView)(convertView.findViewById(R.id.price_change_indicator));
 		if(Double.parseDouble(shareHeader.get(shareName)) > 0)
 			priceChangeIndicator.setImageResource(R.drawable.up_arrow);

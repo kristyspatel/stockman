@@ -25,10 +25,10 @@ public class SellSharesFragment extends Fragment {
 	        
 	        // preparing list data
 	        listDataHeader = new LinkedHashMap<String, String>();
-	        listDataHeader.put("Maroon", "0.05");
-	        listDataHeader.put("Blue", "0.5");
-	        listDataHeader.put("pink", "-0.95");
-	        listDataHeader.put("yellow", "-0.35");
+	        listDataHeader.put("2xMaroon", "0.05");
+	        listDataHeader.put("3xBlue", "0.5");
+	        listDataHeader.put("1xpink", "-0.95");
+	        listDataHeader.put("1xyellow", "-0.35");
 	        listDataChild = new ArrayList<String>();
 	        listDataChild.add("Maroon");
 	 

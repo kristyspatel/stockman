@@ -6,6 +6,9 @@ public class Company {
 
 	public float price;
 	public String name;
+	public String pic; // TODO
+	public float accelerator; // TODO
+	public float velocity; // TODO
 	public int id;
 
 	public static SparseArray<Company> list= new SparseArray<Company>();

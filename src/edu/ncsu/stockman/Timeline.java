@@ -34,7 +34,7 @@ public class Timeline extends Activity {
 		for(Notification n: Main.current_user.notifications){
 			TextView t = new TextView(l.getContext());
 			t.setText(n.text);
-			t.setTextSize(20);
+			t.setTextSize(15);
 			t.setPadding(0,5,0,5);
 			t.setTextColor(Color.parseColor("#ffffff"));
 			l.addView(t,new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
@@ -59,7 +59,7 @@ public class Timeline extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.timeline, menu);
+		getMenuInflater().inflate(R.menu.activity_timeline, menu);
 		return true;
 	}
 	

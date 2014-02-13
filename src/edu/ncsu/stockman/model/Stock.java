@@ -4,6 +4,7 @@ public class Stock {
 
 	public Company company;
 	public int amount;
+	
 	public Stock(Company company, int amount) {
 		super();
 		this.company = company;

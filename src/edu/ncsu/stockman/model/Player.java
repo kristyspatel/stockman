@@ -58,7 +58,7 @@ public class Player{
 			int count_revealed = 0;
 			char [] str = new char[Main.wordLength];
 			
-			p.guesses.add(new Guess(this,p,true));
+			p.guesses.add(new Guess(this,p,true,letter));
 			for (int i = 0; i < p.word.length; i++) {
 				if (p.word[i] == letter){
 					p.word_revealed[i] = true;  
@@ -75,7 +75,7 @@ public class Player{
 			return true;
 		}
 		else{
-			p.guesses.add(new Guess(this,p,true));
+			p.guesses.add(new Guess(this,p,true,letter));
 			notifyOthers(user.name +" guessed "+p.user.name+"'s word incorreclty.");
 			p.cash -= Main.costOfGuess;
 			return false;
@@ -120,6 +120,6 @@ public class Player{
 		}
 	}
 	
-	//TODO invite to a game
-	//TODO accept/reject invitation	
+	//TODO USER:invite to a game
+	//TODO USER:accept/reject invitation	
 }

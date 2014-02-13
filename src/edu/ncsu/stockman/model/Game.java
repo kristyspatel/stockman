@@ -6,6 +6,7 @@ public class Game {
 
 	public String name;
 	public int id;
+	public Player creator;
 	public SparseArray<Player> players = new SparseArray<Player>();;
 	
 	public Game(int id, String name) {
