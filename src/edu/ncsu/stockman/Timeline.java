@@ -1,8 +1,15 @@
 package edu.ncsu.stockman;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
+
 import edu.ncsu.stockman.model.Game;
 import edu.ncsu.stockman.model.Main;
 import edu.ncsu.stockman.model.Notification;
+import edu.ncsu.stockman.model.User;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ActionBar.LayoutParams;
@@ -24,8 +31,35 @@ public class Timeline extends Activity {
 		addGames();
 		addNotifications();
 		
-		TextView welcome = (TextView) findViewById(R.id.welcome);
-		welcome.setText("Welcome: "+Main.current_user.name);
+		// start Facebook Login
+	  Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+	    // callback when session changes state
+	    @Override
+	    public void call(Session session, SessionState state, Exception exception) {
+	    	if (session.isOpened()) {
+	    		// make request to the /me API
+	    		Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+	    		  // callback after Graph API response with user object
+	    		  @Override
+	    		  public void onCompleted(GraphUser user, Response response) {
+	    			  if (user != null) {
+	    				  TextView welcome = (TextView) findViewById(R.id.welcome);
+	    				  welcome.setText("Welcome: "+user.getName());
+	    				  System.out.println(user);
+	    				}
+	    		  }
+	    		}).executeAsync();
+	    	}
+	    }
+	  });
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  super.onActivityResult(requestCode, resultCode, data);
+	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	}
 	
 	public void addNotifications() {
@@ -64,9 +98,9 @@ public class Timeline extends Activity {
 	}
 	
 	public void create_new_game(View v){
-		Intent intent = new Intent(this, New_Game.class);
-		startActivity(intent);
-		
+		//Intent intent = new Intent(this, New_Game.class);
+		//startActivity(intent);
+		User.test();
 	}
 
 	public void open_game(View v){

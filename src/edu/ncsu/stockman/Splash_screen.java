@@ -1,11 +1,14 @@
 package edu.ncsu.stockman;
 
 import java.util.Random;
-
+import com.facebook.Session;
+import com.facebook.widget.LoginButton;
 import edu.ncsu.stockman.model.User;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.View;
 
@@ -15,9 +18,35 @@ public class Splash_screen extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash_screen);
-		// Show the Up button in the action bar.
+		
+		// check if user is already logged in
+		if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()){
+			Intent intent = new Intent(this, Timeline.class);
+			User.login(new Random().nextInt(3)+1);
+			startActivity(intent);
+		}
 	}
 
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  super.onActivityResult(requestCode, resultCode, data);
+	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+
+	
+		if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()){
+			Intent intent = new Intent(this, Timeline.class);
+			User.login(new Random().nextInt(3)+1);
+			startActivity(intent);
+		}
+	}
+
+	@Override
+	public View onCreateView(String name, Context context, AttributeSet attrs) {
+		// TODO Auto-generated method stub
+		return super.onCreateView(name, context, attrs);
+
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

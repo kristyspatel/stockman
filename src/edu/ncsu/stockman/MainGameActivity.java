@@ -1,5 +1,7 @@
 package edu.ncsu.stockman;
 
+import com.facebook.Session;
+
 import edu.ncsu.stockman.model.Main;
 import edu.ncsu.stockman.model.Notification;
 import android.os.Bundle;
@@ -22,14 +24,20 @@ public class MainGameActivity extends Activity {
 		TextView cashText = (TextView) findViewById(R.id.cashText);
 		cashText.setText("$"+Main.current_player.cash);
 		
+		//TODO clean, maybe one word with styling (html)
 		((TextView) findViewById(R.id.main_game_letter0)).setText(Main.current_player.word[0]+"");
 		((TextView) findViewById(R.id.main_game_letter1)).setText(Main.current_player.word[1]+"");
 		((TextView) findViewById(R.id.main_game_letter2)).setText(Main.current_player.word[2]+"");
 		((TextView) findViewById(R.id.main_game_letter3)).setText(Main.current_player.word[3]+"");
 		((TextView) findViewById(R.id.main_game_letter4)).setText(Main.current_player.word[4]+"");
 		((TextView) findViewById(R.id.main_game_letter5)).setText(Main.current_player.word[5]+"");
-		
-		
+	
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  super.onActivityResult(requestCode, resultCode, data);
+	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	}
 
 	@Override

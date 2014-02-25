@@ -44,17 +44,23 @@
     <string name="submit">Submit</string>
     <!-- button -->
     <string name="generate_word">Generate</string>
-    
+
     <!-- Field -->
     <string name="field_name">Name</string>
     <!-- Field -->
     <string name="field_email">Email</string>
-    
     <string name="graph">Graph</string>
     <string name="price_change_indicator">price_change_indicator</string>
     <string name="stockmanlogo">StockMan</string>
-
     <string name="sell">Sell</string>
     <string name="title_activity_buy_share">Buy Shares</string>
     <string name="title_activity_stock_market">Stock Market</string>
+
+    <!-- App id on Facebook -->
+    <string name="app_id">1406058572980203</string>
+    <string name="title_activity_manage_friends">ManageFriends</string>
+    <string name="hello_world">Hello world!</string>
+    <!-- Server -->
+    <string name="base_url">http://stockman.local/</string>
+
 </resources>
