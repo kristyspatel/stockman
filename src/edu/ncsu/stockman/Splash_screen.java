@@ -2,7 +2,6 @@ package edu.ncsu.stockman;
 
 import java.util.Random;
 import com.facebook.Session;
-import com.facebook.widget.LoginButton;
 import edu.ncsu.stockman.model.User;
 import android.os.Bundle;
 import android.app.Activity;
@@ -22,7 +21,6 @@ public class Splash_screen extends Activity {
 		// check if user is already logged in
 		if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()){
 			Intent intent = new Intent(this, Timeline.class);
-			User.login(new Random().nextInt(3)+1);
 			startActivity(intent);
 		}
 	}
@@ -36,7 +34,6 @@ public class Splash_screen extends Activity {
 	
 		if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()){
 			Intent intent = new Intent(this, Timeline.class);
-			User.login(new Random().nextInt(3)+1);
 			startActivity(intent);
 		}
 	}
@@ -60,7 +57,6 @@ public class Splash_screen extends Activity {
 	 */
 	public void login(View v){
 		Intent intent = new Intent(this, Timeline.class);
-		User.login(new Random().nextInt(3)+1);
 		startActivity(intent);
 	}
 

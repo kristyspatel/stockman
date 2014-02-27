@@ -61,6 +61,6 @@
     <string name="title_activity_manage_friends">ManageFriends</string>
     <string name="hello_world">Hello world!</string>
     <!-- Server -->
-    <string name="base_url">http://stockman.local/</string>
+    <string name="base_url">http://50.116.13.164/stockman/</string>
 
 </resources>

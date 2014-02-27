@@ -1,14 +1,17 @@
 package edu.ncsu.stockman;
 
-import com.facebook.Request;
-import com.facebook.Response;
+import java.util.HashMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.model.GraphUser;
 
 import edu.ncsu.stockman.model.Game;
 import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.MidLayer;
 import edu.ncsu.stockman.model.Notification;
+import edu.ncsu.stockman.model.Player;
 import edu.ncsu.stockman.model.User;
 import android.os.Bundle;
 import android.app.Activity;
@@ -28,32 +31,43 @@ public class Timeline extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
-		addGames();
-		addNotifications();
 		
-		// start Facebook Login
-	  Session.openActiveSession(this, true, new Session.StatusCallback() {
+		
+		/**
+		 * Fetch User's info, games, notifications, invitations
+		 */
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		MidLayer asyncHttpPost = new MidLayer(data,this) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if (result.error != null)
+					System.out.println(result.error.text);
+				if(result.info != null){
+					if(result.info.code == 0){
+						
+						try {
+							JSONObject j = new JSONObject(result.info.text);
+							User me = new User(j.optJSONObject("info"));
+							me.setGames(j.optJSONArray("games"));
+							me.setNotifications(j.optJSONArray("notifications"));
+							
+							Main.current_user = me;
+							
+							//Change the activity components
+							((Timeline)context).setName(Main.current_user.name);
+							((Timeline)context).setGames();
+							((Timeline)context).setNotifications();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		};		
+		asyncHttpPost.execute(getString(R.string.base_url)+"/user/get");
 
-	    // callback when session changes state
-	    @Override
-	    public void call(Session session, SessionState state, Exception exception) {
-	    	if (session.isOpened()) {
-	    		// make request to the /me API
-	    		Request.newMeRequest(session, new Request.GraphUserCallback() {
-
-	    		  // callback after Graph API response with user object
-	    		  @Override
-	    		  public void onCompleted(GraphUser user, Response response) {
-	    			  if (user != null) {
-	    				  TextView welcome = (TextView) findViewById(R.id.welcome);
-	    				  welcome.setText("Welcome: "+user.getName());
-	    				  System.out.println(user);
-	    				}
-	    		  }
-	    		}).executeAsync();
-	    	}
-	    }
-	  });
 	}
 	
 	@Override
@@ -62,7 +76,7 @@ public class Timeline extends Activity {
 	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	}
 	
-	public void addNotifications() {
+	public void setNotifications() {
 		LinearLayout l = (LinearLayout) findViewById(R.id.notification_list);
 		
 		for(Notification n: Main.current_user.notifications){
@@ -74,7 +88,11 @@ public class Timeline extends Activity {
 			l.addView(t,new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 		}
 	}
-	public void addGames() {
+	public void setName(String s) {
+		TextView t = (TextView) findViewById(R.id.welcome);
+		t.setText("Welcome:"+s);
+	}
+	public void setGames() {
 		super.onStart();
 		//TODO clean this mess
 		LinearLayout main = (LinearLayout)findViewById(R.id.games_list);
@@ -98,17 +116,45 @@ public class Timeline extends Activity {
 	}
 	
 	public void create_new_game(View v){
-		//Intent intent = new Intent(this, New_Game.class);
-		//startActivity(intent);
-		User.test();
+		Intent intent = new Intent(this, New_Game.class);
+		startActivity(intent);
 	}
 
 	public void open_game(View v){
-		Intent intent = new Intent(this, MainGameActivity.class);
-		startActivity(intent);
-		System.out.println(v.getTag());
+		
 		Main.current_game = (Game) v.getTag();
-		Main.current_player = Main.current_game.players.get(Main.current_user.id);
+		
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		MidLayer asyncHttpPost = new MidLayer(data,this) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if (result.error != null)
+					System.out.println(result.error.text);
+				if(result.info != null){
+					if(result.info.code == 10){
+						
+						try {
+							JSONObject j = new JSONObject(result.info.text);
+							Player me = new Player(j.optJSONObject("me"));
+							Main.current_game.setPlayers(j.optJSONArray("players"));
+							
+							Main.current_player = me;
+							
+							System.out.println(Main.current_player);
+							Intent intent = new Intent(context, MainGameActivity.class);
+							startActivity(intent);
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		};		
+		asyncHttpPost.execute(getString(R.string.base_url)+"/game/get/"+Main.current_game.id);
+		
 	}
 	public void logout(MenuItem c){
 		SettingsActivity.logout(this);

@@ -1,7 +1,9 @@
 package edu.ncsu.stockman.model;
 
 import java.util.ArrayList;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import android.util.SparseArray;
 
 public class User {
@@ -10,9 +12,33 @@ public class User {
 	public String name;
 	public SparseArray<Game> games; 
 	public int id;
+	
+	public long facebook_id;
+	public enum User_status {ACTIVE,INACTIVE};
+	public User_status user_status;
 	public SparseArray<User> friends;
 	public ArrayList<Notification> notifications;
 
+	
+	public User(JSONObject info) {
+		super();
+		try {
+			this.email = info.getString("email");
+			this.name = info.getString("name");
+			this.id = info.getInt("id_user");
+			this.facebook_id = info.getLong("facebook_id");
+			int s = info.getInt("user_status");
+			user_status = (s == 1 ? User_status.ACTIVE : User_status.INACTIVE);
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.games = new SparseArray<Game>();
+		this.friends = new SparseArray<User>();
+		this.notifications = new ArrayList<Notification>();
+	}
 	
 	public User(String email, String name, int id) {
 		super();
@@ -24,14 +50,29 @@ public class User {
 		this.friends = new SparseArray<User>();
 		this.notifications = new ArrayList<Notification>();
 	}
-	
-	public static boolean login(int id) // TODO change id to email and password
-	{
-		User u = Main.users.get(id);
-		if (u == null)
-			return false;
-		Main.current_user = u;
 		
-		return true;
+	public void setNotifications(JSONArray notifications){
+		for (int i = 0; i < notifications.length(); i++) {
+			try {
+				JSONObject notif = notifications.getJSONObject(i);
+				Notification g = new Notification(notif);
+				this.notifications.add(g);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	public void setGames(JSONArray games){
+		for (int i = 0; i < games.length(); i++) {
+			try {
+				JSONObject game = games.getJSONObject(i);
+				Game g = new Game(game);
+				this.games.append(g.id, g);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }
