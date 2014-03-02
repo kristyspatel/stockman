@@ -1,5 +1,7 @@
 package edu.ncsu.stockman;
 
+import edu.ncsu.stockman.model.Company;
+import edu.ncsu.stockman.model.Main;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +19,13 @@ public class BuySharesFragment extends Fragment {
  
         View rootView = inflater.inflate(R.layout.buy_shares_fragment, container, false);
         ListView cardList = (ListView) rootView.findViewById(R.id.cardList);
-		String[] values = new String[] { "Maroon", "Blue", "green","yellow","violet","pink","red","purple"};
-		cardList.setAdapter(new BuySharesListAdapter(getActivity().getApplicationContext(),values));
+		//String[] values = new String[] { "Maroon", "Blue", "green","yellow","violet","pink","red","purple"};
+        Company[] companies = new Company[Main.companies.size()];
+        for (int i = 0; i < Main.companies.size(); i++) {
+        	companies[i] = Main.companies.valueAt(i);
+		}
+        
+		cardList.setAdapter(new BuySharesListAdapter(getActivity().getApplicationContext(),companies));
         return rootView;
     }
 	

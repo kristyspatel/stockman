@@ -1,30 +1,34 @@
 package edu.ncsu.stockman;
 
+import edu.ncsu.stockman.model.Company;
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ListAdapter;
 
-public class BuySharesListAdapter extends ArrayAdapter<String> {
+public class BuySharesListAdapter extends ArrayAdapter<Company>{
 	private final Context context;
-	private final String[] values;
+	private final Company[] companies;
 
-	public BuySharesListAdapter(Context context,String[] values) {
-		super(context, R.layout.buy_share_listitem, values);
+	public BuySharesListAdapter(Context context,Company[] companies) {
+		
+		super(context, R.layout.buy_share_listitem, companies);
 		this.context = context;
-		this.values = values;
+		this.companies = companies;
 	}
 	
-	@Override
+	
 	public View getView(int position, View convertView, ViewGroup parent){
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.buy_share_listitem, parent, false);
 		TextView cardName = (TextView) rowView.findViewById(R.id.cardName);
-		cardName.setText(values[position]);
+		cardName.setText(companies[position].name);
 		ImageView cardImage = (ImageView) rowView.findViewById(R.id.cardImage);
 		cardImage.setImageResource(R.drawable.ic_launcher);
 		TextView previousPrice = (TextView) rowView.findViewById(R.id.previousPrice);
