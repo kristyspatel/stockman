@@ -1,13 +1,9 @@
 package edu.ncsu.stockman;
 
-import java.util.HashMap;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.facebook.Session;
-
 import edu.ncsu.stockman.model.Company;
 import edu.ncsu.stockman.model.Game;
 import edu.ncsu.stockman.model.Main;

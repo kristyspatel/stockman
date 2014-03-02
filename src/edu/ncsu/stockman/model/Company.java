@@ -1,5 +1,8 @@
 package edu.ncsu.stockman.model;
 
+import java.util.Calendar;
+import java.util.TimeZone;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +48,20 @@ public class Company {
 			e.printStackTrace();
 		}
 		
+	}
+	public float getPrice(){
+	   	 Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+	   	 int h = c.get(Calendar.HOUR_OF_DAY);
+	   	 int m = c.get(Calendar.MINUTE);
+	   	 int s = c.get(Calendar.SECOND);
+	   	 return price[h*60*2+m*2+(s<30?0:1)];
+	}
+	public float getPrevPrice(){
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		int h = c.get(Calendar.HOUR_OF_DAY);
+		int m = c.get(Calendar.MINUTE);
+		int s = c.get(Calendar.SECOND);
+		return price[h*60*2+m*2+(s<30?0:1)-1];
 	}
 	
 }
