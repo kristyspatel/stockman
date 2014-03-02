@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class BuySharesFragment extends Fragment {
 
@@ -19,7 +21,6 @@ public class BuySharesFragment extends Fragment {
  
         View rootView = inflater.inflate(R.layout.buy_shares_fragment, container, false);
         ListView cardList = (ListView) rootView.findViewById(R.id.cardList);
-		//String[] values = new String[] { "Maroon", "Blue", "green","yellow","violet","pink","red","purple"};
         Company[] companies = new Company[Main.companies.size()];
         for (int i = 0; i < Main.companies.size(); i++) {
         	companies[i] = Main.companies.valueAt(i);

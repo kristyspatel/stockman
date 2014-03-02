@@ -88,7 +88,7 @@ public class New_Game extends Activity {
 		}catch(JSONException e){
 			e.printStackTrace();
 		}
-		//data.put("members", ArrayList.);
+
 		MidLayer asyncHttpPost = new MidLayer(data,this) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
