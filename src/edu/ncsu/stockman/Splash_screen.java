@@ -30,9 +30,8 @@ public class Splash_screen extends Activity {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  super.onActivityResult(requestCode, resultCode, data);
 	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-
-	
 		if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()){
+			
 			Intent intent = new Intent(this, Timeline.class);
 			startActivity(intent);
 		}

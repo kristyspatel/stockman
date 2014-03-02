@@ -36,8 +36,14 @@ public class Timeline extends Activity {
 		/**
 		 * Fetch User's info, games, notifications, invitations
 		 */
-		HashMap<String, String> data = new HashMap<String, String>();
+		JSONObject data = new JSONObject();
+		try{		
 		data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
+		System.out.println(data.toString());
 		MidLayer asyncHttpPost = new MidLayer(data,this) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
@@ -48,10 +54,13 @@ public class Timeline extends Activity {
 						
 						try {
 							JSONObject j = new JSONObject(result.info.text);
+							System.out.println("Userdata");
+							System.out.println(j.toString());
 							User me = new User(j.optJSONObject("info"));
+							//System.out.println(me.toString());
 							me.setGames(j.optJSONArray("games"));
 							me.setNotifications(j.optJSONArray("notifications"));
-							
+							me.setFriends(j.optJSONArray("friends"));
 							Main.current_user = me;
 							
 							//Change the activity components
@@ -70,6 +79,7 @@ public class Timeline extends Activity {
 
 	}
 	
+	//TODO delete it and test it.
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  super.onActivityResult(requestCode, resultCode, data);
@@ -124,8 +134,12 @@ public class Timeline extends Activity {
 		
 		Main.current_game = (Game) v.getTag();
 		
-		HashMap<String, String> data = new HashMap<String, String>();
+		JSONObject data = new JSONObject();
+		try{
 		data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		}catch(JSONException e){
+			e.printStackTrace();
+		}
 		MidLayer asyncHttpPost = new MidLayer(data,this) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
