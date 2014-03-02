@@ -57,6 +57,10 @@ public class SettingsActivity extends Activity {
 		Intent intent = new Intent(c, SettingsActivity.class);
 		c.startActivity(intent);
 	}
+	public void goToManageFriends(Activity c){
+		Intent intent = new Intent(c, ManageFriendsActivity.class);
+		c.startActivity(intent);
+	}
 
 	public void logout(MenuItem c){
 		logout(this);

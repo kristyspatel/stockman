@@ -52,7 +52,22 @@ public class User {
 		this.friends = new SparseArray<User>();
 		this.notifications = new ArrayList<Notification>();
 	}
-		
+	
+	public void setFriends(JSONArray friends)
+	{
+		for(int i=0;i<friends.length();i++)
+		{
+			try{
+				JSONObject friend = friends.getJSONObject(i);
+				User u = new User(friend);
+				this.friends.append(u.id, u);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void setNotifications(JSONArray notifications){
 		this.notifications = new ArrayList<Notification>();
 		for (int i = 0; i < notifications.length(); i++) {

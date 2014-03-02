@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.facebook.Session;
 import edu.ncsu.stockman.model.Friend;
 import edu.ncsu.stockman.model.Friend.Friendship_status;
@@ -111,9 +113,13 @@ public class ManageFriendsActivity extends Activity {
 					TextView t = (TextView) v;
 					
 					t.setId(f.id);
-					HashMap<String, String> data = new HashMap<String, String>();
+					JSONObject data = new JSONObject();
+					try{		
 					data.put("access_token", Session.getActiveSession().getAccessToken());//post
-					System.out.println(Session.getActiveSession().getAccessToken());
+					}catch(JSONException e)
+					{
+						e.printStackTrace();
+					}
 					
 					MidLayer asyncHttpPost = new MidLayer(data,v.getContext()) {
 						@Override
@@ -155,9 +161,13 @@ public class ManageFriendsActivity extends Activity {
 		}
 	}
 	private void getFriends(){
-		HashMap<String, String> data = new HashMap<String, String>();
+		JSONObject data = new JSONObject();
+		try{		
 		data.put("access_token", Session.getActiveSession().getAccessToken());//post
-		System.out.println(Session.getActiveSession().getAccessToken());
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
 		MidLayer asyncHttpPost = new MidLayer(data,this) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {

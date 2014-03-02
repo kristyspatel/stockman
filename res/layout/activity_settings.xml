@@ -64,4 +64,13 @@
         </EditText>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="goToManageFriends"
+        android:text="Manage Friends"
+        android:textAppearance="?android:attr/textAppearanceMediumInverse" />
+
 </LinearLayout>

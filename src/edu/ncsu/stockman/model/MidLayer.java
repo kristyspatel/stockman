@@ -11,6 +11,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -24,13 +25,15 @@ import android.view.View;
 
 abstract public class MidLayer extends AsyncTask<String,Integer, JSONObject>{
 	
-	private HashMap<String, String> mData = null;// post data
+	JSONObject mData = null;
 	public Bundle bundle = new Bundle();
 	public View view; //the view that 
+	//private HashMap<String, String> mData = null;// post data
 	ProgressDialog progress;
 	public Context context;
 
-    public MidLayer(HashMap<String, String> data, Context c) {
+    //public MidLayer(HashMap<String, String> data, Context c) {
+	public MidLayer(JSONObject data, Context c) {
         mData = data;
         context = c;
     }
@@ -54,18 +57,22 @@ abstract public class MidLayer extends AsyncTask<String,Integer, JSONObject>{
         try {
             // set up post data
             ArrayList<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
-            Iterator<String> it = mData.keySet().iterator();
+            Iterator<String> it = mData.keys();
             while (it.hasNext()) {
                 String key = it.next();
-                nameValuePair.add(new BasicNameValuePair(key, mData.get(key)));
+                nameValuePair.add(new BasicNameValuePair(key, mData.get(key).toString()));
             }
-
+        	//mData.keys()
+        	//StringEntity se = new StringEntity(mData.toString());
+        	//se.setContentType("application/json");
+        	//post.setEntity(se);
             post.setEntity(new UrlEncodedFormEntity(nameValuePair, "UTF-8"));
             HttpResponse response = client.execute(post);
             StatusLine statusLine = response.getStatusLine();
             if(statusLine.getStatusCode() == HttpURLConnection.HTTP_OK){
                 result = EntityUtils.toByteArray(response.getEntity());
                 str = new String(result, "UTF-8");
+                System.out.println(str);
                 json= new JSONObject(str);
             }
         }
@@ -104,7 +111,7 @@ abstract public class MidLayer extends AsyncTask<String,Integer, JSONObject>{
 					result.optJSONObject("info").optString("context"),
 					result.optJSONObject("info").optString("text"),
 					TYPE.INFO);
-
+		System.out.println(r);
 		progress.dismiss();
 		resultReady(r);
 	}
