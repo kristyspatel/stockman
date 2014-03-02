@@ -42,16 +42,16 @@ public class BuySharesFragment extends Fragment {
 
         @Override
         public void run() {
-        	System.out.println(cardList);
+
         	for (int i = 0; i < Main.companies.size(); i++) {
         		View v = cardList.getAdapter().getView(i, null, cardList);
-//        		View v = cardList.getChildAt(i);
-        		//System.out.println(v);
         		TextView currentPrice = (TextView) v.findViewById(R.id.currentPrice);
-        		currentPrice.setText(Main.companies.valueAt(i).price+"");
+        		currentPrice.setText(Main.companies.valueAt(i).getPrice()+"");
+        		TextView prevPrice = (TextView) v.findViewById(R.id.previousPrice);
+        		prevPrice.setText(Main.companies.valueAt(i).getPrevPrice()+"");
 			}
             
-        	timerHandler.postDelayed(this, 500);          
+        	timerHandler.postDelayed(this, 1000*20);          
         }
     };
     
