@@ -7,14 +7,13 @@ import java.util.Locale;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.ncsu.stockman.model.User.User_status;
-
 public class Player{
 
 	public int id;
 	public User user;
 	public Game game;
 	public double cash;
+	public String name;
 	public enum Player_status {INVITED,WAITING_FOR_WORD,ENROLLED,OUT};
 	public Player_status status;
 	
@@ -49,7 +48,8 @@ public class Player{
 			int s = info.getInt("player_status");
 			this.word = info.getString("word").toCharArray();
 			this.cash = info.getDouble("cash");
-			
+			this.name = info.getString("name");
+			this.user = new User(info.getString("email"),info.getString("name"),info.getInt("id_user"),info.getLong("facebook_id"));
 			if (s == 1)
 				status = Player_status.INVITED;
 			else if (s == 2)
@@ -109,35 +109,35 @@ public class Player{
 		}
 	}
 
-	public boolean buy(Company c, int amount){
-		if (c.price * amount < cash)
-			return false;
-		else {
-			Stock s = stocks.get(c);
-			if (s != null){
-				s.amount += amount;
-				cash -= amount * c.price;
-			}
-			else{
-				stocks.put(c,new Stock(c, amount));	
-			}
-			notifyOthers(user.name +" bought "+amount+" of "+c.name + " share(s).");
-			return true;
-		}
-	}
-	
-	public boolean sell(Company c, int amount){
-		Stock s = stocks.get(c);
-		if (s != null){
-			if (s.amount < amount)
-				return false;
-			s.amount -= amount;
-			cash += amount * c.price;
-			notifyOthers(user.name +" sold "+amount+" of "+c.name + " share(s).");
-			return true;
-		}
-		return false;
-	}
+//	public boolean buy(Company c, int amount){
+//		if (c.price * amount < cash)
+//			return false;
+//		else {
+//			Stock s = stocks.get(c);
+//			if (s != null){
+//				s.amount += amount;
+//				cash -= amount * c.price;
+//			}
+//			else{
+//				stocks.put(c,new Stock(c, amount));	
+//			}
+//			notifyOthers(user.name +" bought "+amount+" of "+c.name + " share(s).");
+//			return true;
+//		}
+//	}
+//	
+//	public boolean sell(Company c, int amount){
+//		Stock s = stocks.get(c);
+//		if (s != null){
+//			if (s.amount < amount)
+//				return false;
+//			s.amount -= amount;
+//			cash += amount * c.price;
+//			notifyOthers(user.name +" sold "+amount+" of "+c.name + " share(s).");
+//			return true;
+//		}
+//		return false;
+//	}
 	
 	public void notifyOthers(String noti){
 		for (int i = 0; i < game.players.size(); i++) {

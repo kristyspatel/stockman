@@ -36,6 +36,9 @@
     <string name="player_pic">Player Picture</string>
     <!-- image description (alternative) -->
     <string name="player_status">Player Status</string>
+    
+    <!-- image description (alternative) -->
+    <string name="profile_pic">Profile Picture</string>
 
     <!-- icon -->
     <string name="hang_friends_icon">Hang Friends</string>

@@ -21,6 +21,7 @@ public class MainGameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_game);
 		
+		setTitle(Main.current_game.name);
 		TextView cashText = (TextView) findViewById(R.id.cashText);
 		cashText.setText("$"+Main.current_player.cash);
 		
@@ -34,6 +35,12 @@ public class MainGameActivity extends Activity {
 	
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		TextView cashText = (TextView) findViewById(R.id.cashText);
+		cashText.setText("$"+Main.current_player.cash);
+	}
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  super.onActivityResult(requestCode, resultCode, data);

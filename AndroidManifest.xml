@@ -47,6 +47,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
         <activity
             android:name="edu.ncsu.stockman.Timeline"
@@ -74,8 +75,10 @@
         <activity android:name="com.facebook.LoginActivity" >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.ManageFriends"
-            android:label="@string/title_activity_manage_friends" >
+            android:name="edu.ncsu.stockman.ManageFriendsActivity"
+            android:label="@string/title_activity_manage_friends"
+            android:parentActivityName="edu.ncsu.stockman.SettingsActivity" >
+            
         </activity>
     </application>
 

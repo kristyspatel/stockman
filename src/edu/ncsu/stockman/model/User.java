@@ -17,6 +17,7 @@ public class User {
 	public enum User_status {ACTIVE,INACTIVE};
 	public User_status user_status;
 	public SparseArray<User> friends;
+	public ArrayList<Friend> facebook_friends= new ArrayList<Friend>();
 	public ArrayList<Notification> notifications;
 
 	
@@ -40,10 +41,11 @@ public class User {
 		this.notifications = new ArrayList<Notification>();
 	}
 	
-	public User(String email, String name, int id) {
+	public User(String email, String name, int id, long facebook_id) {
 		super();
 		this.email = email;
 		this.name = name;
+		this.facebook_id = facebook_id;
 		this.id = id;
 		
 		this.games = new SparseArray<Game>();
@@ -52,6 +54,7 @@ public class User {
 	}
 		
 	public void setNotifications(JSONArray notifications){
+		this.notifications = new ArrayList<Notification>();
 		for (int i = 0; i < notifications.length(); i++) {
 			try {
 				JSONObject notif = notifications.getJSONObject(i);
@@ -63,7 +66,23 @@ public class User {
 			}
 		}
 	}
+	
+	public void setFacebookFriends(JSONArray friends){
+		this.facebook_friends = new ArrayList<Friend>();
+		for (int i = 0; i < friends.length(); i++) {
+			try {
+				JSONObject friend = friends.getJSONObject(i);
+				Friend f = new Friend(friend);
+				this.facebook_friends.add(f);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void setGames(JSONArray games){
+		this.games = new SparseArray<Game>();
 		for (int i = 0; i < games.length(); i++) {
 			try {
 				JSONObject game = games.getJSONObject(i);
