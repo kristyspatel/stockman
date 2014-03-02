@@ -3,8 +3,6 @@ package edu.ncsu.stockman;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +24,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 public class New_Game extends Activity {
 

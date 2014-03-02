@@ -1,9 +1,14 @@
 package edu.ncsu.stockman;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.TimeZone;
+
+import edu.ncsu.stockman.model.Main;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.ActionBar;
@@ -19,6 +24,7 @@ import android.widget.ListView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.text.format.DateFormat;
 
 public class StockMarketActivity extends FragmentActivity implements ActionBar.TabListener {
 
@@ -26,8 +32,42 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
 	 private BuySellTabsAdapter buySellTabAdapter;
 	 private ActionBar actionBar;
 	 private String[] tabs = { "Buy Cards", "Sell Cards" };
+	 
+     //Timer to change the prices
+     Handler timerHandler = new Handler();
+     Runnable timerRunnable = new Runnable() {
+
+         @Override
+         public void run() {
+        	 Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        	 int h = c.get(Calendar.HOUR_OF_DAY);
+        	 int m = c.get(Calendar.MINUTE);
+        	 int s = c.get(Calendar.SECOND);
+        	 setTitle(Main.companies.get(1).price[h*60*2+m*2+(s<30?0:1)]+"");
+
+             //timerTextView.setText(String.format("%d:%02d", minutes, seconds));
+
+             timerHandler.postDelayed(this, 500);
+         }
+     };
+     
+     @Override
+     public void onPause() {
+         super.onPause();
+         timerHandler.removeCallbacks(timerRunnable);
+     }
+     @Override
+     public void onResume() {
+         super.onResume();
+         timerHandler.postDelayed(timerRunnable, 0);
+     }
+     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		// run timers
+		timerHandler.postDelayed(timerRunnable, 0);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_stock_market);
 		viewPager = (ViewPager) findViewById(R.id.buySellTabPager);

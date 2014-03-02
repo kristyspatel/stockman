@@ -2,11 +2,13 @@ package edu.ncsu.stockman;
 
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.facebook.Session;
 
+import edu.ncsu.stockman.model.Company;
 import edu.ncsu.stockman.model.Game;
 import edu.ncsu.stockman.model.Main;
 import edu.ncsu.stockman.model.MidLayer;
@@ -76,6 +78,31 @@ public class Timeline extends Activity {
 			}
 		};		
 		asyncHttpPost.execute(getString(R.string.base_url)+"/user/get");
+		MidLayer asyncHttpPost2 = new MidLayer(data,this) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if (result.error != null)
+					System.out.println(result.error.text);
+				if(result.info != null){
+					if(result.info.code == 0){
+						
+						try {
+							JSONArray j = new JSONArray(result.info.text);
+							for (int i = 0; i < j.length(); i++) {
+								Company c = new Company(j.getJSONObject(i));
+								Main.companies.append(c.id, c);
+							}
+							System.out.println("companies"+Main.companies);
+							
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		};		
+		asyncHttpPost2.execute(getString(R.string.base_url)+"/stockmarket/get");
 
 	}
 	

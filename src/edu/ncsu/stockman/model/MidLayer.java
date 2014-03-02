@@ -20,11 +20,15 @@ import org.json.JSONObject;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
 
 abstract public class MidLayer extends AsyncTask<String,Integer, JSONObject>{
 	
-	//private HashMap<String, String> mData = null;// post data
 	JSONObject mData = null;
+	public Bundle bundle = new Bundle();
+	public View view; //the view that 
+	//private HashMap<String, String> mData = null;// post data
 	ProgressDialog progress;
 	public Context context;
 
@@ -40,8 +44,8 @@ abstract public class MidLayer extends AsyncTask<String,Integer, JSONObject>{
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		progress = ProgressDialog.show(context, "dialog title",
-			    "dialog message", true);
+		progress = ProgressDialog.show(context, "Contacting Server",
+			    "Please wait..", true);
 	}
 	@Override
 	protected JSONObject doInBackground(String... params) {
@@ -86,9 +90,12 @@ abstract public class MidLayer extends AsyncTask<String,Integer, JSONObject>{
 	}
 	@Override
 	protected void onPostExecute(JSONObject result){
-		Result r = new Result();
-		if (result == null)
+		System.out.println(result);
+		if (result == null){
+			progress.dismiss();
 			return;
+		}
+		Result r = new Result();
 		if(result.optJSONObject("error") != null)
 			r.error = new Content(result.optJSONObject("error").optInt("code"),
 					result.optJSONObject("error").optString("context"),

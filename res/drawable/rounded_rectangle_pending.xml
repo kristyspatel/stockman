@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
+   <solid android:color="#CCC1A3" />
+	<corners android:radius="5dp"/>
+   <stroke android:width="1dip" android:color="#FFFCE8"/>
+</shape>
+<!-- 
+https://kuler.adobe.com/Vintage-American-color-theme-3502064/edit/?copy=true&base=2&rule=Custom&selected=2&name=Copy%20of%20Vintage%20American&mode=rgb&rgbvalues=0.8,0.23137254901960785,0.21568627450980393,0.2235294117647059,0.5333333333333333,0.6,1,0.9882352941176471,0.9098039215686274,1,0.5215686274509804,0.4980392156862745,0.8,0.7568627450980392,0.6392156862745098&swatchOrder=0,1,2,3,4 -->

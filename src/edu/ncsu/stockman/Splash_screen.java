@@ -1,8 +1,6 @@
 package edu.ncsu.stockman;
 
-import java.util.Random;
 import com.facebook.Session;
-import edu.ncsu.stockman.model.User;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;

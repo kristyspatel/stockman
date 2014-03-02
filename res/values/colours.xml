@@ -6,4 +6,7 @@
 <color name="kulur_green">#88B351</color>
 <color name="kulur_beige">#DEDCBB</color>
 <color name="kulur_white">#FFFFFF</color>
+<color name="pending">#FFFCE8</color>
+<color name="friend">#FFFCE8</color>
+<color name="notinvitied">#CC3B37</color>
 </resources>
