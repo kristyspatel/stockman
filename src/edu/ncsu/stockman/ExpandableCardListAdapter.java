@@ -3,6 +3,8 @@ package edu.ncsu.stockman;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+
+import edu.ncsu.stockman.model.Stock;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,28 +19,20 @@ import android.widget.TextView;
 public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 
 	private Context context;
-	private LinkedHashMap<String,String> shareHeader;
-	private ArrayList<String> shareDetails;
+	private ArrayList<Stock> stocks;
 	private LayoutInflater inflater;
 
 	
-	public ExpandableCardListAdapter(LayoutInflater inflater,LinkedHashMap<String,String> shareHeader,ArrayList<String> shareDetails)
+	public ExpandableCardListAdapter(LayoutInflater inflater,ArrayList<Stock> shareHeader)
 	{
 		this.inflater = inflater;
-		this.shareHeader = shareHeader;
-		this.shareDetails = shareDetails;
+		this.stocks = shareHeader;
 	}
 	
 	public void setInflater(LayoutInflater inflater) {
 		this.inflater = inflater;
 	}
 	
-	@Override
-	public Object getChild(int groupPosition, int childPosition) {
-		// TODO Auto-generated method stub
-		return shareDetails.get(groupPosition);
-	}
-
 	@Override
 	public long getChildId(int groupPosition, int childPosition) {
 		// TODO Auto-generated method stub
@@ -66,13 +60,13 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public Object getGroup(int groupPosition) {
 		// TODO Auto-generated method stub
-		return (new ArrayList<String>(shareHeader.keySet())).get(groupPosition);
+		return stocks.get(groupPosition);
 	}
 
 	@Override
 	public int getGroupCount() {
 		// TODO Auto-generated method stub
-		return shareHeader.size();
+		return stocks.size();
 	}
 
 	@Override
@@ -87,13 +81,18 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 		// TODO Auto-generated method stub
 		if(convertView == null)
 			convertView = inflater.inflate(R.layout.expandable_cards, null);
+		
 		TextView shareNameTextView = (TextView) convertView.findViewById(R.id.share_card);
-		String shareName = (new ArrayList<String>(shareHeader.keySet())).get(groupPosition);
+		Stock stock = stocks.get(groupPosition);
+		String shareName = stock.company.name;
 		shareNameTextView.setText(shareName);
+		
 		TextView priceChangeTextView = (TextView) convertView.findViewById(R.id.price_change);
-		priceChangeTextView.setText(shareHeader.get(shareName) + "%");
+		float change = (stock.company.getPrice()-stock.price) / stock.company.getPrice();
+		priceChangeTextView.setText( change + "%");
+		
 		ImageView priceChangeIndicator = (ImageView)(convertView.findViewById(R.id.price_change_indicator));
-		if(Double.parseDouble(shareHeader.get(shareName)) > 0)
+		if(change > 0)
 			priceChangeIndicator.setImageResource(R.drawable.up_arrow);
 		else
 			priceChangeIndicator.setImageResource(R.drawable.down_arrow);
@@ -110,6 +109,12 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Object getChild(int groupPosition, int childPosition) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

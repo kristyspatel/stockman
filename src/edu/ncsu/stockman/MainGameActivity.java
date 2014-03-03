@@ -1,9 +1,15 @@
 package edu.ncsu.stockman;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.facebook.Session;
 
 import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.MidLayer;
 import edu.ncsu.stockman.model.Notification;
+import edu.ncsu.stockman.model.Player;
+import edu.ncsu.stockman.model.User;
 import android.os.Bundle;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -33,6 +39,45 @@ public class MainGameActivity extends Activity {
 		((TextView) findViewById(R.id.main_game_letter4)).setText(Main.current_player.word[4]+"");
 		((TextView) findViewById(R.id.main_game_letter5)).setText(Main.current_player.word[5]+"");
 	
+		
+		// grab all player info from server
+		JSONObject data = new JSONObject();
+		try{		
+		data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
+		MidLayer asyncHttpPost = new MidLayer(data,this) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if (result.error != null)
+					System.out.println(result.error.text);
+				if(result.info != null){
+					if(result.info.code == 0){
+						
+						try {
+							JSONObject j = new JSONObject(result.info.text);
+							Player me = Main.current_player;
+							//System.out.println(me.toString());
+							me.setStocks(j.optJSONArray("stocks"));
+							
+							//TODO this guesses is not fully implemented
+							me.setGuesses(j.optJSONArray("gusses"));
+							
+							//Change the activity components
+							((Timeline)context).setName(Main.current_user.name);
+							((Timeline)context).setGames();
+							((Timeline)context).setNotifications();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		};		
+		asyncHttpPost.execute(getString(R.string.base_url)+"/player/get/"+Main.current_player.id);
 	}
 	
 	@Override

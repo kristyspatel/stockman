@@ -3,6 +3,8 @@ package edu.ncsu.stockman;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import edu.ncsu.stockman.model.Main;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,21 +20,13 @@ public class SellSharesFragment extends Fragment {
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	            Bundle savedInstanceState) {
 	 
+		 	
+		 	
 	        View rootView = inflater.inflate(R.layout.sell_shares_fragment, container, false);
-	        LinkedHashMap<String,String> listDataHeader; 
-	    	ArrayList<String> listDataChild;
-	        ExpandableListView expListView = (ExpandableListView) rootView.findViewById(R.id.shares);
+	    	ExpandableListView expListView = (ExpandableListView) rootView.findViewById(R.id.shares);
 	        
-	        // preparing list data
-	        listDataHeader = new LinkedHashMap<String, String>();
-	        listDataHeader.put("2xMaroon", "0.05");
-	        listDataHeader.put("3xBlue", "0.5");
-	        listDataHeader.put("1xpink", "-0.95");
-	        listDataHeader.put("1xyellow", "-0.35");
-	        listDataChild = new ArrayList<String>();
-	        listDataChild.add("Maroon");
 	 
-	        ExpandableListAdapter listAdapter = new ExpandableCardListAdapter(inflater, listDataHeader, listDataChild);
+	        ExpandableListAdapter listAdapter = new ExpandableCardListAdapter(inflater, Main.current_player.stocks);
 	        // setting list adapter
 	        expListView.setAdapter(listAdapter);
 	        return rootView;

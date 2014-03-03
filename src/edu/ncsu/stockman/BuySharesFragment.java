@@ -2,8 +2,6 @@ package edu.ncsu.stockman;
 
 import edu.ncsu.stockman.model.Company;
 import edu.ncsu.stockman.model.Main;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class BuySharesFragment extends Fragment {
