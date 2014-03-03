@@ -5,7 +5,14 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.TimeZone;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.facebook.Session;
+
 import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.MidLayer;
+import edu.ncsu.stockman.model.User;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -137,4 +144,5 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
 	public void logout(MenuItem c){
 		SettingsActivity.logout(this);
 	}
+	
 }

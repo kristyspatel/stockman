@@ -44,7 +44,7 @@ public class Player{
 		
 		super();
 		try {
-			this.id = info.getInt("id_user");
+			this.id = info.getInt("id_player");
 			int s = info.getInt("player_status");
 			this.word = info.getString("word").toCharArray();
 			this.cash = info.getDouble("cash");

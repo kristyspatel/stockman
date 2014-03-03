@@ -49,19 +49,19 @@ public class Company {
 		}
 		
 	}
-	public float getPrice(){
-	   	 Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-	   	 int h = c.get(Calendar.HOUR_OF_DAY);
-	   	 int m = c.get(Calendar.MINUTE);
-	   	 int s = c.get(Calendar.SECOND);
-	   	 return price[h*60*2+m*2+(s<30?0:1)];
+	public float getPrice(){	   	 
+	   	 return price[getTimeStamp()];
 	}
-	public float getPrevPrice(){
+	public float getPrevPrice(){		
+		return price[getTimeStamp()-1];
+	}
+	
+	public int getTimeStamp(){
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 		int h = c.get(Calendar.HOUR_OF_DAY);
 		int m = c.get(Calendar.MINUTE);
 		int s = c.get(Calendar.SECOND);
-		return price[h*60*2+m*2+(s<30?0:1)-1];
+		return (h*60*2+m*2+(s<30?0:1));
 	}
 	
 }
