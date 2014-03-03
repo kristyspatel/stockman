@@ -35,7 +35,7 @@ public class ManageFriendsActivity extends Activity {
 	   		if(u.friendship_status == Friendship_status.ACCEPTED){
 	   			s.setBackgroundResource(R.drawable.rounded_rectangle_friend);
 	   			s.setTextColor(getResources().getColor(R.color.friend));
-	   			s.setText("✔");
+	   			s.setText("Friend");
 	   		}
 	   		else if(u.friendship_status == Friendship_status.PENDING){
 	   			s.setBackgroundResource(R.drawable.rounded_rectangle_pending);
@@ -65,7 +65,7 @@ public class ManageFriendsActivity extends Activity {
   	   		// set the picture
   	   		ImageView i = (ImageView) v.findViewById(R.id.friend_list_img);
   	   		new DownloadImageTask(i)
-	  	   			.execute("http://graph.facebook.com/"+u.id+"/picture?type=square");
+	  	   			.execute("http://graph.facebook.com/"+u.facebook_id+"/picture?type=square");
   	   		
   	   		//set the status
   	   		TextView s = (TextView) v.findViewById(R.id.friend_list_status);

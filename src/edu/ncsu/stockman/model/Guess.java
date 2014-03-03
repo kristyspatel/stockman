@@ -1,5 +1,8 @@
 package edu.ncsu.stockman.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Guess {
 
 	public int id;
@@ -16,5 +19,18 @@ public class Guess {
 		this.letter = letter;
 	}
 	
+	
+	public Guess(JSONObject j) {
+		super();
+		try {
+			this.id = j.getInt("id_guess");
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	
 }

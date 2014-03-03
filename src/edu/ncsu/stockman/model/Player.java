@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.SparseArray;
 
 public class Player{
 
@@ -18,7 +21,7 @@ public class Player{
 	public Player_status status;
 	
 	// TODO public enum status
-	public HashMap<Company, Stock> stocks = new HashMap<Company, Stock>();
+	public ArrayList<Stock> stocks = new ArrayList<Stock>();
 	public char[] word = new char[6]; 
 	public ArrayList<Guess> guesses = new ArrayList<Guess>();
 	public boolean[] word_revealed = new boolean[6]; // ______
@@ -36,7 +39,7 @@ public class Player{
 		this.id = id;
 		this.cash = cash;
 		game = g;
-		this.stocks = new HashMap<Company, Stock>();
+		this.stocks = new ArrayList<Stock>();
 		if (word.length()==6)
 			this.word = word.toUpperCase(Locale.ENGLISH).toCharArray();
 	}
@@ -108,36 +111,35 @@ public class Player{
 			return false;
 		}
 	}
+	
+	public void setStocks(JSONArray stocks){
+		this.stocks = new ArrayList<Stock>();
+		for (int i = 0; i < stocks.length(); i++) {
+			try {
+				JSONObject stock = stocks.getJSONObject(i);
+				Stock s = new Stock(stock);
+				this.stocks.add(s);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void setGuesses(JSONArray gusses){
+		this.guesses = new ArrayList<Guess>();
+		for (int i = 0; i < gusses.length(); i++) {
+			try {
+				JSONObject guess = gusses.getJSONObject(i);
+				Guess s = new Guess(guess);
+				this.guesses.add(s);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
-//	public boolean buy(Company c, int amount){
-//		if (c.price * amount < cash)
-//			return false;
-//		else {
-//			Stock s = stocks.get(c);
-//			if (s != null){
-//				s.amount += amount;
-//				cash -= amount * c.price;
-//			}
-//			else{
-//				stocks.put(c,new Stock(c, amount));	
-//			}
-//			notifyOthers(user.name +" bought "+amount+" of "+c.name + " share(s).");
-//			return true;
-//		}
-//	}
-//	
-//	public boolean sell(Company c, int amount){
-//		Stock s = stocks.get(c);
-//		if (s != null){
-//			if (s.amount < amount)
-//				return false;
-//			s.amount -= amount;
-//			cash += amount * c.price;
-//			notifyOthers(user.name +" sold "+amount+" of "+c.name + " share(s).");
-//			return true;
-//		}
-//		return false;
-//	}
 	
 	public void notifyOthers(String noti){
 		for (int i = 0; i < game.players.size(); i++) {
