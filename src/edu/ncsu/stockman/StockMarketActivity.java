@@ -69,6 +69,7 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
                 // on changing the page
                 // make respected tab selected
                 actionBar.setSelectedNavigationItem(position);
+                ((ExpandableCardListAdapter)((SellSharesFragment) ((BuySellTabsAdapter) viewPager.getAdapter()).sell).listAdapter).notifyDataSetChanged();
             }
          
             @Override

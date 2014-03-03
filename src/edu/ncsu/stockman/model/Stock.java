@@ -15,10 +15,12 @@ public class Stock {
 	public float price;
 	public int id_stock;
 	
-	public Stock(Company company, int amount) {
+	public Stock(Company company, int amount, int id_stock, float price) {
 		super();
 		this.company = company;
 		this.amount = amount;
+		this.id_stock = id_stock;
+		this.price = price;
 	}
 	
 	public Stock(JSONObject j) {

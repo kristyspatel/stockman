@@ -116,9 +116,11 @@ public class Player{
 		this.stocks = new ArrayList<Stock>();
 		for (int i = 0; i < stocks.length(); i++) {
 			try {
+				System.out.println("here");
 				JSONObject stock = stocks.getJSONObject(i);
 				Stock s = new Stock(stock);
-				this.stocks.add(s);
+				if(s.amount != 0)
+					this.stocks.add(s);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

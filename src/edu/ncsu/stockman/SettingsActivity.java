@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 public class SettingsActivity extends Activity {
@@ -57,9 +58,9 @@ public class SettingsActivity extends Activity {
 		Intent intent = new Intent(c, SettingsActivity.class);
 		c.startActivity(intent);
 	}
-	public void goToManageFriends(Activity c){
-		Intent intent = new Intent(c, ManageFriendsActivity.class);
-		c.startActivity(intent);
+	public void goToManageFriends(View c){
+		Intent intent = new Intent(this, ManageFriendsActivity.class);
+		startActivity(intent);
 	}
 
 	public void logout(MenuItem c){

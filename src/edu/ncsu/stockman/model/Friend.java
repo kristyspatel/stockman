@@ -9,7 +9,7 @@ public class Friend {
 	public int id;
 	
 	public long facebook_id;
-	public enum Friendship_status {PENDING,ACCEPTED,NOTINVITIED};
+	public enum Friendship_status {REQUEST_SENT,PENDING,ACCEPTED,NOTINVITIED};
 	public Friendship_status friendship_status;
 
 	
@@ -21,12 +21,15 @@ public class Friend {
 			this.facebook_id = info.getLong("facebook_id");
 			
 			int s = info.optInt("status");
-			if (s==0)// because it is null
-				friendship_status = Friendship_status.NOTINVITIED;
-			else if (s==1)
-				friendship_status = Friendship_status.PENDING;
+			
+			if (s==1)
+				friendship_status = Friendship_status.REQUEST_SENT;
 			else if (s==2)
 				friendship_status = Friendship_status.ACCEPTED;
+			else if (s==3)
+				friendship_status = Friendship_status.PENDING;
+			else if (s==4)
+				friendship_status = Friendship_status.NOTINVITIED;
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

@@ -54,7 +54,7 @@ public class MainGameActivity extends Activity {
 				if (result.error != null)
 					System.out.println(result.error.text);
 				if(result.info != null){
-					if(result.info.code == 0){
+					if(result.info.code == 10){
 						
 						try {
 							JSONObject j = new JSONObject(result.info.text);
@@ -63,12 +63,7 @@ public class MainGameActivity extends Activity {
 							me.setStocks(j.optJSONArray("stocks"));
 							
 							//TODO this guesses is not fully implemented
-							me.setGuesses(j.optJSONArray("gusses"));
-							
-							//Change the activity components
-							((Timeline)context).setName(Main.current_user.name);
-							((Timeline)context).setGames();
-							((Timeline)context).setNotifications();
+							//me.setGuesses(j.optJSONArray("gusses"));
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

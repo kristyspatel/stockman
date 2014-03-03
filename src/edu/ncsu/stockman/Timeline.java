@@ -36,12 +36,47 @@ public class Timeline extends Activity {
 		 */
 		JSONObject data = new JSONObject();
 		try{		
-		data.put("access_token", Session.getActiveSession().getAccessToken());//post
+			data.put("access_token", Session.getActiveSession().getAccessToken());//post
 		}catch(JSONException e)
 		{
 			e.printStackTrace();
 		}
-		System.out.println(data.toString());
+		getUserInfo();
+		MidLayer asyncHttpPost2 = new MidLayer(data,this) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if (result.error != null)
+					System.out.println(result.error.text);
+				if(result.info != null){
+					if(result.info.code == 0){
+						
+						try {
+							JSONArray j = new JSONArray(result.info.text);
+							for (int i = 0; i < j.length(); i++) {
+								Company c = new Company(j.getJSONObject(i));
+								Main.companies.append(c.id, c);
+							}
+							System.out.println("companies"+Main.companies);
+							
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		};		
+		asyncHttpPost2.execute(getString(R.string.base_url)+"/stockmarket/get");
+
+	}
+	public void getUserInfo(){
+		JSONObject data = new JSONObject();
+		try{		
+			data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
 		MidLayer asyncHttpPost = new MidLayer(data,this) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
@@ -74,34 +109,7 @@ public class Timeline extends Activity {
 			}
 		};		
 		asyncHttpPost.execute(getString(R.string.base_url)+"/user/get");
-		MidLayer asyncHttpPost2 = new MidLayer(data,this) {
-			@Override
-			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 0){
-						
-						try {
-							JSONArray j = new JSONArray(result.info.text);
-							for (int i = 0; i < j.length(); i++) {
-								Company c = new Company(j.getJSONObject(i));
-								Main.companies.append(c.id, c);
-							}
-							System.out.println("companies"+Main.companies);
-							
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		};		
-		asyncHttpPost2.execute(getString(R.string.base_url)+"/stockmarket/get");
-
 	}
-	
 	//TODO delete it and test it.
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -196,8 +204,13 @@ public class Timeline extends Activity {
 	public void logout(MenuItem c){
 		SettingsActivity.logout(this);
 	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//getUserInfo();
+	}
 	public void goToSettings(MenuItem c){
 		SettingsActivity.goToSettings(this);
 	}
-
 }

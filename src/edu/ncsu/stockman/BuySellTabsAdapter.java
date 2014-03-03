@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class BuySellTabsAdapter extends FragmentPagerAdapter {
  
+	Fragment buy = new BuySharesFragment();
+	Fragment sell = new SellSharesFragment();
     public BuySellTabsAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -17,10 +19,10 @@ public class BuySellTabsAdapter extends FragmentPagerAdapter {
         switch (index) {
         case 0:
             // Top Rated fragment activity
-            return new BuySharesFragment();
+            return buy;
         case 1:
             // Games fragment activity
-            return new SellSharesFragment();
+            return sell;
         }
  
         return null;
