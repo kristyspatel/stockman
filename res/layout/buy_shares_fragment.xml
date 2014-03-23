@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="0dp" >
 
     <TextView
@@ -18,7 +16,6 @@
         android:gravity="center"
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
-        android:text="Your Balance is 105$"
         android:textAlignment="center"
         android:textColor="@color/button"
         android:textSize="18sp" />
@@ -63,6 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:background="@color/button"
+            android:onClick="buyShares"
             android:text="Buy"/>
 
     </LinearLayout>

@@ -1,32 +1,30 @@
 package edu.ncsu.stockman;
 
-
-
 import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.facebook.Session;
-
+import edu.ncsu.stockman.model.Game;
 import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.MidLayer;
 import edu.ncsu.stockman.model.User;
-
 import android.os.Bundle;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class New_Game extends Activity {
 
+	CheckBox[] members;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,6 +35,21 @@ public class New_Game extends Activity {
 		setContentView(R.layout.activity_new_game);
 		setFriends(Main.current_user.friends);
 		
+		//TODO change game name listener
+		TextView game_name = (TextView) findViewById(R.id.gamename);
+		game_name.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				onChange(getBaseContext());
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {}
+		});
 	}
 
 	@Override
@@ -54,6 +67,8 @@ public class New_Game extends Activity {
 	public void setFriends(SparseArray<User> friends){
 		LinearLayout friend_scroller = (LinearLayout) findViewById(R.id.friend_list);
 		
+		members = new CheckBox[Main.current_user.friends.size()];
+		
 		for(int i=0; i<Main.current_user.friends.size();i++)
 		{
 			CheckBox friend = new CheckBox(this);
@@ -61,51 +76,53 @@ public class New_Game extends Activity {
 			friend.setText(friends.get(friends.keyAt(i)).name);
 			friend.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			friend.setTextColor(getResources().getColor(R.color.kulur_white));
+			
+			friend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+				
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					onChange(buttonView.getContext());
+				}
+			});
+			members[i] = friend;
 			friend_scroller.addView(friend);
 		}
 	}
 	
+	public void onChange(Context c){
+		TextView game_name = (TextView) findViewById(R.id.gamename);
+		Button invite = (Button) findViewById(R.id.invite);
+		for (int j = 0; j < members.length; j++) {
+			if(members[j].isChecked()){
+				if(game_name.getText().toString().trim().length() > 0 ){
+					invite.setEnabled(true);
+					invite.setTextAppearance(c, R.style.button_enabled);
+					return;
+				}
+			}
+		}
+		invite.setEnabled(false);
+		invite.setTextAppearance(c, R.style.button_disabled);
+	}
 	
 	public void startGame(View v)
 	{
-		//HashMap<String, String> data = new HashMap<String, String>();
-		JSONObject data = new JSONObject();
-		try{	
-		data.put("access_token",  Session.getActiveSession().getAccessToken());
-		
-		//data.put("access_token", Session.getActiveSession().getAccessToken());//post
-		ArrayList<String> members = new ArrayList<String>(); 
-		for(int i=0;i<Main.current_user.friends.size();i++)
+		System.out.println("Creating new game");
+		ArrayList<String> members_array = new ArrayList<String>(); 
+		for(int i=0;i<members.length;i++)
 		{
-			CheckBox checkBox = (CheckBox)findViewById(Main.current_user.friends.keyAt(i));
-			if(checkBox.isChecked())
-				members.add(Integer.toString((checkBox.getId())));
+			if(members[i].isChecked())
+				members_array.add(Integer.toString((members[i].getId())));
 		}
-		data.put("members", members);
 		EditText game = (EditText)findViewById(R.id.gamename);
-		data.put("name",game.getText());
-		System.out.println(data.toString());
-		}catch(JSONException e){
-			e.printStackTrace();
-		}
-
-		MidLayer asyncHttpPost = new MidLayer(data,this) {
-			@Override
-			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 0){
-						System.out.println(result.info.text);
-						Intent intent = new Intent(context,Timeline.class);
-						startActivity(intent);	
-					}
-				}
-			}
-		};		
-		asyncHttpPost.execute(getString(R.string.base_url)+"/game/create");
 		
-
+		//first letter to upper case and trim
+		String s = game.getText().toString().trim();
+		char[] stringArray = s.trim().toCharArray();
+        stringArray[0] = Character.toUpperCase(stringArray[0]);
+        s = new String(stringArray);
+        
+		Game.createGame(this, members_array, s);
 	}
 	public void OnHomeMenuItem(MenuItem v){
 		Intent intent = new Intent(this, Timeline.class);

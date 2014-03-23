@@ -1,42 +1,19 @@
 package edu.ncsu.stockman;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.TimeZone;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.facebook.Session;
-
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.MidLayer;
-import edu.ncsu.stockman.model.User;
-
 import android.os.Bundle;
-import android.os.Handler;
 import android.app.ActionBar.Tab;
-import android.app.Activity;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.text.format.DateFormat;
 
 public class StockMarketActivity extends FragmentActivity implements ActionBar.TabListener {
 
 	 private ViewPager viewPager;
-	 private BuySellTabsAdapter buySellTabAdapter;
+	 public BuySellTabsAdapter buySellTabAdapter;
 	 private ActionBar actionBar;
 	 private String[] tabs = { "Buy Cards", "Sell Cards" };
 	 
@@ -53,7 +30,6 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
         buySellTabAdapter = new BuySellTabsAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(buySellTabAdapter);
-        actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
  
         // Adding Tabs
@@ -80,20 +56,6 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
             public void onPageScrollStateChanged(int arg0) {
             }
         });
-        
-        
-        
-      		// Show the Up button in the action bar.
-		setupActionBar();
-	}
-
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-
 	}
 
 	@Override
@@ -104,44 +66,28 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
 	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
 		viewPager.setCurrentItem(tab.getPosition());
-		
 	}
 
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
-		
 	}
 	public void goToSettings(MenuItem c){
 		SettingsActivity.goToSettings(this);
 	}
 
+	public void buyShares(View v) {
+		buySellTabAdapter.buy.buyShares();
+	}
+	
 	public void logout(MenuItem c){
 		SettingsActivity.logout(this);
 	}

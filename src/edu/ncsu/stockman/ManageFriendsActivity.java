@@ -1,11 +1,9 @@
 package edu.ncsu.stockman;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.facebook.Session;
 import edu.ncsu.stockman.model.Friend;
 import edu.ncsu.stockman.model.Friend.Friendship_status;
@@ -76,39 +74,6 @@ public class ManageFriendsActivity extends Activity {
   	   		TextView s = (TextView) v.findViewById(R.id.friend_list_status);
   	   		s.setTag(u);
   	   		setStatusStyle(s,u);
-//  	   		s.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//				
-//				@Override
-//				public void onFocusChange(View v, boolean hasFocus) {
-//					// TODO Auto-generated method stub
-//					Friend f = (Friend) v.getTag();
-//					TextView t = (TextView) v;
-//					
-//					if(hasFocus){
-//			  	   		if(f.friendship_status == Friendship_status.ACCEPTED){
-//			  	   			t.setText("Unfriend?");
-//			  	   		}
-//			  	   		else if(f.friendship_status == Friendship_status.PENDING){
-//			  	   			t.setText("Cancel?");
-//			  	   		}
-//			  	   		else if(f.friendship_status == Friendship_status.NOTINVITIED){
-//			  	   			t.setText("Invite?");
-//			  	   		}
-//					}
-//					else{
-//			  	   		if(f.friendship_status == Friendship_status.ACCEPTED){
-//			  	   			t.setText("Friends");
-//			  	   		}
-//			  	   		else if(f.friendship_status == Friendship_status.PENDING){
-//			  	   			t.setText("Pending");
-//			  	   		}
-//			  	   		else if(f.friendship_status == Friendship_status.NOTINVITIED){
-//			  	   			t.setText("Not invited");
-//			  	   		}
-//						
-//					}
-//				}
-//			});
 
   	   		s.setOnClickListener(new View.OnClickListener() {
 				
@@ -126,7 +91,7 @@ public class ManageFriendsActivity extends Activity {
 						e.printStackTrace();
 					}
 					
-					MidLayer asyncHttpPost = new MidLayer(data,v.getContext()) {
+					MidLayer asyncHttpPost = new MidLayer(data,v.getContext(),true) {
 						@Override
 						protected void resultReady(MidLayer.Result result) {
 							if (result.error != null)
@@ -155,16 +120,16 @@ public class ManageFriendsActivity extends Activity {
 					};
 					asyncHttpPost.view = v;
 					if(f.friendship_status == Friendship_status.ACCEPTED){
-						//asyncHttpPost.execute(getString(R.string.base_url)+"/user/list_facebook_friends");
+						//asyncHttpPost.exec(getString(R.string.base_url)+"/user/list_facebook_friends");
 		  	   		}
 		  	   		else if(f.friendship_status == Friendship_status.PENDING){
-		  	   			asyncHttpPost.execute(getString(R.string.base_url)+"user/accept_invitation/"+f.id);
+		  	   			asyncHttpPost.exec(getString(R.string.base_url)+"friend/accept/"+f.id);
 		  	   		}
 		  	   		else if(f.friendship_status == Friendship_status.REQUEST_SENT){
-		  	   			//asyncHttpPost.execute(getString(R.string.base_url)+"/friend/add_friend/"+f.facebook_id);
+		  	   			//asyncHttpPost.exec(getString(R.string.base_url)+"/friend/add_friend/"+f.facebook_id);
 		  	   		}					
 		  	   		else if(f.friendship_status == Friendship_status.NOTINVITIED){
-		  	   			asyncHttpPost.execute(getString(R.string.base_url)+"friend/add_friend/"+f.facebook_id);
+		  	   			asyncHttpPost.exec(getString(R.string.base_url)+"friend/add_friend/"+f.facebook_id);
 		  	   		}					
 				}
 			});
@@ -180,7 +145,7 @@ public class ManageFriendsActivity extends Activity {
 		{
 			e.printStackTrace();
 		}
-		MidLayer asyncHttpPost = new MidLayer(data,this) {
+		MidLayer asyncHttpPost = new MidLayer(data,this,true) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
 				if (result.error != null)
@@ -201,7 +166,7 @@ public class ManageFriendsActivity extends Activity {
 				}
 			}
 		};		
-		asyncHttpPost.execute(getString(R.string.base_url)+"/user/list_facebook_friends");
+		asyncHttpPost.exec(getString(R.string.base_url)+"/user/list_facebook_friends");
 	}
 	
 	

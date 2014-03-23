@@ -1,17 +1,11 @@
 package edu.ncsu.stockman;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.text.DecimalFormat;
 
 import com.facebook.Session;
-
 import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.MidLayer;
-import edu.ncsu.stockman.model.Notification;
 import edu.ncsu.stockman.model.Player;
-import edu.ncsu.stockman.model.User;
 import android.os.Bundle;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -25,61 +19,42 @@ public class MainGameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if(Main.current_game == null || Main.current_player == null){
+			System.err.println("MainGameActivity current_player or current_game is null");
+			finish();
+			return;
+		}
 		setContentView(R.layout.activity_main_game);
 		
 		setTitle(Main.current_game.name);
-		TextView cashText = (TextView) findViewById(R.id.cashText);
-		cashText.setText("$"+Main.current_player.cash);
 		
-		//TODO clean, maybe one word with styling (html)
-		((TextView) findViewById(R.id.main_game_letter0)).setText(Main.current_player.word[0]+"");
-		((TextView) findViewById(R.id.main_game_letter1)).setText(Main.current_player.word[1]+"");
-		((TextView) findViewById(R.id.main_game_letter2)).setText(Main.current_player.word[2]+"");
-		((TextView) findViewById(R.id.main_game_letter3)).setText(Main.current_player.word[3]+"");
-		((TextView) findViewById(R.id.main_game_letter4)).setText(Main.current_player.word[4]+"");
-		((TextView) findViewById(R.id.main_game_letter5)).setText(Main.current_player.word[5]+"");
-	
+		LinearLayout v = (LinearLayout) findViewById(R.id.main_myword);
 		
-		// grab all player info from server
-		JSONObject data = new JSONObject();
-		try{		
-		data.put("access_token", Session.getActiveSession().getAccessToken());//post
-		}catch(JSONException e)
-		{
-			e.printStackTrace();
+		for (int i = 0; i < Main.wordLength; i++) {
+			TextView t = new TextView(this);
+			//t.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+			t.setEnabled(false);
+			t.setPadding(40, 0, 40, 0);
+			if(Main.current_player.word_revealed[i])
+				t.setTextAppearance(this, R.style.letter_revealed);
+			else
+				t.setTextAppearance(this, R.style.letter_not_revealed);
+			t.setText(Main.current_player.word[i]+"");
+			v.addView(t);
 		}
-		MidLayer asyncHttpPost = new MidLayer(data,this) {
-			@Override
-			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 10){
-						
-						try {
-							JSONObject j = new JSONObject(result.info.text);
-							Player me = Main.current_player;
-							//System.out.println(me.toString());
-							me.setStocks(j.optJSONArray("stocks"));
-							
-							//TODO this guesses is not fully implemented
-							//me.setGuesses(j.optJSONArray("gusses"));
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		};		
-		asyncHttpPost.execute(getString(R.string.base_url)+"/player/get/"+Main.current_player.id);
+		
+		
+		//fetch player info from server
+		Player.get(this);
 	}
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart() {
+		super.onStart();
+		//set
 		TextView cashText = (TextView) findViewById(R.id.cashText);
-		cashText.setText("$"+Main.current_player.cash);
+		DecimalFormat dc = new DecimalFormat("#.00");
+		cashText.setText("$"+Double.valueOf(dc.format(Main.current_player.cash)));
 	}
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -96,7 +71,7 @@ public class MainGameActivity extends Activity {
 	
 	/** Called when the user clicks the HangFirends Image button*/
 	public void hangFriends(View view) {
-	    // Do something in response to button
+		// Do something in response to button
 		Intent intent = new Intent(this, ChooseHangFriendActivity.class);
 		startActivity(intent);		
 	}

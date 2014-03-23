@@ -1,14 +1,14 @@
 package edu.ncsu.stockman;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 public class BuySellTabsAdapter extends FragmentPagerAdapter {
  
-	Fragment buy = new BuySharesFragment();
-	Fragment sell = new SellSharesFragment();
+	public BuySharesFragment buy = new BuySharesFragment();
+	public SellSharesFragment sell = new SellSharesFragment();
+	
     public BuySellTabsAdapter(FragmentManager fm) {
         super(fm);
     }

@@ -23,8 +23,12 @@ public class Guess {
 	public Guess(JSONObject j) {
 		super();
 		try {
-			this.id = j.getInt("id_guess");
 			
+			this.id = j.getInt("id_guess");
+			this.him = Main.current_game.players.get(j.getInt("him_player"));
+			this.me = Main.current_game.players.get(j.getInt("me_player"));
+			this.correct = j.getInt("correct") == 0 ? false: true;
+			this.letter = j.getString("letter").charAt(0);
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

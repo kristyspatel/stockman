@@ -1,12 +1,8 @@
 package edu.ncsu.stockman;
 
-
-import java.util.Random;
-
 import com.facebook.Session;
-
+import com.facebook.SessionState;
 import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.User;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends FacebookActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,25 +23,6 @@ public class SettingsActivity extends Activity {
 
 		e = (EditText)findViewById(R.id.settings_field_email);
 		e.setText(Main.current_user.email);
-		
-		System.out.println(Session.getActiveSession().getAccessToken());
-		
-		if (Session.getActiveSession() == null || Session.getActiveSession().isClosed()){
-			Intent intent = new Intent(this, Splash_screen.class);
-			startActivity(intent);
-		}
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	  super.onActivityResult(requestCode, resultCode, data);
-	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-
-	  // check if user is logged out
-		if (Session.getActiveSession() == null || Session.getActiveSession().isClosed()){
-			Intent intent = new Intent(this, Splash_screen.class);
-			startActivity(intent);
-		}
 	}
 	
 	@Override
@@ -72,8 +49,18 @@ public class SettingsActivity extends Activity {
 		c.startActivity(intent);
 	}
 	public static void logout(Activity c){
+		Session.getActiveSession().closeAndClearTokenInformation();
 		Intent intent = new Intent(c, Splash_screen.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		c.startActivity(intent);
 	}
 
+	//facebook
+	public void onSessionStateChange(Session session, SessionState state, Exception exception) {
+	    if (state.isClosed()) {
+	    	Intent intent = new Intent(this, Splash_screen.class);
+	    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    	startActivity(intent);
+	    }
+	}
 }

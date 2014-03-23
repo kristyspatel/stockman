@@ -1,15 +1,10 @@
 package edu.ncsu.stockman;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.facebook.Session;
+import java.util.Calendar;
 import edu.ncsu.stockman.model.Company;
 import edu.ncsu.stockman.model.Game;
 import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.MidLayer;
 import edu.ncsu.stockman.model.Notification;
-import edu.ncsu.stockman.model.Player;
 import edu.ncsu.stockman.model.User;
 import android.os.Bundle;
 import android.app.Activity;
@@ -30,96 +25,24 @@ public class Timeline extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
 		
-		
-		/**
-		 * Fetch User's info, games, notifications, invitations
-		 */
-		JSONObject data = new JSONObject();
-		try{		
-			data.put("access_token", Session.getActiveSession().getAccessToken());//post
-		}catch(JSONException e)
-		{
-			e.printStackTrace();
+		System.out.println(Math.random());
+		//Fetch companies and there prices (only if not fetched before or if the prices has changed)
+		if(Main.companies.size()==0 || Main.day < Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
+			Company.getPrices(this);
 		}
-		getUserInfo();
-		MidLayer asyncHttpPost2 = new MidLayer(data,this) {
-			@Override
-			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 0){
-						
-						try {
-							JSONArray j = new JSONArray(result.info.text);
-							for (int i = 0; i < j.length(); i++) {
-								Company c = new Company(j.getJSONObject(i));
-								Main.companies.append(c.id, c);
-							}
-							System.out.println("companies"+Main.companies);
-							
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		};		
-		asyncHttpPost2.execute(getString(R.string.base_url)+"/stockmarket/get");
+	}
 
-	}
-	public void getUserInfo(){
-		JSONObject data = new JSONObject();
-		try{		
-			data.put("access_token", Session.getActiveSession().getAccessToken());//post
-		}catch(JSONException e)
-		{
-			e.printStackTrace();
-		}
-		MidLayer asyncHttpPost = new MidLayer(data,this) {
-			@Override
-			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 0){
-						
-						try {
-							JSONObject j = new JSONObject(result.info.text);
-							System.out.println("Userdata");
-							System.out.println(j.toString());
-							User me = new User(j.optJSONObject("info"));
-							//System.out.println(me.toString());
-							me.setGames(j.optJSONArray("games"));
-							me.setNotifications(j.optJSONArray("notifications"));
-							me.setFriends(j.optJSONArray("friends"));
-							Main.current_user = me;
-							
-							//Change the activity components
-							((Timeline)context).setName(Main.current_user.name);
-							((Timeline)context).setGames();
-							((Timeline)context).setNotifications();
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		};		
-		asyncHttpPost.execute(getString(R.string.base_url)+"/user/get");
-	}
-	//TODO delete it and test it.
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	  super.onActivityResult(requestCode, resultCode, data);
-	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+	protected void onStart() {
+		super.onStart();
+		
+		//Fetch User's info, games, notifications, invitations
+		User.fetchUserInfo(this);
 	}
 	
 	public void setNotifications() {
 		LinearLayout l = (LinearLayout) findViewById(R.id.notification_list);
-		
+		l.removeAllViews();
 		for(Notification n: Main.current_user.notifications){
 			TextView t = new TextView(l.getContext());
 			t.setText(n.text);
@@ -134,17 +57,53 @@ public class Timeline extends Activity {
 		t.setText("Welcome:"+s);
 	}
 	public void setGames() {
-		super.onStart();
-		//TODO clean this mess
+		
 		LinearLayout main = (LinearLayout)findViewById(R.id.games_list);
+		main.removeAllViews();
+		
+		// New Button
+		View v = getLayoutInflater().inflate(R.layout.game_in_timeline, main,false);
+		
+		Button b = (Button) v.findViewById(R.id.game_item);
+		b.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(getBaseContext(), New_Game.class);
+				startActivity(intent);
+				
+			}
+		});
+		b.setText("New");
+		
+		main.addView(v);
+		
+		
 		for (int i = 0; i < Main.current_user.games.size(); i++) {
+			
+			//get game from model
 			Game g = Main.current_user.games.valueAt(i);
-			View v = getLayoutInflater().inflate(R.layout.game_in_timeline, main,false);
-			Button b = (Button) v.findViewById(R.id.game_item);
+			
+			//use the template
+			v = getLayoutInflater().inflate(R.layout.game_in_timeline, main,false);
+			
+			//onClick
+			//change the text of button and set tag
+			b = (Button) v.findViewById(R.id.game_item);
+			b.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					open_game(v);
+				}
+			});
+			
 			b.setTag(g);
 			b.setText(g.name.charAt(0)+"");
+			//change the textview text
 			TextView t = (TextView) v.findViewById(R.id.game_desc);
 			t.setText(g.name);
+			
 			main.addView(v);
 		}
 	}
@@ -156,60 +115,26 @@ public class Timeline extends Activity {
 		return true;
 	}
 	
-	public void create_new_game(View v){
-		Intent intent = new Intent(this, New_Game.class);
-		startActivity(intent);
+	@Override
+	public void onBackPressed() {
+		System.out.println("onBack");
+		setResult(1);
+		super.onBackPressed();
 	}
 
 	public void open_game(View v){
 		
 		Main.current_game = (Game) v.getTag();
 		
-		JSONObject data = new JSONObject();
-		try{
-		data.put("access_token", Session.getActiveSession().getAccessToken());//post
-		}catch(JSONException e){
-			e.printStackTrace();
-		}
-		MidLayer asyncHttpPost = new MidLayer(data,this) {
-			@Override
-			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 10){
-						
-						try {
-							JSONObject j = new JSONObject(result.info.text);
-							Player me = new Player(j.optJSONObject("me"));
-							Main.current_game.setPlayers(j.optJSONArray("players"));
-							
-							Main.current_player = me;
-							
-							System.out.println(Main.current_player);
-							Intent intent = new Intent(context, MainGameActivity.class);
-							startActivity(intent);
-
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		};		
-		asyncHttpPost.execute(getString(R.string.base_url)+"/game/get/"+Main.current_game.id);
+		//TODO use cache
+		//server request, and if it's sucessful, it will start Main Activity
+		Game.fetchGame(this);
 		
 	}
 	public void logout(MenuItem c){
 		SettingsActivity.logout(this);
 	}
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		//getUserInfo();
-	}
+
 	public void goToSettings(MenuItem c){
 		SettingsActivity.goToSettings(this);
 	}

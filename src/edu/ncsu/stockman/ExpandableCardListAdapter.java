@@ -2,33 +2,17 @@ package edu.ncsu.stockman;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.facebook.Session;
-
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.MidLayer;
-import edu.ncsu.stockman.model.Player;
 import edu.ncsu.stockman.model.Stock;
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 
-	private Context context;
 	private ArrayList<Stock> stocks;
 	private LayoutInflater inflater;
 
@@ -65,49 +49,7 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 				// TODO Auto-generated method stub
 				Stock s = (Stock) v.getTag();
 				
-				JSONObject data = new JSONObject();
-				try{		
-				data.put("access_token", Session.getActiveSession().getAccessToken());//post
-				}catch(JSONException e)
-				{
-					e.printStackTrace();
-				}
-				double remaining_cash = Main.current_player.cash + 1
-						* s.company.getPrice();
-				MidLayer asyncHttpPost = new MidLayer(data,v.getContext()) {
-					@Override
-					protected void resultReady(MidLayer.Result result) {
-						if (result.error != null)
-							System.out.println(result.error.text);
-						if(result.info != null){
-							if(result.info.code == 0){
-								
-									DecimalFormat dc = new DecimalFormat("#.00");
-									Toast toast = Toast.makeText(context, "The stock has been sold. The remaining balance is: "+
-											Double.valueOf(dc.format(bundle.getDouble("remaining_cash")))
-											, Toast.LENGTH_SHORT);
-									toast.show();
-									//TODO
-									int stock = -1;
-									for (int i = 0; i < Main.current_player.stocks.size(); i++) {
-										if (Main.current_player.stocks.get(i).id_stock == bundle.getInt("id_stock")){
-											stock = i;
-											break;
-										}
-									}
-									
-									Main.current_player.stocks.get(stock).amount -= 1;
-									if (Main.current_player.stocks.get(stock).amount  == 0)
-										Main.current_player.stocks.remove(stock);
-									notifyDataSetChanged();
-							}
-						}
-					}
-				};
-				asyncHttpPost.bundle.putDouble("remaining_cash",remaining_cash);
-				asyncHttpPost.bundle.putInt("id_stock",s.id_stock);
-				asyncHttpPost.execute(v.getContext().getString(R.string.base_url)+"stockmarket/sell/"+Main.current_player.id+"/"+s.id_stock+"/1/"+s.company.getTimeStamp());
-				
+				Stock.sellShares(v.getContext(),s,1);
 			}
 		});
 		priceFluctuationGraph.setImageResource(R.drawable.graph);

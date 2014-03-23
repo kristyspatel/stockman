@@ -22,6 +22,7 @@
         </activity>
         <activity
             android:name="edu.ncsu.stockman.PickWordActivity"
+            android:noHistory="true"
             android:label="@string/title_activity_pick_word"
             android:parentActivityName="edu.ncsu.stockman.Timeline" >
         </activity>
@@ -41,26 +42,27 @@
         </activity>
         <activity
             android:name="edu.ncsu.stockman.Splash_screen"
-            
+            android:launchMode="singleTask"
             android:label="@string/title_activity_splash_screen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
         <activity
             android:name="edu.ncsu.stockman.Timeline"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_timeline" >
         </activity>
         <activity
             android:name="edu.ncsu.stockman.New_Game"
             android:label="@string/title_activity_new_game"
+            android:noHistory="true"
             android:parentActivityName="edu.ncsu.stockman.Timeline" >
         </activity>
         <activity
             android:name="edu.ncsu.stockman.SettingsActivity"
+            android:noHistory="true"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
