@@ -62,7 +62,7 @@ public class Timeline extends Activity {
 	}
 	public void setGames() {
 		
-		LinearLayout main = (LinearLayout)findViewById(R.id.standing_list);
+		LinearLayout main = (LinearLayout)findViewById(R.id.games_list);
 		main.removeAllViews();
 		
 		// New Button
