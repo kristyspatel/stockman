@@ -17,13 +17,14 @@ import com.facebook.Session;
 import edu.ncsu.stockman.MainGameActivity;
 import edu.ncsu.stockman.R;
 
-public class Player{
+public class Player implements Comparable<Player>{
 
 	public int id;
 	public User user;
 	public Game game;
 	public double cash;
 	public String name;
+	public int die_date ;
 	public enum Player_status {INVITED,WAITING_FOR_WORD,ENROLLED,OUT};
 	public Player_status status;
 	
@@ -54,10 +55,19 @@ public class Player{
 		try {
 			this.id = info.getInt("id_player");
 			int s = info.getInt("player_status");
+			
+			this.die_date = info.getInt("die_date");
 			this.word = info.getString("word").toCharArray();
 			this.cash = info.getDouble("cash");
-			this.name = info.getString("name");
-			this.user = new User(info.getString("email"),info.getString("name"),info.getInt("id_user"),info.getLong("facebook_id"));
+			
+			if(Main.current_user != null && Main.current_user.id == info.getInt("id_user")){
+				this.name = Main.current_user.name;
+				this.user = Main.current_user;
+			}
+			else{
+				this.name = info.getString("name");
+				this.user = new User(info.getString("email"),info.getString("name"),info.getInt("id_user"),info.getLong("facebook_id"));
+			}
 			if (s == 1)
 				status = Player_status.INVITED;
 			else if (s == 2)
@@ -74,7 +84,6 @@ public class Player{
 				else
 					word_revealed[i] = true;
 				word_r /= 2;
-				System.out.print(word_revealed[i]?"true":"false");
 			}
 			System.out.println(word_r);
 			
@@ -274,9 +283,39 @@ public class Player{
 				}
 			}
 		};
-		System.out.println("here");
 		asyncHttpPost.bundle.putBoolean("isCorrect", isCorrect);
 		asyncHttpPost.exec(c.getString(R.string.base_url)+"player/guess/"+p.id);
+	}
+	public static void changeStatus(Context c, Game g, Player_status new_status){
+
+		// grab player info from server
+		JSONObject data = new JSONObject();
+		try{		
+			data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
+		
+		MidLayer asyncHttpPost = new MidLayer(data,c,false) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if(result.info.code == 1){
+					System.err.println("The player status was not updated.");
+				}
+			}
+		};
+		if(new_status == Player_status.OUT)
+			asyncHttpPost.exec(c.getString(R.string.base_url)+"user/decline_invitation/"+g.id);
+		else if(new_status == Player_status.WAITING_FOR_WORD)
+			asyncHttpPost.exec(c.getString(R.string.base_url)+"user/accept_invitation/"+g.id);
+	}
+	@Override
+	public int compareTo(Player another) {
+		if (this.die_date > another.die_date)
+			return 1;
+		else
+			return -1;
 	}
 	
 }

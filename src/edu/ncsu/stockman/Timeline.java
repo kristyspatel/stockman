@@ -1,25 +1,29 @@
 package edu.ncsu.stockman;
 
 import java.util.Calendar;
-import edu.ncsu.stockman.model.Company;
 import edu.ncsu.stockman.model.Game;
 import edu.ncsu.stockman.model.Main;
 import edu.ncsu.stockman.model.Notification;
+import edu.ncsu.stockman.model.Player;
 import edu.ncsu.stockman.model.User;
+import edu.ncsu.stockman.model.Player.Player_status;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 public class Timeline extends Activity {
 
+	SparseArray<LinearLayout> l;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,7 +32,7 @@ public class Timeline extends Activity {
 		System.out.println(Math.random());
 		//Fetch companies and there prices (only if not fetched before or if the prices has changed)
 		if(Main.companies.size()==0 || Main.day < Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
-			Company.getPrices(this);
+			//Company.getPrices(this);
 		}
 	}
 
@@ -58,7 +62,7 @@ public class Timeline extends Activity {
 	}
 	public void setGames() {
 		
-		LinearLayout main = (LinearLayout)findViewById(R.id.games_list);
+		LinearLayout main = (LinearLayout)findViewById(R.id.standing_list);
 		main.removeAllViews();
 		
 		// New Button
@@ -79,33 +83,102 @@ public class Timeline extends Activity {
 		
 		main.addView(v);
 		
+		//set the property list variable
+		l = new SparseArray<LinearLayout>(Main.current_user.games.size());
 		
 		for (int i = 0; i < Main.current_user.games.size(); i++) {
 			
 			//get game from model
 			Game g = Main.current_user.games.valueAt(i);
-			
+			if(g.me.status == Player_status.OUT){
+				//don't show it
+				continue;
+			}
 			//use the template
 			v = getLayoutInflater().inflate(R.layout.game_in_timeline, main,false);
+			l.put(g.id, (LinearLayout) v);
 			
 			//onClick
 			//change the text of button and set tag
+			
 			b = (Button) v.findViewById(R.id.game_item);
-			b.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					open_game(v);
-				}
-			});
+			
 			
 			b.setTag(g);
 			b.setText(g.name.charAt(0)+"");
 			//change the textview text
 			TextView t = (TextView) v.findViewById(R.id.game_desc);
+			
+			if(g.me.status == Player_status.INVITED){
+				t.setTextAppearance(this, R.style.game_button_inviatation);
+				b.setBackgroundResource(R.color.kulur_purple_dark);
+				b.setTextAppearance(this, R.style.game_button_inviatation);
+				b.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onInvitedGameClick(v);
+					}
+				});
+			}
+			else{
+				b.setTextAppearance(this, R.style.game_button);
+				b.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						open_game(v);
+					}
+				});
+			}
 			t.setText(g.name);
 			
 			main.addView(v);
 		}
+	}
+	View button; //sorry I could not find another way
+	public void onInvitedGameClick(View button) {
+		this.button = button;
+        PopupMenu popup = new PopupMenu(this, button);
+        popup.getMenuInflater().inflate(R.menu.game_dropdown, popup.getMenu());
+        
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+            	
+            	if(item.getItemId() == R.id.game_invitation_accept){
+            		//UI
+            		Game g = (Game) Timeline.this.button.getTag();
+            		LinearLayout ll = Timeline.this.l.get(g.id);
+            		Button b = (Button) ll.findViewById(R.id.game_item);
+            		b.setBackgroundResource(R.color.button);
+            		b.setTextAppearance(Timeline.this, R.style.game_button);
+            		TextView t = (TextView) ll.findViewById(R.id.game_desc);
+            		t.setTextAppearance(Timeline.this, R.style.game_button);
+            		b.setOnClickListener(new View.OnClickListener() {
+            			@Override
+            			public void onClick(View v) {
+            				open_game(v);
+            			}
+            		});
+            		
+            		//model 
+            		g.me.status = Player_status.WAITING_FOR_WORD;
+            		Player.changeStatus(Timeline.this, g, Player_status.WAITING_FOR_WORD);
+            	}
+            	else{
+            		//UI
+            		Game g = (Game) Timeline.this.button.getTag();
+            		LinearLayout ll = Timeline.this.l.get(g.id);
+            		ll.setVisibility(View.GONE);
+
+            		//model
+            		g.me.status = Player_status.OUT;
+            		Player.changeStatus(Timeline.this, g, Player_status.OUT);
+            	}
+                return true;
+            }
+        });
+ 
+        popup.show();
+
 	}
 
 	@Override

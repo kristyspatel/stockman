@@ -20,6 +20,7 @@ public class Game {
 	public String name;
 	public int id;
 	public Player creator;
+	public Player me;
 	public SparseArray<Player> players = new SparseArray<Player>();;
 	
 	public Game(JSONObject info) {
@@ -27,6 +28,7 @@ public class Game {
 		try {
 			this.name = info.getString("name");
 			this.id = info.getInt("id_game");
+			this.me = new Player(info);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -119,11 +121,7 @@ public class Game {
 							Toast toast = Toast.makeText(context, "Sorry, but your are out of this game.", Toast.LENGTH_LONG);
 							toast.show();
 						}
-						else if(me.status == Player.Player_status.INVITED){
-							//TODO lang
-							Toast toast = Toast.makeText(context, "You are invitied to this game. (TODO).", Toast.LENGTH_LONG);
-							toast.show();
-						}
+						
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

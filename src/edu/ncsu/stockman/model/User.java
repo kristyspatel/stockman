@@ -141,11 +141,11 @@ public class User {
 					try {
 						JSONObject j = new JSONObject(result.info.text);
 						User me = new User(j.optJSONObject("info"));
+						Main.current_user = me;
 						//System.out.println(me.toString());
 						me.setGames(j.optJSONArray("games"));
 						me.setNotifications(j.optJSONArray("notifications"));
 						me.setFriends(j.optJSONArray("friends"));
-						Main.current_user = me;
 						
 						//Change the activity components
 						// TODO maybe change this to an adaptor
