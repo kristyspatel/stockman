@@ -25,7 +25,6 @@ public class Guess {
 		try {
 			this.id = j.getInt("id_guess");
 			
-			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -31,9 +31,9 @@ public class MainActivity extends Activity {
         listDataChild.add("Maroon");
  
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ExpandableListAdapter listAdapter = new ExpandableCardListAdapter(inflater, listDataHeader, listDataChild);
+        //ExpandableListAdapter listAdapter = new ExpandableCardListAdapter(inflater, listDataHeader, listDataChild);
         // setting list adapter
-        expListView.setAdapter(listAdapter);
+        //expListView.setAdapter(listAdapter);
     }
 
 

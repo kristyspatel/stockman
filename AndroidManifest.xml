@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -47,7 +47,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
         <activity
             android:name="edu.ncsu.stockman.Timeline"
@@ -78,7 +77,14 @@
             android:name="edu.ncsu.stockman.ManageFriendsActivity"
             android:label="@string/title_activity_manage_friends"
             android:parentActivityName="edu.ncsu.stockman.SettingsActivity" >
-            
+        </activity>
+        <activity
+            android:name="edu.ncsu.stockman.CommentActivity"
+            android:label="@string/title_activity_comment"
+            android:parentActivityName="edu.ncsu.stockman.Timeline" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.ncsu.stockman.Timeline" />
         </activity>
     </application>
 

@@ -29,8 +29,7 @@ public class BuySharesListAdapter extends ArrayAdapter<Company>{
 	
 	
 	public View getView(int position, View convertView, ViewGroup parent){
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.buy_share_listitem, parent, false);
 		
 		RadioButton cardRadio = (RadioButton) rowView.findViewById(R.id.radio_shares);

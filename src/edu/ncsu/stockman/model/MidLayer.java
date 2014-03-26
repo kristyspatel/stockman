@@ -25,7 +25,7 @@ import android.view.View;
 
 abstract public class MidLayer extends AsyncTask<String,Integer, JSONObject>{
 	
-	JSONObject mData = null;
+	public JSONObject mData = null;
 	public Bundle bundle = new Bundle();
 	public View view; //the view that 
 	//private HashMap<String, String> mData = null;// post data
