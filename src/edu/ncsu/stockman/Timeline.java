@@ -1,6 +1,10 @@
 package edu.ncsu.stockman;
 
 import java.util.Calendar;
+
+import com.facebook.Session;
+
+import edu.ncsu.stockman.model.Company;
 import edu.ncsu.stockman.model.Game;
 import edu.ncsu.stockman.model.Main;
 import edu.ncsu.stockman.model.Notification;
@@ -32,8 +36,10 @@ public class Timeline extends Activity {
 		System.out.println(Math.random());
 		//Fetch companies and there prices (only if not fetched before or if the prices has changed)
 		if(Main.companies.size()==0 || Main.day < Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
-			//Company.getPrices(this);
+			Company.getPrices(this);
 		}
+		
+		System.out.println(Session.getActiveSession().getAccessToken());
 	}
 
 	@Override
@@ -90,10 +96,6 @@ public class Timeline extends Activity {
 			
 			//get game from model
 			Game g = Main.current_user.games.valueAt(i);
-			if(g.me.status == Player_status.OUT){
-				//don't show it
-				continue;
-			}
 			//use the template
 			v = getLayoutInflater().inflate(R.layout.game_in_timeline, main,false);
 			l.put(g.id, (LinearLayout) v);
@@ -117,6 +119,17 @@ public class Timeline extends Activity {
 					@Override
 					public void onClick(View v) {
 						onInvitedGameClick(v);
+					}
+				});
+			}
+			else if(g.me.status == Player_status.OUT){
+				t.setTextAppearance(this, R.style.game_button_inviatation);
+				b.setBackgroundResource(R.color.kulur_purple_dark);
+				b.setTextAppearance(this, R.style.game_button_inviatation);
+				b.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						open_game(v);
 					}
 				});
 			}

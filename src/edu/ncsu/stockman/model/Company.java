@@ -61,6 +61,28 @@ public class Company {
 		return price[getTimeStamp()-1];
 	}
 	
+	public int getPictureResourceID(){
+		
+		if(abbr.equals("AAPL"))
+			return R.drawable.apple;
+		else if(abbr.equals("MSFT"))
+			return R.drawable.microsoft;
+		else if(abbr.equals("GOOG"))
+			return R.drawable.google;
+		else if(abbr.equals("TWTR"))
+			return R.drawable.twitter;
+		else if(abbr.equals("HSY"))
+			return R.drawable.hershey;
+		else if(abbr.equals("KO"))
+			return R.drawable.cocacola;
+		else if(abbr.equals("MCD"))
+			return R.drawable.mcdonalds;
+		else if(abbr.equals("BKW"))
+			return R.drawable.burger_king;
+		else if(abbr.equals("SNE"))
+			return R.drawable.sony;
+		return -1;
+	}
 	public int getTimeStamp(){
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 		int h = c.get(Calendar.HOUR_OF_DAY);

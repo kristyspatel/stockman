@@ -18,7 +18,7 @@ public class Notification {
 		super();
 		this.text = j.optString("text");
 		this.seen = (j.optString("seen") == "1"?true : false);
-		this.id_notification = j.optInt("text");
+		this.id_notification = j.optInt("id_notification");
 	}
 	
 	

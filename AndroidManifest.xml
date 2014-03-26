@@ -22,8 +22,8 @@
         </activity>
         <activity
             android:name="edu.ncsu.stockman.PickWordActivity"
-            android:noHistory="true"
             android:label="@string/title_activity_pick_word"
+            android:noHistory="true"
             android:parentActivityName="edu.ncsu.stockman.Timeline" >
         </activity>
         <activity
@@ -42,17 +42,18 @@
         </activity>
         <activity
             android:name="edu.ncsu.stockman.Splash_screen"
-            android:launchMode="singleTask"
-            android:label="@string/title_activity_splash_screen" >
+            android:label="@string/title_activity_splash_screen"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="edu.ncsu.stockman.Timeline"
-            android:launchMode="singleTop"
-            android:label="@string/title_activity_timeline" >
+            android:label="@string/title_activity_timeline"
+            android:launchMode="singleTop" >
         </activity>
         <activity
             android:name="edu.ncsu.stockman.New_Game"
@@ -62,8 +63,8 @@
         </activity>
         <activity
             android:name="edu.ncsu.stockman.SettingsActivity"
-            android:noHistory="true"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:noHistory="true" >
         </activity>
         <activity
             android:name="edu.ncsu.stockman.StockMarketActivity"
@@ -81,7 +82,11 @@
             android:name="edu.ncsu.stockman.ManageFriendsActivity"
             android:label="@string/title_activity_manage_friends"
             android:parentActivityName="edu.ncsu.stockman.SettingsActivity" >
-            
+        </activity>
+        <activity
+            android:name="edu.ncsu.stockman.ShowLogs"
+            android:parentActivityName="edu.ncsu.stockman.MainGameActivity"
+            android:label="@string/title_activity_show_logs" >
         </activity>
     </application>
 

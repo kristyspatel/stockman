@@ -46,8 +46,11 @@ public class MainGameActivity extends Activity {
 			v.addView(t);
 		}
 		
-		
-		
+		//fetch player info from server
+		Player.get(this);
+	}
+	
+	private void showStanding() {
 		// sort players on the their die_date 
 		PriorityQueue<Player> sorted = new PriorityQueue<Player>(Main.current_game.players.size());
 		
@@ -56,44 +59,49 @@ public class MainGameActivity extends Activity {
 			System.out.print("?");
 			sorted.add(p);
 		}
-		
-		//show players in the standing ssection
+				//show players in the standing ssection
 		LinearLayout main = (LinearLayout)findViewById(R.id.standing_list);
+		main.removeAllViews();
 		int counter = 0;
 		for (int i = 0; i < Main.current_game.players.size(); i++) {
 			
 			View view = getLayoutInflater().inflate(R.layout.player_in_standing, main,false);
 			
 			Player p = sorted.poll();
+			System.out.println(p.user.name);
 			
 			Button b = (Button) view.findViewById(R.id.player_item);
 			
 			TextView t = (TextView) view.findViewById(R.id.player_desc);
 
 			t.setText(p.user.name);
+			b.setTag(p);
+			b.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Player p = (Player) v.getTag();
+//					if (p.status ==Player_status.OUT ){
+						Intent intent = new Intent(MainGameActivity.this, ShowLogs.class);
+						intent.putExtra("player_id", p.id);
+						startActivity(intent);
+	//				}
+				}
+			});
 			
+			main.addView(view);
 			if(p.status == Player_status.OUT){
-				b.setText(Main.current_game.players.size() - i +1 +"");
-				main.addView(view,counter);
+				b.setText(i +1 +"");
 			}
 			else{
-				main.addView(view);
-				counter++;
 				b.setText("?");
-				b.setEnabled(false);
+				
 			}
-			
-			
 		}
-		
-		
-		//fetch player info from server
-		Player.get(this);
 	}
 	
-	@Override
-	protected void onStart() {
-		super.onStart();
+	public void updateCashValues(){
 		//set the player's current cash and possessions.
 		TextView t = (TextView) findViewById(R.id.remaining_cash);
 		DecimalFormat dc = new DecimalFormat("#.00");
@@ -112,8 +120,14 @@ public class MainGameActivity extends Activity {
 		t = (TextView) findViewById(R.id.cashText);
 		t.setText("$"+Double.valueOf(dc.format(current_possissions+Main.current_player.cash)));
 		
-		
 	}
+	@Override
+	protected void onStart() {
+		super.onStart();
+		updateCashValues();
+		showStanding();
+	}
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  super.onActivityResult(requestCode, resultCode, data);

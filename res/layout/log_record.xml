@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:id="@+id/log_img"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:textSize="25sp" />
+
+			     <RelativeLayout
+			         android:id="@+id/time_date"
+			         android:layout_width="50dp"
+			         android:layout_height="wrap_content"
+			         android:background="#333333"
+			         android:layout_toRightOf="@id/log_img" >
+			
+			         <TextView
+			             android:id="@+id/log_time"
+			             android:layout_width="wrap_content"
+			             android:layout_height="wrap_content"
+			             android:layout_centerHorizontal="true"
+			             android:text="12:40" />
+			
+			         <TextView
+			             android:id="@+id/log_date"
+			             android:layout_width="wrap_content"
+			             android:layout_height="wrap_content"
+			             android:layout_below="@id/log_time"
+			             android:layout_centerHorizontal="true"
+			             android:text="Tue 13" />
+			
+			     </RelativeLayout>
+                    
+                    <TextView
+                        android:id="@+id/log_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/time_date"
+                        android:text="One letter: (m) was revealed by Kristy Patel."/>
+
+                </RelativeLayout>
+                
+ 

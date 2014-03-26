@@ -39,15 +39,6 @@ public class Game {
 		this.name = name;
 		this.id = id;
 	}
-	static boolean selectGame(int id)
-	{
-		Game g = Main.current_user.games.get(id);
-		if (g == null)
-			return false;
-		Main.current_game = g;
-		Main.current_player = g.players.get(Main.current_user.id);
-		return true;
-	}
 	public void setPlayers(JSONArray players){
 		for (int i = 0; i < players.length(); i++) {
 			try {
@@ -118,7 +109,9 @@ public class Game {
 						}
 						else if(me.status == Player.Player_status.OUT){
 							//TODO lang
-							Toast toast = Toast.makeText(context, "Sorry, but your are out of this game.", Toast.LENGTH_LONG);
+							Intent intent = new Intent(context, MainGameActivity.class);
+							context.startActivity(intent);
+							Toast toast = Toast.makeText(context, "This game is now over.", Toast.LENGTH_LONG);
 							toast.show();
 						}
 						
