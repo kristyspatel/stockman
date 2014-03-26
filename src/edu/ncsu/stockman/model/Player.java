@@ -16,6 +16,7 @@ import com.facebook.Session;
 
 import edu.ncsu.stockman.MainGameActivity;
 import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.ShowLogs;
 
 public class Player implements Comparable<Player>{
 
@@ -29,6 +30,7 @@ public class Player implements Comparable<Player>{
 	public Player_status status;
 	
 	// TODO public enum status
+	public ArrayList<Activityy> logs = new ArrayList<Activityy>();
 	public ArrayList<Stock> stocks = new ArrayList<Stock>();
 	public char[] word = new char[6]; 
 	public ArrayList<Guess> guesses = new ArrayList<Guess>();
@@ -126,6 +128,8 @@ public class Player implements Comparable<Player>{
 			if (count_revealed == Main.wordLength){
 				//notifyOthers(p.user.name +" is dead. "+user.name+"'s just revealed his last letter. His word is:"+String.copyValueOf(p.word));
 				error.setText(p.user.name +" is dead. You just revealed his last letter. His word is:"+String.copyValueOf(p.word));
+				p.status = Player_status.OUT;
+				p.die_date = (int) System.currentTimeMillis() / 1000;
 				error.setVisibility(View.VISIBLE);
 			}
 			else{
@@ -185,6 +189,19 @@ public class Player implements Comparable<Player>{
 			}
 		}
 	}
+	public void setActivies(JSONArray logs){
+		this.logs = new ArrayList<Activityy>();
+		for (int i = 0; i < logs.length(); i++) {
+			try {
+				JSONObject log = logs.getJSONObject(i);
+				Activityy s = new Activityy(log,this);
+				this.logs.add(s);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
 	
 	public void notifyOthers(String noti){
@@ -225,6 +242,35 @@ public class Player implements Comparable<Player>{
 		};		
 		asyncHttpPost.exec(c.getString(R.string.base_url)+"/player/pick_word/"+Main.current_player.id);
 	}
+	public static void getLogs(Context c,int id_player){
+		// grab player info from server
+		JSONObject data = new JSONObject();
+		try{		
+			data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
+		
+		MidLayer asyncHttpPost = new MidLayer(data,c,true) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if(result.info.code == 10){
+					try {
+						JSONArray j = new JSONArray(result.info.text);
+						int id_player = bundle.getInt("id_player");
+						Main.current_game.players.get(id_player).setActivies(j);
+						((ShowLogs) context).setLogs();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		};		
+		asyncHttpPost.bundle.putInt("id_player", id_player);
+		asyncHttpPost.exec(c.getString(R.string.base_url)+"/player/list_logs/"+id_player);
+	}
 	public static void get(Context c){
 		// grab player info from server
 		JSONObject data = new JSONObject();
@@ -249,6 +295,7 @@ public class Player implements Comparable<Player>{
 							me = Main.current_player;
 						
 						me.setStocks(j.getJSONArray("stocks"));
+						((MainGameActivity) context).updateCashValues();
 						
 						me.setGuesses(j.optJSONArray("guesses"));
 					} catch (JSONException e) {
@@ -312,10 +359,16 @@ public class Player implements Comparable<Player>{
 	}
 	@Override
 	public int compareTo(Player another) {
-		if (this.die_date > another.die_date)
+		if(another.die_date == 0)
 			return 1;
-		else
+		
+		if(die_date == 0)
 			return -1;
+		
+		if (this.die_date > another.die_date)
+			return -1;
+		else
+			return 1;
 	}
 	
 }

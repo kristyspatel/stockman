@@ -46,6 +46,7 @@ public class HangFriendActivity extends Activity {
 		// set the guesses
 		for (int i = 0; i < Main.current_player.guesses.size(); i++) {
 			Guess g = Main.current_player.guesses.get(i);
+			System.out.println("Guess id"+g.id);
 			if(him.id == g.him.id){
 				int x  = getNumberForChar(Character.toLowerCase(g.letter));
 				if(x==-1)

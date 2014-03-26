@@ -53,7 +53,7 @@ public class ChooseHangFriendActivity extends Activity {
 			   t.setText(p.name);
 			   
 			   if(p.status == Player_status.INVITED || p.status == Player_status.WAITING_FOR_WORD){
-				   t.setText(p.name+" (Invitied).");
+				   t.setText(p.name+" (Invited).");
 				   img.setEnabled(false);
 				   //get his profile picture
 				   new DownloadImageTask(img)

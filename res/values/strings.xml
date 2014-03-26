@@ -65,6 +65,7 @@
     <string name="hello_world">Hello world!</string>
     <!-- Server -->
     <string name="base_url">http://50.116.13.164/stockman/</string>
+    <string name="title_activity_show_logs">ShowLogs</string>
     <string name="title_activity_comment">CommentActivity</string>
-
+    
 </resources>
