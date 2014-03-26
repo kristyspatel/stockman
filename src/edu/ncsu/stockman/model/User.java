@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.facebook.Session;
+
+import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.Timeline;
+import android.content.Context;
 import android.util.SparseArray;
 
 public class User {
@@ -108,5 +114,53 @@ public class User {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	
+	/**
+	 * Server side functions
+	 */
+	
+	/**
+	 * Fetch User's info, games, notifications, invitations
+	 */
+	public static void fetchUserInfo(Context c){
+		JSONObject data = new JSONObject();
+		try{		
+			data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
+		
+		MidLayer asyncHttpPost = new MidLayer(data,c,Main.current_user==null?true:false) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if(result.info.code == 0){
+					
+					try {
+						JSONObject j = new JSONObject(result.info.text);
+						User me = new User(j.optJSONObject("info"));
+						Main.current_user = me;
+						//System.out.println(me.toString());
+						me.setGames(j.optJSONArray("games"));
+						me.setNotifications(j.optJSONArray("notifications"));
+						me.setFriends(j.optJSONArray("friends"));
+						
+						//Change the activity components
+						// TODO maybe change this to an adaptor
+						((Timeline)context).setName(Main.current_user.name);
+						((Timeline)context).setGames();
+						((Timeline)context).setNotifications();
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			
+			}
+		};		
+		asyncHttpPost.exec(c.getString(R.string.base_url)+"/user/get");
 	}
 }

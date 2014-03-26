@@ -7,6 +7,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.facebook.Session;
+
+import edu.ncsu.stockman.R;
+
+import android.content.Context;
 import android.util.SparseArray;
 
 public class Company {
@@ -64,4 +69,41 @@ public class Company {
 		return (h*60*2+m*2+(s<30?0:1));
 	}
 	
+	
+	/**
+	 * Server side functions
+	 */
+	
+	public static void getPrices(Context c){
+
+		// TODO check if local file exist. 
+		JSONObject data = new JSONObject();
+		try{		
+			data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
+		
+		MidLayer asyncHttpPost2 = new MidLayer(data,c,true) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if(result.info.code == 0){
+					
+					try {
+						JSONArray j = new JSONArray(result.info.text);
+						for (int i = 0; i < j.length(); i++) {
+							Company c = new Company(j.getJSONObject(i));
+							Main.companies.append(c.id, c);
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		};	
+		asyncHttpPost2.exec(c.getString(R.string.base_url)+"/stockmarket/get");
+
+	}
 }

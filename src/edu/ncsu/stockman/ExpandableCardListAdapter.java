@@ -1,14 +1,9 @@
 package edu.ncsu.stockman;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
 import edu.ncsu.stockman.model.Stock;
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -18,7 +13,6 @@ import android.widget.TextView;
 
 public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 
-	private Context context;
 	private ArrayList<Stock> stocks;
 	private LayoutInflater inflater;
 
@@ -47,6 +41,17 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 			convertView = inflater.inflate(R.layout.card_details, null);
 		ImageView priceFluctuationGraph = (ImageView)convertView.findViewById(R.id.priceFluctuationGraph);
 		Button sellButton  = (Button)convertView.findViewById(R.id.sellButton);
+		sellButton.setTag(stocks.get(groupPosition));
+		sellButton.setOnClickListener( new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Stock s = (Stock) v.getTag();
+				
+				Stock.sellShares(v.getContext(),s,1);
+			}
+		});
 		priceFluctuationGraph.setImageResource(R.drawable.graph);
 		return convertView;
 	}
@@ -79,17 +84,20 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
+		
 		if(convertView == null)
 			convertView = inflater.inflate(R.layout.expandable_cards, null);
 		
 		TextView shareNameTextView = (TextView) convertView.findViewById(R.id.share_card);
 		Stock stock = stocks.get(groupPosition);
-		String shareName = stock.company.name;
-		shareNameTextView.setText(shareName);
+		shareNameTextView.setText(stock.amount + " x "+stock.company.name);
 		
 		TextView priceChangeTextView = (TextView) convertView.findViewById(R.id.price_change);
 		float change = (stock.company.getPrice()-stock.price) / stock.company.getPrice();
-		priceChangeTextView.setText( change + "%");
+		
+		DecimalFormat dc = new DecimalFormat("#.00");
+		
+		priceChangeTextView.setText( Double.valueOf(dc.format(change)) + "%");
 		
 		ImageView priceChangeIndicator = (ImageView)(convertView.findViewById(R.id.price_change_indicator));
 		if(change > 0)
@@ -114,7 +122,7 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
 		// TODO Auto-generated method stub
-		return null;
+		return childPosition;
 	}
 	
 

@@ -5,29 +5,5 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-    <item
-        android:id="@+id/itembackButtom"
-        android:checkable="false"
-        android:checked="false"
-        android:enabled="true"
-        android:icon="@drawable/backbutton"
-        android:menuCategory="system"
-        android:onClick="onBackMenuItem"
-        android:orderInCategory="1"
-        android:showAsAction="always"
-        android:title="Back Button"
-        android:visible="true">
-    </item>
-    <item
-        android:id="@+id/itemhomeButton"
-        android:enabled="true"
-        android:icon="@drawable/homebutton"
-        android:menuCategory="system"
-        android:onClick="OnHomeMenuItem"
-        android:orderInCategory="99"
-        android:showAsAction="always"
-        android:title="Home Button"
-        android:visible="true">
-    </item>
 
 </menu>

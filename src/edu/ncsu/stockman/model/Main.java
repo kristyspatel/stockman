@@ -1,5 +1,6 @@
 package edu.ncsu.stockman.model;
 
+import java.util.Calendar;
 import android.util.SparseArray;
 
 public class Main {
@@ -12,12 +13,16 @@ public class Main {
 	public static User current_user;
 	public static Game current_game;
 	public static Player current_player;
+
+	public static int day;
 	
 	public static int wordLength = 6;
 	public static double costOfGuess = 50;
 	
 	
 	static {
+		day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+		
 		//set uo users
 //		users.put(1,new User("a.osaimy@gmail.com", "Abdul", 1));
 //		users.put(2,new User("kpatel6@ncsu.edu", "Kristy", 2));

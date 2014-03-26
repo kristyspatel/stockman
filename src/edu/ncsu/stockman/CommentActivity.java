@@ -85,7 +85,7 @@ public class CommentActivity extends Activity {
 			e.printStackTrace();
 		}
 		System.out.println(data.toString());
-		MidLayer asyncHttpPost = new MidLayer(data,this) {
+		MidLayer asyncHttpPost = new MidLayer(data,this,true) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
 				if (result.error != null)
@@ -132,7 +132,7 @@ public class CommentActivity extends Activity {
 			e.printStackTrace();
 		}
 		System.out.println(data.toString());
-		MidLayer asyncHttpPost = new MidLayer(data,this) {
+		MidLayer asyncHttpPost = new MidLayer(data,this,true) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
 				if (result.error != null)
@@ -265,7 +265,7 @@ public class CommentActivity extends Activity {
 			e.printStackTrace();
 		}
 		System.out.println(data.toString());
-		MidLayer asyncHttpPost = new MidLayer(data,this) {
+		MidLayer asyncHttpPost = new MidLayer(data,this,true) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
 				if (result.error != null)
