@@ -1,7 +1,7 @@
 package edu.ncsu.stockman;
 
-import edu.ncsu.stockman.model.Company;
 import java.util.ArrayList;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import edu.ncsu.stockman.model.Company;
 
 public class BuySharesListAdapter extends ArrayAdapter<Company>{
 	private final Context context;
@@ -28,6 +29,7 @@ public class BuySharesListAdapter extends ArrayAdapter<Company>{
 		super.notifyDataSetChanged();
 	}
 	
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
 		
 		LayoutInflater inflater = (LayoutInflater) context
@@ -36,9 +38,10 @@ public class BuySharesListAdapter extends ArrayAdapter<Company>{
 		
 		RadioButton cardRadio = (RadioButton) rowView.findViewById(R.id.radio_shares);
 		cardRadio.setTag(companies[position]);
+		rowView.setTag(companies[position]);
 		radioList.add(cardRadio);
 		//cardRadio.set
-		cardRadio.setOnClickListener(new View.OnClickListener() {
+		rowView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -53,11 +56,11 @@ public class BuySharesListAdapter extends ArrayAdapter<Company>{
 			}
 		});
 		TextView cardName = (TextView) rowView.findViewById(R.id.cardName);
-		cardName.setText(companies[position].name);
+		cardName.setText(companies[position].abbr);
 		
 		//TODO set the company logo
-		//ImageView cardImage = (ImageView) rowView.findViewById(R.id.cardImage);
-		//cardImage.setImageResource(R.drawable.ic_launcher);
+		ImageView cardImage = (ImageView) rowView.findViewById(R.id.cardImage);
+		cardImage.setImageResource(companies[position].getPictureResourceID());
 		
 		TextView previousPrice = (TextView) rowView.findViewById(R.id.previousPrice);
 		previousPrice.setText(Float.toString(companies[position].getPrevPrice()));

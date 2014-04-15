@@ -1,4 +1,4 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
 
 import java.util.ArrayList;
 
@@ -6,47 +6,75 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.facebook.Session;
-
-import edu.ncsu.stockman.model.Comment;
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.MidLayer;
-import edu.ncsu.stockman.model.Notification;
-import edu.ncsu.stockman.model.User;
-import android.R.color;
-import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.NavUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.text.Editable;
-import android.text.TextWatcher;
+
+import com.facebook.Session;
+
+import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.model.Comment;
+import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.MidLayer;
+import edu.ncsu.stockman.model.Notification;
 
 public class CommentActivity extends Activity {
 
-	ArrayList<Comment> comments;
+	Notification notification;
 	Button postButton;
+	
+	// Timer to update comments if new comment from server
+	Handler timerHandler = new Handler();
+	Runnable timerRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+
+			if(notification.new_comment){
+				setContent();
+				notification.new_comment = false;
+			}
+			timerHandler.postDelayed(this, 1000);
+		}
+	};
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		timerHandler.removeCallbacks(timerRunnable);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		timerHandler.postDelayed(timerRunnable, 0);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		notification = Main.current_user.notifications.get(getIntent().getExtras().getInt("notification_id"));
 		setContentView(R.layout.activity_comment);
 		Button postButton = (Button)findViewById(R.id.post);
 		postButton.setVisibility(View.GONE);
 		EditText et = (EditText)findViewById(R.id.comment_box);
+		
+		
 		et.addTextChangedListener(new TextWatcher() {
+			
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -84,35 +112,29 @@ public class CommentActivity extends Activity {
 		{
 			e.printStackTrace();
 		}
-		System.out.println(data.toString());
 		MidLayer asyncHttpPost = new MidLayer(data,this,true) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 10){
-						
-						try {
-							JSONArray j = new JSONArray(result.info.text);
-							setComments(j);
-							setNotification();
-							setContent();
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					if(result.info.code == 1)
-					{
+				if(result.info.code == 10){
+					
+					try {
+						JSONArray j = new JSONArray(result.info.text);
+						setComments(j);
 						setNotification();
-						//setNoComments();
+						setContent();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+				}
+				if(result.info.code == 1)
+				{
+					setNotification();
+					//setNoComments();
 				}
 			}
 		};
-		System.out.println("/user/get_comment/"+getIntent().getExtras().getInt("notification_id"));
-		asyncHttpPost.execute(getString(R.string.base_url)+"/user/get_comment/"+getIntent().getExtras().getInt("notification_id"));
+		asyncHttpPost.execute(getString(R.string.base_url)+"/user/get_comment/"+notification.id_notification);
 	}
 	public void setPostButtonVisibility(int i)
 	{
@@ -131,59 +153,37 @@ public class CommentActivity extends Activity {
 		{
 			e.printStackTrace();
 		}
-		System.out.println(data.toString());
 		MidLayer asyncHttpPost = new MidLayer(data,this,true) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 10){
-						
-						try {
-							JSONArray j = new JSONArray(result.info.text);
-							setComments(j);
-							setNotification();
-							setContent();
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					if(result.info.code == 1)
-					{
+				if(result.info.code == 10){
+					
+					try {
+						JSONArray j = new JSONArray(result.info.text);
+						setComments(j);
 						setNotification();
-						setNoComments();
+						setContent();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+				}
+				if(result.info.code == 1)
+				{
+					setNotification();
+					setNoComments();
 				}
 			}
 		};
-		System.out.println("/user/get_comment/"+getIntent().getExtras().getInt("notification_id"));
 		asyncHttpPost.execute(getString(R.string.base_url)+"/user/get_comment/"+getIntent().getExtras().getInt("notification_id"));
 
 	}
 	
-	
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-
-	}
 	public void setNotification()
 	{
 		TextView tv = (TextView) findViewById(R.id.notification);
-		for(Notification not:Main.current_user.notifications)
-		{		
-			System.out.println(not.id_notification);
-			if(not.id_notification == getIntent().getExtras().getInt("notification_id"))
-			{
-				
-				tv.setText(not.text);
-			}
-		}
+		String txt = notification.getText(this);
+		tv.setText(txt);
 	}
 	
 	public void setNoComments()
@@ -192,7 +192,7 @@ public class CommentActivity extends Activity {
 		TextView tv = new TextView(this);
 		//tv.setId(comments.get(0).getId());
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-			     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.setMargins(5, 0, 0, 0);		
 		tv.setLayoutParams(layoutParams);
 		tv.setPadding(5, 5, 2, 0);
@@ -204,32 +204,31 @@ public class CommentActivity extends Activity {
 	
 	public void setContent()
 	{   
-		System.out.println("set colour");
 		LinearLayout lv = (LinearLayout)findViewById(R.id.comments_list);
 		//lv.setOrientation(LinearLayout.VERTICAL);
 		//LinearLayout.LayoutParams lin_layout_params = new LinearLayout.LayoutParams(
 			     //LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		//lv.setLayoutParams(lin_layout_params);
-		for(int i=0;i<comments.size();i++)	
+		lv.removeAllViews();
+		for(int i=0;i<notification.comments.size();i++)	
 		{
-			System.out.println(comments.get(i).getComment());
 			TextView user_name = new TextView(this);
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-				     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+				     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			layoutParams.setMargins(5, 2, 0, 0);		
 			user_name.setLayoutParams(layoutParams);
 			user_name.setPadding(5, 5, 2, 0);
-			user_name.setText(comments.get(i).getUser().name+":");
+			user_name.setText(notification.comments.get(i).getUser().name+":");
 			
 			user_name.setTextColor(this.getResources().getColor(edu.ncsu.stockman.R.color.kulur_purple));
 			user_name.setTypeface(null, Typeface.BOLD);
 			TextView comment = new TextView(this);
 			LinearLayout.LayoutParams commentParams = new LinearLayout.LayoutParams(
-				     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+				     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			commentParams.setMargins(5, 0, 0, 0);		
 			comment.setLayoutParams(commentParams);
 			comment.setPadding(5, 5, 2, 0);
-			comment.setText(comments.get(i).getComment());
+			comment.setText(notification.comments.get(i).getComment());
 			lv.addView(user_name);
 			lv.addView(comment);			
 		}
@@ -241,9 +240,8 @@ public class CommentActivity extends Activity {
 		for(int i=0;i<comments.length();i++)
 		{
 			comment_list.add(new Comment(comments.optJSONObject(i)));
-			System.out.println(comment_list.get(i).getComment());
 		}
-		this.comments = comment_list;
+		notification.comments = comment_list;
 	}
 	
 	@Override
@@ -258,33 +256,28 @@ public class CommentActivity extends Activity {
 		JSONObject data = new JSONObject();
 		try{		
 		data.put("access_token", Session.getActiveSession().getAccessToken());//post
-		System.out.println(((EditText)findViewById(R.id.comment_box)).getText());
 		data.put("text",((EditText)findViewById(R.id.comment_box)).getText());
 		}catch(JSONException e)
 		{
 			e.printStackTrace();
 		}
-		System.out.println(data.toString());
 		MidLayer asyncHttpPost = new MidLayer(data,this,true) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 0){
-						try{
-							System.out.println(this.mData.get("text"));
-							add_comment((this.mData.get("text")).toString());
-						}catch(Exception e)
-						{
-							e.printStackTrace();
-						}
-						
+				if(result.info.code == 0){
+					try{
+						String text = (this.mData.getString("text"));
+						//TODO get new comment id from server
+						notification.comments.add(new Comment(Main.current_user,text , 0, notification));
+						add_comment(text);
+					}catch(Exception e)
+					{
+						e.printStackTrace();
 					}
+					
 				}
 			}
 		};
-		System.out.println("/user/comment/"+getIntent().getExtras().getInt("notification_id"));
 		asyncHttpPost.execute(getString(R.string.base_url)+"/user/comment/"+getIntent().getExtras().getInt("notification_id"));
 
 	}
@@ -294,7 +287,7 @@ public class CommentActivity extends Activity {
 		LinearLayout lv = (LinearLayout)findViewById(R.id.comments_list);
 		TextView user_name = new TextView(this);
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-			     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.setMargins(5, 2, 0, 0);		
 		user_name.setLayoutParams(layoutParams);
 		user_name.setPadding(5, 5, 2, 0);
@@ -305,7 +298,7 @@ public class CommentActivity extends Activity {
 		TextView comment = new TextView(this);
 		//tv.setId(comments.get(0).getId());
 		LinearLayout.LayoutParams commentParams = new LinearLayout.LayoutParams(
-			     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		commentParams.setMargins(5, 0, 0, 0);		
 		comment.setLayoutParams(commentParams);
 		comment.setPadding(5, 5, 2, 0);

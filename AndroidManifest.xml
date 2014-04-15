@@ -1,47 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.ncsu.stockman"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="4"
+    android:versionName="1.4" >
 
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    
+    <!-- For Google Cloud Messaging -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="edu.ncsu.stockman.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="edu.ncsu.stockman.permission.C2D_MESSAGE" />
+    
+    
     <application
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <!-- For Google Cloud Messaging -->
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter> 
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="edu.ncsu.stockman" />
+            </intent-filter> 
+        </receiver>
+        <service android:name=".GcmIntentService" />
+        
         <activity
-            android:name="edu.ncsu.stockman.MainGameActivity"
+            android:name="edu.ncsu.stockman.activity.MainGameActivity"
             android:label="@string/title_activity_main_game"
-            android:parentActivityName="edu.ncsu.stockman.Timeline" >
+            android:parentActivityName="edu.ncsu.stockman.activity.Timeline" >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.PickWordActivity"
+            android:name="edu.ncsu.stockman.activity.PickWordActivity"
             android:label="@string/title_activity_pick_word"
             android:noHistory="true"
-            android:parentActivityName="edu.ncsu.stockman.Timeline" >
+            android:parentActivityName="edu.ncsu.stockman.activity.Timeline" >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.HangFriendActivity"
+	        android:name="edu.ncsu.stockman.activity.HangFriendActivity"
             android:label="@string/title_activity_hang_friend"
-            android:parentActivityName="edu.ncsu.stockman.ChooseHangFriendActivity" >
+            android:parentActivityName="edu.ncsu.stockman.activity.ChooseHangFriendActivity" >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.ChooseHangFriendActivity"
+            android:name="edu.ncsu.stockman.activity.ChooseHangFriendActivity"
             android:label="@string/title_activity_choose_hang_friend"
-            android:parentActivityName="edu.ncsu.stockman.MainGameActivity" >
+            android:parentActivityName="edu.ncsu.stockman.activity.MainGameActivity" > 
+            >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.MainActivity"
+        	android:name="edu.ncsu.stockman.activity.MainActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.Splash_screen"
+            android:name="edu.ncsu.stockman.activity.Splash_screen"
             android:label="@string/title_activity_splash_screen"
             android:launchMode="singleTask" >
             <intent-filter>
@@ -51,51 +73,46 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.Timeline"
+        	android:name="edu.ncsu.stockman.activity.Timeline"
             android:label="@string/title_activity_timeline"
             android:launchMode="singleTop" >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.New_Game"
+            android:name="edu.ncsu.stockman.activity.New_Game"
             android:label="@string/title_activity_new_game"
             android:noHistory="true"
-            android:parentActivityName="edu.ncsu.stockman.Timeline" >
+            android:parentActivityName="edu.ncsu.stockman.activity.Timeline" >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:noHistory="true" >
+            android:name="edu.ncsu.stockman.activity.SettingsActivity"
+            android:label="@string/title_activity_settings">
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.StockMarketActivity"
-            android:label="@string/title_activity_stock_market"
-            android:parentActivityName="edu.ncsu.stockman.MainGameActivity" >
+            android:name="edu.ncsu.stockman.activity.StockMarketActivity"
+     		android:label="@string/title_activity_stock_market"
+            android:parentActivityName="edu.ncsu.stockman.activity.MainGameActivity" >
         </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <activity android:name="com.facebook.LoginActivity" >
-        </activity>
-        <activity
-            android:name="edu.ncsu.stockman.ManageFriendsActivity"
+        <activity 
+        	android:name="edu.ncsu.stockman.activity.ManageFriendsActivity"
             android:label="@string/title_activity_manage_friends"
-            android:parentActivityName="edu.ncsu.stockman.SettingsActivity" >
+            android:parentActivityName="edu.ncsu.stockman.activity.SettingsActivity" >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.ShowLogs"
-            android:parentActivityName="edu.ncsu.stockman.MainGameActivity"
+            android:name="edu.ncsu.stockman.activity.ShowLogs"
+            android:parentActivityName="edu.ncsu.stockman.activity.MainGameActivity"
             android:label="@string/title_activity_show_logs" >
         </activity>
         <activity
-            android:name="edu.ncsu.stockman.CommentActivity"
+	       	android:name="edu.ncsu.stockman.activity.CommentActivity"
             android:label="@string/title_activity_comment"
-            android:parentActivityName="edu.ncsu.stockman.Timeline" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ncsu.stockman.Timeline" />
+            android:parentActivityName="edu.ncsu.stockman.activity.Timeline" >
         </activity>
+        <activity android:name="com.facebook.LoginActivity"/>
     </application>
 
 </manifest>

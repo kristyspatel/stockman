@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="Chart.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<style type="text/css" media="screen">
+			body, html{
+				margin: 0;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+
+		<canvas id="myChart"></canvas>
+
+		<script type="text/javascript">
+			function getAssets() {
+				if ( typeof and_data != 'undefined')
+					return and_data.getAssets();
+				else
+					return 20;
+			}
+			function getCash() {
+				if ( typeof and_data != 'undefined')
+					return and_data.getCash();
+				else
+					return 40;
+			}
+			function showAndroidToast(toast) {
+				if ( typeof and_data != 'undefined')
+					and_data.showToast(toast);
+				else
+					console.log(toast);
+			}
+		</script>
+
+		<script type="text/javascript">
+			var ctx = document.getElementById("myChart").getContext("2d");
+			ctx.canvas.width = window.innerWidth;
+			ctx.canvas.height = window.innerHeight-10;
+
+			var data = [{
+				value : getCash(),
+				color : "#F38630"
+			}, {
+				value : getAssets(),
+				color : "#E0E4CC"
+			}];
+			var options = {
+				animation:false
+			};
+			new Chart(ctx).Doughnut(data, options);
+		</script>
+	</body>
+</html>

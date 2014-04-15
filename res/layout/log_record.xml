@@ -6,7 +6,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp">
 
-                    <ImageView
+                    <edu.ncsu.stockman.RoundedImageView
                         android:id="@+id/log_img"
                         android:layout_width="48dp"
                         android:layout_height="48dp"

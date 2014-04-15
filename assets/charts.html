@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	</head>
+	<body>
+
+		<div id="chart_div" style="width: 100%; height: 100%;"></div>
+
+		<script type="text/javascript">
+			function showAndroidToast(toast) {
+				and_data.showToast(toast);
+			}
+		</script>
+
+		<script type="text/javascript">
+			var xx = and_data.getPrices();
+			x = JSON.parse(xx);
+			timestamp = and_data.getTimeStamp();
+			
+			
+			rows = [];
+			for(var i=0;i<timestamp;i++){
+				var time = timestamp + i;
+				var row = [[Math.floor(time/60/60)%24,Math.floor(time/60)%60,time%60,0],x[i]];
+				rows[i]=row;
+			}
+			
+
+			google.load("visualization", "1", {
+				packages : ["corechart"]
+			});
+			google.setOnLoadCallback(drawChart);
+			
+			function drawChart() {
+				var data = new google.visualization.DataTable();
+				data.addColumn('timeofday', 'Time');
+				data.addColumn('number', 'Price');
+				var options = {
+					'legend':'none'
+				};
+				data.addRows(rows);
+
+				var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+				chart.draw(data, options);
+			}
+		</script>
+	</body>
+</html>

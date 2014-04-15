@@ -1,31 +1,39 @@
 package edu.ncsu.stockman.model;
 
-import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
+import android.util.SparseArray;
+
 import com.facebook.Session;
 
 import edu.ncsu.stockman.R;
-import edu.ncsu.stockman.Timeline;
-import android.content.Context;
-import android.util.SparseArray;
+import edu.ncsu.stockman.activity.Timeline;
 
 public class User {
 
 	public String email;
 	public String name;
-	public SparseArray<Game> games; 
+	public SparseArray<Game> games;
+	public Bitmap picture;
 	public int id;
 	
 	public long facebook_id;
 	public enum User_status {ACTIVE,INACTIVE};
 	public User_status user_status;
 	public SparseArray<User> friends;
-	public ArrayList<Friend> facebook_friends= new ArrayList<Friend>();
-	public ArrayList<Notification> notifications;
+	public SparseArray<Friend> facebook_friends= new SparseArray<Friend>();
+	public SparseArray<Notification> notifications;
 
+	//GCM
+	public boolean new_friend =false;
+	public boolean new_game =false;
+	public boolean new_notification =false;
+	
 	
 	public User(JSONObject info) {
 		super();
@@ -44,7 +52,7 @@ public class User {
 		
 		this.games = new SparseArray<Game>();
 		this.friends = new SparseArray<User>();
-		this.notifications = new ArrayList<Notification>();
+		this.notifications = new SparseArray<Notification>();
 	}
 	
 	public User(String email, String name, int id, long facebook_id) {
@@ -56,7 +64,7 @@ public class User {
 		
 		this.games = new SparseArray<Game>();
 		this.friends = new SparseArray<User>();
-		this.notifications = new ArrayList<Notification>();
+		this.notifications = new SparseArray<Notification>();
 	}
 	
 	public void setFriends(JSONArray friends)
@@ -66,7 +74,16 @@ public class User {
 			try{
 				JSONObject friend = friends.getJSONObject(i);
 				User u = new User(friend);
-				this.friends.append(u.id, u);
+				if(this.friends.get(u.id)==null){
+					if(Main.users.get(u.id)==null){
+						Main.users.put(u.id, u);
+						this.friends.put(u.id, u);
+					}
+					else{
+						User uu = Main.users.get(u.id);
+						this.friends.put(uu.id,uu);
+					}
+				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -75,12 +92,12 @@ public class User {
 	}
 	
 	public void setNotifications(JSONArray notifications){
-		this.notifications = new ArrayList<Notification>();
+		this.notifications = new SparseArray<Notification>();
 		for (int i = 0; i < notifications.length(); i++) {
 			try {
 				JSONObject notif = notifications.getJSONObject(i);
 				Notification g = new Notification(notif);
-				this.notifications.add(g);
+				this.notifications.put(g.id_notification, g);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -89,12 +106,12 @@ public class User {
 	}
 	
 	public void setFacebookFriends(JSONArray friends){
-		this.facebook_friends = new ArrayList<Friend>();
+		this.facebook_friends = new SparseArray<Friend>();
 		for (int i = 0; i < friends.length(); i++) {
 			try {
 				JSONObject friend = friends.getJSONObject(i);
 				Friend f = new Friend(friend);
-				this.facebook_friends.add(f);
+				this.facebook_friends.put(f.id,f);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -108,7 +125,7 @@ public class User {
 			try {
 				JSONObject game = games.getJSONObject(i);
 				Game g = new Game(game);
-				this.games.append(g.id, g);
+				this.games.put(g.id, g);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -142,16 +159,17 @@ public class User {
 						JSONObject j = new JSONObject(result.info.text);
 						User me = new User(j.optJSONObject("info"));
 						Main.current_user = me;
+						Main.users.put(me.id, me);
 						//System.out.println(me.toString());
 						me.setGames(j.optJSONArray("games"));
-						me.setNotifications(j.optJSONArray("notifications"));
 						me.setFriends(j.optJSONArray("friends"));
+						me.setNotifications(j.optJSONArray("notifications"));
 						
 						//Change the activity components
 						// TODO maybe change this to an adaptor
-						((Timeline)context).setName(Main.current_user.name);
-						((Timeline)context).setGames();
-						((Timeline)context).setNotifications();
+						me.new_game = true;
+						me.new_friend = true;
+						me.new_notification=true;
 						
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -162,5 +180,64 @@ public class User {
 			}
 		};		
 		asyncHttpPost.exec(c.getString(R.string.base_url)+"/user/get");
+	}
+	/**
+	 * Register the user registeration id given by Google Cloud Service
+	 */
+	public static void registerGoogleId(Context c, String regId){
+		JSONObject data = new JSONObject();
+		try{		
+			data.put("access_token", Session.getActiveSession().getAccessToken());//post
+			data.put("registeration_id", regId);//post
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
+		
+		MidLayer asyncHttpPost = new MidLayer(data,c,false) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if(result.info.code == 0){
+					Log.i("StockManServer", "The user registeration id is updated.");
+				}
+				else{
+					Log.i("StockManServer", "Fail to update user's registeration id");
+				}
+			}
+		};		
+		asyncHttpPost.exec(c.getString(R.string.base_url)+"/user/updateGoogleId");
+	}
+	
+	/**
+	 * get facebook friends
+	 */
+	
+	static public void getFriends(Context c){
+		JSONObject data = new JSONObject();
+		try{		
+		data.put("access_token", Session.getActiveSession().getAccessToken());//post
+		}catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
+		MidLayer asyncHttpPost = new MidLayer(data,c,true) {
+			@Override
+			protected void resultReady(MidLayer.Result result) {
+				if(result.info.code == 0){
+					
+					try {
+						JSONArray friends = new JSONArray(result.info.text);
+						Main.current_user.setFacebookFriends(friends);
+						Main.current_user.new_friend = true;
+						//((ManageFriendsActivity)context).setFriendsView(Main.current_user.facebook_friends);
+
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		};		
+		asyncHttpPost.exec(c.getString(R.string.base_url)+"/user/list_facebook_friends");
 	}
 }

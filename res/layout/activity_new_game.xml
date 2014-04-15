@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,13 +7,18 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context=".NewGAme" >
     
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        
     <TextView
         android:id="@+id/gamelabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        
         android:text="Game"
         android:textColor="@color/kulur_white"
         android:textSize="18sp"
@@ -21,22 +26,35 @@
     
     <EditText
         android:id="@+id/gamename"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_weight="1"
+        android:layout_marginLeft="15dp"
         android:ems="10"  
         android:hint="Game"      
         android:textColor="#ffffff"
         tools:ignore="HardcodedText" />
+    </LinearLayout>
     
+
+    <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Members"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+	<View
+			    android:layout_marginBottom="2dp"
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"/>
     <ScrollView
         android:id="@+id/friendScroller"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_alignLeft="@+id/memberslabel"
-        android:layout_below="@+id/memberslabel"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="15dp" >
+        android:layout_height="0dp"
+        android:layout_weight="1"
+         >
       
         <LinearLayout
             android:id="@+id/friend_list"
@@ -47,30 +65,15 @@
         
     </ScrollView>
 
-    <TextView
-        android:id="@+id/memberslabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/gamelabel"
-        android:layout_below="@+id/gamename"
-        android:layout_marginTop="15dp"
-        android:text="Members"
-        android:textColor="@color/kulur_white"
-        android:textSize="18sp"
-        tools:ignore="HardcodedText" />
-
+    
     <Button
         android:id="@+id/invite"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_alignRight="@+id/friendScroller"
-        android:layout_below="@+id/friendScroller"
-        android:layout_marginTop="24dp"
         android:background="@color/button"
         android:text="Start"
         android:textAppearance="@style/button_disabled"
         android:enabled="false"
-        android:textColor="#000000"
         android:onClick="startGame" />
 
-</RelativeLayout>
+</LinearLayout>

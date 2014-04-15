@@ -1,40 +1,16 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.facebook.Session;
-import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
-import com.fortysevendeg.swipelistview.SwipeListView;
-
-import edu.ncsu.stockman.model.Company;
-
-import java.util.Calendar;
-
-import com.facebook.Session;
-
-import edu.ncsu.stockman.model.Company;
-
-import edu.ncsu.stockman.model.Game;
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.Notification;
-import edu.ncsu.stockman.model.Player;
-import edu.ncsu.stockman.model.User;
-import edu.ncsu.stockman.model.Player.Player_status;
-import android.os.Bundle;
-import android.app.Activity;
-import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
-import android.graphics.Color;
-
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
-
+import android.util.Log;
 import android.util.SparseArray;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,7 +19,21 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-public class Timeline extends Activity {
+import com.facebook.Session;
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
+import com.fortysevendeg.swipelistview.SwipeListView;
+
+import edu.ncsu.stockman.NewsFeedAdapter;
+import edu.ncsu.stockman.NewsFeedRow;
+import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.model.Company;
+import edu.ncsu.stockman.model.Game;
+import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.Player;
+import edu.ncsu.stockman.model.Player.Player_status;
+import edu.ncsu.stockman.model.User;
+
+public class Timeline extends MainActivity {
 
 
 	SwipeListView swipelistview;
@@ -125,10 +115,25 @@ public class Timeline extends Activity {
 
 		//Fetch companies and there prices (only if not fetched before or if the prices has changed)
 		if(Main.companies.size()==0 || Main.day < Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
+			Main.day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
 			Company.getPrices(this);
-			}
+		}
 		
-		System.out.println(Session.getActiveSession().getAccessToken());
+		if(Session.getActiveSession()!=null)
+			System.out.println(Session.getActiveSession().getAccessToken());
+		else{
+			Log.w("StockMan", "Facebook Session is Inactive! Why?");
+			finish();
+		}
+		//Fetch User's info, games, notifications, invitations
+		//User.fetchUserInfo(this);
+		if(Main.current_user==null)
+			User.fetchUserInfo(this);
+		else{
+			setName(Main.current_user.name);
+			setGames();
+			setNotifications();
+		}
 	}
 	
 	public int convertDpToPixel(float dp) {
@@ -141,15 +146,44 @@ public class Timeline extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
-		//Fetch User's info, games, notifications, invitations
-		User.fetchUserInfo(this);
+	}
+	
+	// Timer to update comments if new comment from server
+	Handler timerHandler = new Handler();
+	Runnable timerRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			if(Main.current_user!=null){
+				if(Main.current_user.new_game){
+					setName(Main.current_user.name);
+					setGames();
+					Main.current_user.new_game = false;
+				}
+				if(Main.current_user.new_notification){
+					setNotifications();
+					Main.current_user.new_notification = false;
+				}
+			}
+			timerHandler.postDelayed(this, 1000);
+		}
+	};
+	@Override
+	public void onPause() {
+		super.onPause();
+		timerHandler.removeCallbacks(timerRunnable);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		timerHandler.postDelayed(timerRunnable, 0);
 	}
 	
 	public void setNotifications() {
-		for(Notification n: Main.current_user.notifications)
-        {
-            itemData.add(new NewsFeedRow(n)); 
+		itemData.clear();
+		for (int i = 0; i < Main.current_user.notifications.size(); i++) {
+            itemData.add(new NewsFeedRow(Main.current_user.notifications.valueAt(i))); 
         }
         adapter.notifyDataSetChanged();
 	}
@@ -177,7 +211,7 @@ public class Timeline extends Activity {
 			}
 		});
 		b.setText("New");
-		
+		b.setTextSize(15);
 		main.addView(v);
 		
 		//set the property list variable
@@ -245,7 +279,8 @@ public class Timeline extends Activity {
         popup.getMenuInflater().inflate(R.menu.game_dropdown, popup.getMenu());
         
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
+            @Override
+			public boolean onMenuItemClick(MenuItem item) {
             	
             	if(item.getItemId() == R.id.game_invitation_accept){
             		//UI
@@ -294,7 +329,6 @@ public class Timeline extends Activity {
 	
 	@Override
 	public void onBackPressed() {
-		System.out.println("onBack");
 		setResult(1);
 		super.onBackPressed();
 	}

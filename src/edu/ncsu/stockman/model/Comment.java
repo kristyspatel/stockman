@@ -25,6 +25,14 @@ public class Comment {
 		}			
 	}
 	
+	public Comment(User user, String comment, int id, Notification notification) {
+		super();
+		this.user = user;
+		this.comment = comment;
+		this.id = id;
+		this.notification = notification;
+	}
+
 	public User getUser() {
 		return user;
 	}

@@ -2,6 +2,7 @@ package edu.ncsu.stockman.model;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,14 +10,16 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.facebook.Session;
 
-import edu.ncsu.stockman.MainGameActivity;
 import edu.ncsu.stockman.R;
-import edu.ncsu.stockman.ShowLogs;
+import edu.ncsu.stockman.activity.MainGameActivity;
+import edu.ncsu.stockman.activity.ShowLogs;
 
 public class Player implements Comparable<Player>{
 
@@ -29,12 +32,14 @@ public class Player implements Comparable<Player>{
 	public enum Player_status {INVITED,WAITING_FOR_WORD,ENROLLED,OUT};
 	public Player_status status;
 	
-	// TODO public enum status
 	public ArrayList<Activityy> logs = new ArrayList<Activityy>();
 	public ArrayList<Stock> stocks = new ArrayList<Stock>();
 	public char[] word = new char[6]; 
 	public ArrayList<Guess> guesses = new ArrayList<Guess>();
 	public boolean[] word_revealed = new boolean[6]; // ______
+	
+	//GCM
+	public boolean new_letter_revealed=false;
 	
 	/**
 	 * Constructor
@@ -53,7 +58,7 @@ public class Player implements Comparable<Player>{
 		if (word.length()==6)
 			this.word = word.toUpperCase(Locale.ENGLISH).toCharArray();
 	}
-	public Player(JSONObject info) {
+	public Player(JSONObject info,Game g) {
 		try {
 			this.id = info.getInt("id_player");
 			int s = info.getInt("player_status");
@@ -70,32 +75,50 @@ public class Player implements Comparable<Player>{
 				this.name = info.getString("name");
 				this.user = new User(info.getString("email"),info.getString("name"),info.getInt("id_user"),info.getLong("facebook_id"));
 			}
-			if (s == 1)
-				status = Player_status.INVITED;
-			else if (s == 2)
-				status = Player_status.WAITING_FOR_WORD;
-			else if (s == 3)
-				status = Player_status.ENROLLED;
-			else if (s == 4)
-				status = Player_status.OUT;
 			
-			int word_r = info.getInt("word_revealed");
-			for (int i = word_revealed.length-1; i >= 0; i--) {
-				if(word_r%2 == 0)
-					word_revealed[i] = false;
-				else
-					word_revealed[i] = true;
-				word_r /= 2;
-			}
-			System.out.println(word_r);
+			status = getStatus(s);
 			
+			this.game = g;
+			setRevealedWord(info.getInt("word_revealed"));
+			
+			if(info.has("stocks"))
+				setStocks(info.getJSONArray("stocks"));
+			else
+				Log.i("StockMan","no stocks");
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	public static Player_status getStatus(int s){
+		if (s == 1)
+			return Player_status.INVITED;
+		else if (s == 2)
+			return Player_status.WAITING_FOR_WORD;
+		else if (s == 3)
+			return Player_status.ENROLLED;
+		else if (s == 4)
+			return Player_status.OUT;
 
-	
+		return Player_status.INVITED;//default :/
+	}
+
+	public double getAssets(){
+		double current_possissions = 0D;
+		for (int i = 0; i < Main.current_game.me.stocks.size(); i++) {
+			Stock s = stocks.get(i);
+			current_possissions += s.company.getPrice() * s.amount;
+		}
+		return current_possissions;
+	}
+	public void setRevealedWord(int word_r){
+		for (int i = word_revealed.length-1; i >= 0; i--) {
+			if(word_r%2 == 0)
+				word_revealed[i] = false;
+			else
+				word_revealed[i] = true;
+			word_r /= 2;
+		}
+	}
 	public void setWord(String w){
 		if (w.length() == 6)
 			word = w.toCharArray();
@@ -160,6 +183,16 @@ public class Player implements Comparable<Player>{
 			return false;
 		}
 	}
+	public String hideWord(){
+		String s = "";
+		for (int i = 0; i < Main.wordLength; i++) {
+			if(word_revealed[i])
+				s += word[i]+" ";
+			else
+				s += "_ ";
+		}
+		return s;
+	}
 	
 	public void setStocks(JSONArray stocks){
 		this.stocks = new ArrayList<Stock>();
@@ -170,7 +203,6 @@ public class Player implements Comparable<Player>{
 				if(s.amount != 0)
 					this.stocks.add(s);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -184,7 +216,6 @@ public class Player implements Comparable<Player>{
 				Guess s = new Guess(guess);
 				this.guesses.add(s);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -197,7 +228,6 @@ public class Player implements Comparable<Player>{
 				Activityy s = new Activityy(log,this);
 				this.logs.add(s);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -234,13 +264,14 @@ public class Player implements Comparable<Player>{
 				if(result.info.code == 0){
 					Toast t = Toast.makeText(context, "Your word has been updated", Toast.LENGTH_LONG);
 					t.show();
-					
+					//TODO maybe I need the player id to check
+					Main.current_game.me.status = Player_status.ENROLLED;
 					Intent intent = new Intent(context, MainGameActivity.class);
 					context.startActivity(intent);
 				}
 			}
 		};		
-		asyncHttpPost.exec(c.getString(R.string.base_url)+"/player/pick_word/"+Main.current_player.id);
+		asyncHttpPost.exec(c.getString(R.string.base_url)+"/player/pick_word/"+Main.current_game.me.id);
 	}
 	public static void getLogs(Context c,int id_player){
 		// grab player info from server
@@ -262,7 +293,6 @@ public class Player implements Comparable<Player>{
 						Main.current_game.players.get(id_player).setActivies(j);
 						((ShowLogs) context).setLogs();
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -271,6 +301,8 @@ public class Player implements Comparable<Player>{
 		asyncHttpPost.bundle.putInt("id_player", id_player);
 		asyncHttpPost.exec(c.getString(R.string.base_url)+"/player/list_logs/"+id_player);
 	}
+	
+	@Deprecated
 	public static void get(Context c){
 		// grab player info from server
 		JSONObject data = new JSONObject();
@@ -289,23 +321,24 @@ public class Player implements Comparable<Player>{
 						JSONObject j = new JSONObject(result.info.text);
 						Player me;
 						
-						if(Main.current_player==null)
-							me = new Player(j.getJSONObject("info"));
-						else
-							me = Main.current_player;
+						if(Main.current_game.me==null){
+							Log.e("StockManModel","Main.current_player is null while it should not");
+							return;
+						}
+						
+						me = Main.current_game.me;
 						
 						me.setStocks(j.getJSONArray("stocks"));
 						((MainGameActivity) context).updateCashValues();
 						
 						me.setGuesses(j.optJSONArray("guesses"));
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}
 		};		
-		asyncHttpPost.exec(c.getString(R.string.base_url)+"/player/get/"+Main.current_player.id);
+		asyncHttpPost.exec(c.getString(R.string.base_url)+"/player/get/"+Main.current_game.me.id);
 	}
 	public static void guessWord(Player p, char letter, Context c, boolean isCorrect){
 		// grab player info from server

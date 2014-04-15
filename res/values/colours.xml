@@ -10,4 +10,8 @@
 <color name="friend">#FFFCE8</color>
 <color name="notinvitied">#CC3B37</color>
 <color name="orange">#F87217</color>
+
+<!-- for the graphs -->
+<color name="graphs_orange">#F38630</color>
+<color name="graphs_beige">#E0E4CC</color>
 </resources>

@@ -1,23 +1,51 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
 
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.Player;
-import edu.ncsu.stockman.model.Player.Player_status;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import edu.ncsu.stockman.DownloadImageTask;
+import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.Player;
+import edu.ncsu.stockman.model.Player.Player_status;
 
 public class ChooseHangFriendActivity extends Activity {
 
+	// Timer to update comments if new comment from server
+	Handler timerHandler = new Handler();
+	Runnable timerRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+
+			if(Main.current_game.player_status_change){
+				addPlayers();
+				Main.current_game.player_status_change= false;
+			}
+			timerHandler.postDelayed(this, 1000);
+		}
+	};
+	@Override
+	public void onPause() {
+		super.onPause();
+		timerHandler.removeCallbacks(timerRunnable);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		timerHandler.postDelayed(timerRunnable, 0);
+	}
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,7 +60,6 @@ public class ChooseHangFriendActivity extends Activity {
 
 	
 	private void addPlayers() {
-		super.onStart();
 		// dynamic adding players in the layout
 		// TODO clean this mess
 		
@@ -40,7 +67,7 @@ public class ChooseHangFriendActivity extends Activity {
 		main.removeAllViews();
 		for (int i = 0; i < Main.current_game.players.size(); i++) {
 		   Player p = Main.current_game.players.get(Main.current_game.players.keyAt(i));
-		   if (p.id != Main.current_player.id){
+		   if (p.id != Main.current_game.me.id){
 			   View v = getLayoutInflater().inflate(
 					   R.layout.player, main,false);
 			   
@@ -56,8 +83,7 @@ public class ChooseHangFriendActivity extends Activity {
 				   t.setText(p.name+" (Invited).");
 				   img.setEnabled(false);
 				   //get his profile picture
-				   new DownloadImageTask(img)
-				   	.execute("http://graph.facebook.com/"+p.user.facebook_id+"/picture?height=96&type=normal&width=96");
+				   DownloadImageTask.setFacebookImage(img,p.user);
 			   }
 			   else if(p.status == Player_status.OUT){
 				   t.setText(p.name);

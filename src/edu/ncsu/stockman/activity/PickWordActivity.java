@@ -1,16 +1,13 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.Player;
-
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -21,6 +18,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.Player;
 
 public class PickWordActivity extends Activity {
 
@@ -135,7 +135,7 @@ public class PickWordActivity extends Activity {
 			return;
 		}
 		else{
-			Main.current_player.word = s.toCharArray();
+			Main.current_game.me.word = s.toCharArray();
 			Player.setWord(this,s);
 		}
 			

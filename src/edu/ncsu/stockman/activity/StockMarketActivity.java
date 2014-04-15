@@ -1,14 +1,16 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
 
-import android.os.Bundle;
-import android.app.ActionBar.Tab;
 import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
+import edu.ncsu.stockman.BuySellTabsAdapter;
+import edu.ncsu.stockman.R;
 
 public class StockMarketActivity extends FragmentActivity implements ActionBar.TabListener {
 
@@ -45,7 +47,7 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
                 // on changing the page
                 // make respected tab selected
                 actionBar.setSelectedNavigationItem(position);
-                ((ExpandableCardListAdapter)((SellSharesFragment) ((BuySellTabsAdapter) viewPager.getAdapter()).sell).listAdapter).notifyDataSetChanged();
+                ((BuySellTabsAdapter) viewPager.getAdapter()).sell.listAdapter.notifyDataSetChanged();
             }
          
             @Override

@@ -1,31 +1,26 @@
 package edu.ncsu.stockman;
 
-import android.widget.ArrayAdapter;
 import java.util.List;
 
-import edu.ncsu.stockman.model.Notification;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
+import edu.ncsu.stockman.activity.CommentActivity;
 
-public class NewsFeedAdapter extends ArrayAdapter {
-	 List   data;
+public class NewsFeedAdapter extends ArrayAdapter<NewsFeedRow> {
+	 List<NewsFeedRow>   data;
      Context context;
      int layoutResID;
      PopupWindow popUp;
 
-public NewsFeedAdapter(Context context, int layoutResourceId,List data) {
+public NewsFeedAdapter(Context context, int layoutResourceId,List<NewsFeedRow> data) {
      super(context, layoutResourceId, data);
      this.data=data;
      this.context=context;
@@ -49,16 +44,15 @@ public View getView(int position, View convertView, ViewGroup parent) {
            holder.itemName = (TextView)row.findViewById(R.id.example_itemname);           
            holder.button1=(Button)row.findViewById(R.id.swipe_button1);
            row.setTag(holder);
-           System.out.println("notification id "+((NewsFeedRow)data.get(position)).getItemName().id_notification);
-           holder.button1.setTag(((NewsFeedRow)data.get(position)).getItemName().id_notification);
+           holder.button1.setTag((data.get(position)).getItemName().id_notification);
        }
        else
        {
            holder = (NewsHolder)row.getTag();
        }
-       popUp = new PopupWindow((Activity)context);
-       NewsFeedRow itemdata = (NewsFeedRow)data.get(position);
-       holder.itemName.setText(itemdata.getItemName().text);
+       popUp = new PopupWindow(context);
+       NewsFeedRow itemdata = data.get(position);
+       holder.itemName.setText(itemdata.getItemName().getText(context));
        
        
        holder.button1.setOnClickListener(new View.OnClickListener() {

@@ -1,10 +1,13 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import android.os.Bundle;
-import android.content.Intent;
-import android.view.Menu;
+
+import edu.ncsu.stockman.R;
 
 public class Splash_screen extends FacebookActivity{
 

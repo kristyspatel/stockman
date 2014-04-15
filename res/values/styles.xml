@@ -88,7 +88,24 @@
     </style>
     
     
-    
+    <!-- MainGameActivity -->
+    <style name="cashText">
+        <item name="android:textColor">@color/graphs_orange</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="assestsText">
+        <item name="android:textColor">@color/graphs_beige</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="totalText">
+        <item name="android:textColor">@color/kulur_white</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <!-- Logs -->
     <style name="log">
         <item name="android:textSize">14sp</item>
     </style>
@@ -108,10 +125,16 @@
     <style name="open_log" parent="log">
         <item name="android:textColor">#CAE1FF</item>
     </style>
+    <style name="invite_log" parent="log">
+        <item name="android:textColor">#CAE1FF</item>
+    </style>
     <style name="died_log" parent="log">
         <item name="android:textColor">#FFFFFF</item>
     </style>
     <style name="pickword_log" parent="log">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <style name="accept_log" parent="log">
         <item name="android:textColor">#FFFFFF</item>
     </style>
     <style name="hanged_log" parent="log">

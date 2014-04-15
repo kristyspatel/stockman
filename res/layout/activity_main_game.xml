@@ -14,87 +14,154 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentTop="false"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/cash_group"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="100dp"
-            android:gravity="center" >
+            android:layout_height="wrap_content" >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical" >
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="fill_parent"
+                android:layout_height="150dp" />
+            
+    <TextView
+        android:id="@+id/cashText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="60dp"
+        android:text="$500"
+        style="@style/totalText"
+         />
 
-                <ImageButton
-                    android:id="@+id/hangFriendsButton"
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:layout_gravity="top"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="#222"
-                    android:onClick="hangFriends"
-                    android:scaleType="fitEnd"
-                    android:src="@drawable/icon_hang2" />
+    <TextView
+        android:id="@+id/remaining_cash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="60dp"
+        android:text="$300"
+        style="@style/cashText"/>
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/hang_friends_icon"
-                    android:textColor="@color/kulur_white"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical" >
-
-                <ImageButton
-                    android:id="@+id/stockMarketButton"
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:layout_gravity="top"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="#222"
-                    android:onClick="stockMarket"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/icon_stock" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Stock Market"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/kulur_white"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-        </LinearLayout>
+    <TextView
+        android:id="@+id/remaining_stocks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="60dp"
+        android:text="$290"
+        style="@style/assestsText"
+            />
+        </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/action_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your Word is"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/kulur_white"
-                android:textSize="15sp" />
+                android:text="Actions"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/darker_gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:gravity="center" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageButton
+                        android:id="@+id/hangFriendsButton"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_gravity="top"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="#222"
+                        android:onClick="hangFriends"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/icon_hang2" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hang_friends_icon"
+                        android:textColor="@color/kulur_white"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageButton
+                        android:id="@+id/stockMarketButton"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_gravity="top"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="#222"
+                        android:onClick="stockMarket"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/icon_stock" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stock Market"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/kulur_white"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/yourword_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Word"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/darker_gray" />
 
             <LinearLayout
                 android:id="@+id/main_myword"
@@ -103,58 +170,42 @@
                 android:gravity="center"
                 android:orientation="horizontal" >
             </LinearLayout>
-
         </LinearLayout>
-        
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView1"
+
+        <LinearLayout
+            android:id="@+id/playerstanding_group"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <LinearLayout
-                android:id="@+id/standing_list"
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Players Standing"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/darker_gray" />
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" >
-            </LinearLayout>
-        </HorizontalScrollView>
-        
+                android:layout_height="wrap_content" >
 
+                <LinearLayout
+                    android:id="@+id/standing_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/cashText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:text="$500"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/button"
-        android:textSize="50sp" />
-
-    <TextView
-        android:id="@+id/remaining_cash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="60dp"
-        android:text="$300"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/button"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/remaining_stocks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="60dp"
-        android:layout_marginTop="60dp"
-        android:text="$290"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/button"
-        android:textSize="20sp" />
 
 </RelativeLayout>

@@ -1,22 +1,28 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
 
-import java.util.ArrayList;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.facebook.Session;
-import edu.ncsu.stockman.model.Friend;
-import edu.ncsu.stockman.model.Friend.Friendship_status;
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.MidLayer;
-import android.os.Bundle;
+
 import android.app.Activity;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.facebook.Session;
+
+import edu.ncsu.stockman.DownloadImageTask;
+import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.model.Friend;
+import edu.ncsu.stockman.model.Friend.Friendship_status;
+import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.MidLayer;
+import edu.ncsu.stockman.model.User;
 
 public class ManageFriendsActivity extends Activity {
 
@@ -25,10 +31,38 @@ public class ManageFriendsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_manage_friends);
 		
-
-		getFriends();
+		User.getFriends(this);
 	}
 
+	
+	// Timer to update comments if new comment from server
+	Handler timerHandler = new Handler();
+	Runnable timerRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+
+			if(Main.current_user.new_friend){
+				setFriendsView(Main.current_user.facebook_friends);
+				Main.current_user.new_friend= false;
+			}
+			timerHandler.postDelayed(this, 1000);
+		}
+	};
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		timerHandler.removeCallbacks(timerRunnable);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		timerHandler.postDelayed(timerRunnable, 0);
+	}
+
+	
 	private void setStatusStyle(TextView s, Friend u){
 	   		if(u.friendship_status == Friendship_status.ACCEPTED){
 	   			s.setBackgroundResource(R.drawable.rounded_rectangle_friend);
@@ -51,13 +85,16 @@ public class ManageFriendsActivity extends Activity {
 	   			s.setText("Not Invited");
 	   		}
 	}
-	private void setFriendsView(ArrayList<Friend> friends){
+	public void setFriendsView(SparseArray<Friend> friends){
 		if (friends == null){
 			Log.i("ERROR","null friends");
 			return;
 		}
 		LinearLayout main = (LinearLayout)findViewById(R.id.list_friends);
-		for(Friend u: friends){
+		main.removeAllViews();
+		for (int i = 0; i < friends.size(); i++) {
+			
+			Friend u = friends.valueAt(i);
   	   		View v = getLayoutInflater().inflate(
 					   R.layout.friend_item_list, main,false);
   	   		
@@ -66,9 +103,8 @@ public class ManageFriendsActivity extends Activity {
   	   		t.setText(u.name);
   	   		
   	   		// set the picture
-  	   		ImageView i = (ImageView) v.findViewById(R.id.friend_list_img);
-  	   		new DownloadImageTask(i)
-	  	   			.execute("http://graph.facebook.com/"+u.facebook_id+"/picture?type=square");
+  	   		ImageView img = (ImageView) v.findViewById(R.id.friend_list_img);
+  	   		DownloadImageTask.setFacebookImage(img,u.user);
   	   		
   	   		//set the status
   	   		TextView s = (TextView) v.findViewById(R.id.friend_list_status);
@@ -137,37 +173,7 @@ public class ManageFriendsActivity extends Activity {
   	   		main.addView(v);
 		}
 	}
-	private void getFriends(){
-		JSONObject data = new JSONObject();
-		try{		
-		data.put("access_token", Session.getActiveSession().getAccessToken());//post
-		}catch(JSONException e)
-		{
-			e.printStackTrace();
-		}
-		MidLayer asyncHttpPost = new MidLayer(data,this,true) {
-			@Override
-			protected void resultReady(MidLayer.Result result) {
-				if (result.error != null)
-					System.out.println(result.error.text);
-				if(result.info != null){
-					if(result.info.code == 0){
-						
-						try {
-							JSONArray friends = new JSONArray(result.info.text);
-							Main.current_user.setFacebookFriends(friends);
-							setFriendsView(Main.current_user.facebook_friends);
-
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		};		
-		asyncHttpPost.exec(getString(R.string.base_url)+"/user/list_facebook_friends");
-	}
+	
 	
 	
 	@Override

@@ -1,6 +1,5 @@
 package edu.ncsu.stockman;
 import edu.ncsu.stockman.model.Notification;
-import android.graphics.drawable.Drawable;
 
 public class NewsFeedRow {
 	Notification itemName;

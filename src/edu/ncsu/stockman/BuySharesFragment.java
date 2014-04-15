@@ -1,8 +1,5 @@
 package edu.ncsu.stockman;
 
-import edu.ncsu.stockman.model.Company;
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.Stock;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import edu.ncsu.stockman.model.Company;
+import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.Stock;
 
 public class BuySharesFragment extends Fragment {
 
@@ -33,7 +33,7 @@ public class BuySharesFragment extends Fragment {
 
 		// set the text of buy
 		TextView t_v = (TextView) rootView.findViewById(R.id.yourBalance);
-		t_v.setText("Your Balance is " + Main.current_player.cash);
+		t_v.setText("Your Balance is " + Main.current_game.me.cash);
 
 		// set the adapter
 		cardList = (ListView) rootView.findViewById(R.id.cardList);

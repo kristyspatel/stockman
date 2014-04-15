@@ -1,19 +1,15 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
 
 import java.util.ArrayList;
-import edu.ncsu.stockman.model.Game;
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.User;
-import android.os.Bundle;
+
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseArray;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,6 +17,10 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.model.Game;
+import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.User;
 
 public class New_Game extends Activity {
 
@@ -59,10 +59,6 @@ public class New_Game extends Activity {
 		return true;
 	}
 
-	public void create_game(View v){
-		Intent intent = new Intent(this, PickWordActivity.class);
-		startActivity(intent);
-	}
 	
 	public void setFriends(SparseArray<User> friends){
 		LinearLayout friend_scroller = (LinearLayout) findViewById(R.id.friend_list);
@@ -74,7 +70,7 @@ public class New_Game extends Activity {
 			CheckBox friend = new CheckBox(this);
 			friend.setId(friends.keyAt(i));
 			friend.setText(friends.get(friends.keyAt(i)).name);
-			friend.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+			friend.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			friend.setTextColor(getResources().getColor(R.color.kulur_white));
 			
 			friend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -123,15 +119,7 @@ public class New_Game extends Activity {
         s = new String(stringArray);
         
 		Game.createGame(this, members_array, s);
-	}
-	public void OnHomeMenuItem(MenuItem v){
-		Intent intent = new Intent(this, Timeline.class);
-		startActivity(intent);
-	}
-	
-	public void onBackMenuItem(MenuItem v){
-		Intent intent = new Intent(this, Timeline.class);
-		startActivity(intent);
+		finish();
 	}
 	
 }

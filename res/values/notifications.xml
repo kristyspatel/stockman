@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="n_guess_out" >%2$s is out. His secret word is: %3$s.</string>
+    <string name="n_guess_correctly">%1$s guessed %2$s\'s word. His word is: %3$s.</string>
+    <string name="n_guess_incorrectly">%1$s guessed %2$s\'s word but incorrectly.</string>
+    <string name="n_buy">%1$s bought %2$d shares of %3$s.</string>
+    <string name="n_sell">%1$s sold %2$d shares of %3$s.</string>
+    <string name="n_accept_game">%1$s accepted the %2$s game invitation.</string>
+    <string name="n_decline_game">%1$s decline the %2$s game invitation.</string>
+</resources>

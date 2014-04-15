@@ -1,68 +1,112 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
 
-import java.text.DecimalFormat;
 import java.util.PriorityQueue;
-import com.facebook.Session;
-import edu.ncsu.stockman.model.Main;
-import edu.ncsu.stockman.model.Player;
-import edu.ncsu.stockman.model.Stock;
-import edu.ncsu.stockman.model.Player.Player_status;
-import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.facebook.Session;
+import edu.ncsu.stockman.ChartsInterface;
+import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.model.Main;
+import edu.ncsu.stockman.model.Player;
+import edu.ncsu.stockman.model.Player.Player_status;
 
 public class MainGameActivity extends Activity {
 
+	WebView webview;
+	// Timer to update comments if new comment from server
+	Handler timerHandler = new Handler();
+	Runnable timerRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+
+			if(Main.current_game.player_status_change){
+				showStanding();
+				Main.current_game.player_status_change= false;
+			}
+			else if(Main.current_game.me.new_letter_revealed){
+				showPlayerWord();
+				Main.current_game.me.new_letter_revealed= false;
+			}
+			timerHandler.postDelayed(this, 1000);
+		}
+	};
+	@Override
+	public void onPause() {
+		super.onPause();
+		timerHandler.removeCallbacks(timerRunnable);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		timerHandler.postDelayed(timerRunnable, 0);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if(Main.current_game == null || Main.current_player == null){
-			System.err.println("MainGameActivity current_player or current_game is null");
+		if(Main.current_game == null || Main.current_game.me == null){
+			System.err.println("MainGameActivity current_game.me or current_game is null");
 			finish();
 			return;
 		}
 		setContentView(R.layout.activity_main_game);
 		
 		setTitle(Main.current_game.name);
+
+		if(Main.current_game.me.status==Player_status.OUT){
+			LinearLayout v = (LinearLayout) findViewById(R.id.action_group);
+			v.setVisibility(LinearLayout.GONE);
+		}
 		
-		
+		showPlayerWord();
+		//fetch player info from server
+		//Player.get(this);
+	}
+	
+	private void showPlayerWord() {
 		//set the player's word
 		LinearLayout v = (LinearLayout) findViewById(R.id.main_myword);
+		v.removeAllViews();
 		for (int i = 0; i < Main.wordLength; i++) {
 			TextView t = new TextView(this);
 			t.setEnabled(false);
 			t.setPadding(40, 0, 40, 0);
-			if(Main.current_player.word_revealed[i])
+			if(Main.current_game.me.word_revealed[i]){
 				t.setTextAppearance(this, R.style.letter_revealed);
-			else
+				t.setPaintFlags(t.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+			}
+			else{
 				t.setTextAppearance(this, R.style.letter_not_revealed);
-			t.setText(Main.current_player.word[i]+"");
+			}
+			t.setText(Main.current_game.me.word[i]+"");
 			v.addView(t);
 		}
-		
-		//fetch player info from server
-		Player.get(this);
+				
 	}
-	
 	private void showStanding() {
 		// sort players on the their die_date 
 		PriorityQueue<Player> sorted = new PriorityQueue<Player>(Main.current_game.players.size());
 		
 		for (int i = 0; i < Main.current_game.players.size(); i++) {
 			Player p = Main.current_game.players.valueAt(i);
-			System.out.print("?");
 			sorted.add(p);
 		}
 				//show players in the standing ssection
 		LinearLayout main = (LinearLayout)findViewById(R.id.standing_list);
 		main.removeAllViews();
-		int counter = 0;
 		for (int i = 0; i < Main.current_game.players.size(); i++) {
 			
 			View view = getLayoutInflater().inflate(R.layout.player_in_standing, main,false);
@@ -80,13 +124,10 @@ public class MainGameActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					Player p = (Player) v.getTag();
-//					if (p.status ==Player_status.OUT ){
-						Intent intent = new Intent(MainGameActivity.this, ShowLogs.class);
-						intent.putExtra("player_id", p.id);
-						startActivity(intent);
-	//				}
+					Intent intent = new Intent(MainGameActivity.this, ShowLogs.class);
+					intent.putExtra("player_id", p.id);
+					startActivity(intent);
 				}
 			});
 			
@@ -94,32 +135,41 @@ public class MainGameActivity extends Activity {
 			if(p.status == Player_status.OUT){
 				b.setText(i +1 +"");
 			}
+			else if(p.status == Player_status.INVITED){
+				b.setText("!");
+			}
+			else if(p.status == Player_status.WAITING_FOR_WORD){
+				b.setText("!!");
+			}
 			else{
 				b.setText("?");
-				
 			}
 		}
 	}
 	
+	@SuppressLint("SetJavaScriptEnabled")
 	public void updateCashValues(){
-		//set the player's current cash and possessions.
+//		set the player's current cash and possessions.
 		TextView t = (TextView) findViewById(R.id.remaining_cash);
-		DecimalFormat dc = new DecimalFormat("#.00");
-		t.setText("$"+Double.valueOf(dc.format(Main.current_player.cash)));
+		t.setText("Cash:\n $"+String.format("%.2f",Main.current_game.me.cash));
 		
 		//set player's possessions
-		double current_possissions = 0D;
-		for (int i = 0; i < Main.current_player.stocks.size(); i++) {
-			Stock s = Main.current_player.stocks.get(i);
-			current_possissions += s.company.getPrice() * s.amount;
-		}
+		double current_possissions = Main.current_game.me.getAssets();
 		t = (TextView) findViewById(R.id.remaining_stocks);
-		t.setText("$"+Double.valueOf(dc.format(current_possissions)));
+		t.setText("Assets:\n $"+String.format("%.2f",current_possissions));
 		
 		//set player's total
 		t = (TextView) findViewById(R.id.cashText);
-		t.setText("$"+Double.valueOf(dc.format(current_possissions+Main.current_player.cash)));
+		t.setText("$"+String.format("%.2f",current_possissions+Main.current_game.me.cash));
 		
+		webview = (WebView)findViewById(R.id.webview);
+		webview.getSettings().setJavaScriptEnabled(true);
+		webview.setPadding(0, 0, 0, 0);
+		webview.setBackgroundColor(0x00000000);
+		webview.addJavascriptInterface(new ChartsInterface(this,Main.current_game.me), "and_data");
+		//priceFluctuationGraph.loadUrl("file:///android_asset/googlecharts.html");
+		webview.loadUrl("file:///android_asset/chartsjs_cash.html");
+
 	}
 	@Override
 	protected void onStart() {

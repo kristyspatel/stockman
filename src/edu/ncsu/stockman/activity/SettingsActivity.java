@@ -1,15 +1,18 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
-import edu.ncsu.stockman.model.Main;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import com.facebook.Session;
+import com.facebook.SessionState;
+
+import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.model.Main;
 
 public class SettingsActivity extends FacebookActivity {
 
@@ -56,6 +59,7 @@ public class SettingsActivity extends FacebookActivity {
 	}
 
 	//facebook
+	@Override
 	public void onSessionStateChange(Session session, SessionState state, Exception exception) {
 	    if (state.isClosed()) {
 	    	Intent intent = new Intent(this, Splash_screen.class);

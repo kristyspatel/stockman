@@ -1,15 +1,17 @@
 package edu.ncsu.stockman;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import edu.ncsu.stockman.model.Stock;
+import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import edu.ncsu.stockman.model.Stock;
 
 public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 
@@ -33,13 +35,17 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 		return childPosition;
 	}
 
+	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stubs
 		if(convertView == null)
 			convertView = inflater.inflate(R.layout.card_details, null);
-		ImageView priceFluctuationGraph = (ImageView)convertView.findViewById(R.id.priceFluctuationGraph);
+		
+
+		
+		Log.i("StockMan", "Now");
+		//set the button
 		Button sellButton  = (Button)convertView.findViewById(R.id.sellButton);
 		sellButton.setTag(stocks.get(groupPosition));
 		sellButton.setOnClickListener( new View.OnClickListener() {
@@ -52,7 +58,16 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 				Stock.sellShares(v.getContext(),s,1);
 			}
 		});
-		priceFluctuationGraph.setImageResource(R.drawable.graph);
+
+		//Set the graph
+		WebView priceFluctuationGraph = (WebView)convertView.findViewById(R.id.priceFluctuationGraph);
+		priceFluctuationGraph.getSettings().setJavaScriptEnabled(true);
+		priceFluctuationGraph.setPadding(0, 0, 0, 0);
+		priceFluctuationGraph.addJavascriptInterface(new ChartsInterface(convertView.getContext(),
+				stocks.get(groupPosition).company), "and_data");
+		//priceFluctuationGraph.loadUrl("file:///android_asset/googlecharts.html");
+		priceFluctuationGraph.loadUrl("file:///android_asset/chartsjs.html");
+		
 		return convertView;
 	}
 
@@ -95,9 +110,8 @@ public class ExpandableCardListAdapter extends BaseExpandableListAdapter {
 		TextView priceChangeTextView = (TextView) convertView.findViewById(R.id.price_change);
 		float change = (stock.company.getPrice()-stock.price) / stock.company.getPrice();
 		
-		DecimalFormat dc = new DecimalFormat("#.00");
 		
-		priceChangeTextView.setText( Double.valueOf(dc.format(change)) + "%");
+		priceChangeTextView.setText( Double.valueOf(String.format("%.2f",change)) + "%");
 		
 		ImageView priceChangeIndicator = (ImageView)(convertView.findViewById(R.id.price_change_indicator));
 		if(change > 0)

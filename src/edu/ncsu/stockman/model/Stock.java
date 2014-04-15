@@ -1,15 +1,19 @@
 package edu.ncsu.stockman.model;
 
 import java.text.DecimalFormat;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.facebook.Session;
+
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.Session;
+
 import edu.ncsu.stockman.R;
-import edu.ncsu.stockman.StockMarketActivity;
+import edu.ncsu.stockman.activity.StockMarketActivity;
 
 public class Stock {
 
@@ -47,7 +51,7 @@ public class Stock {
 	
 	public static void buyShares(Context c,Company company, int amount){
 
-		double 	remaining_cash = Main.current_player.cash - amount * company.getPrice();
+		double 	remaining_cash = Main.current_game.me.cash - amount * company.getPrice();
 		//add the access token to the request
 				JSONObject data = new JSONObject();
 				try {
@@ -68,10 +72,9 @@ public class Stock {
 						
 						//change the balance
 						TextView t_v = (TextView) rootView.findViewById(R.id.yourBalance);
-						DecimalFormat dc = new DecimalFormat("#.00");
-						Main.current_player.cash = Double.valueOf(dc.format(bundle
+						Main.current_game.me.cash = Double.valueOf(String.format("%.2f",bundle
 								.getDouble("remaining_cash")));
-						t_v.setText("Your Balance is " + Main.current_player.cash);
+						t_v.setText("Your Balance is " + Main.current_game.me.cash);
 						
 						TextView tv = (TextView) rootView
 								.findViewById(R.id.NoOfShares);
@@ -82,7 +85,7 @@ public class Stock {
 								Toast.LENGTH_SHORT);
 						toast.show();
 	
-						Main.current_player.stocks.add(new Stock(
+						Main.current_game.me.stocks.add(new Stock(
 								new JSONObject(result.info.text)));
 	
 					} catch (Exception e) {
@@ -95,7 +98,7 @@ public class Stock {
 		
 		asyncHttpPost.bundle.putDouble("remaining_cash", remaining_cash);
 		asyncHttpPost.exec(c.getString(R.string.base_url) + "stockmarket/buy/"
-				+ Main.current_player.id + "/" + company.id + "/" + amount + "/"
+				+ Main.current_game.me.id + "/" + company.id + "/" + amount + "/"
 				+ company.getTimeStamp());
 
 	}
@@ -108,30 +111,29 @@ public class Stock {
 		{
 			e.printStackTrace();
 		}
-		double remaining_cash = Main.current_player.cash + 1
+		double remaining_cash = Main.current_game.me.cash + 1
 				* s.company.getPrice();
 		MidLayer asyncHttpPost = new MidLayer(data,c,true) {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
 				if(result.info.code == 0){
-					DecimalFormat dc = new DecimalFormat("#.00");
-					Main.current_player.cash = Double.valueOf(dc.format(bundle.getDouble("remaining_cash")));
+					Main.current_game.me.cash = Double.valueOf(String.format("%.2f",bundle.getDouble("remaining_cash")));
 					
-					Toast toast = Toast.makeText(context, "The stock has been sold. The remaining balance is: "+Main.current_player.cash
+					Toast toast = Toast.makeText(context, "The stock has been sold. The remaining balance is: "+Main.current_game.me.cash
 							, Toast.LENGTH_LONG);
 					toast.show();
 					//TODO
 					int stock = -1;
-					for (int i = 0; i < Main.current_player.stocks.size(); i++) {
-						if (Main.current_player.stocks.get(i).id_stock == bundle.getInt("id_stock")){
+					for (int i = 0; i < Main.current_game.me.stocks.size(); i++) {
+						if (Main.current_game.me.stocks.get(i).id_stock == bundle.getInt("id_stock")){
 							stock = i;
 							break;
 						}
 					}
 					
-					Main.current_player.stocks.get(stock).amount -= 1;
-					if (Main.current_player.stocks.get(stock).amount  == 0)
-						Main.current_player.stocks.remove(stock);
+					Main.current_game.me.stocks.get(stock).amount -= 1;
+					if (Main.current_game.me.stocks.get(stock).amount  == 0)
+						Main.current_game.me.stocks.remove(stock);
 					((StockMarketActivity) context).buySellTabAdapter.sell.listAdapter.notifyDataSetChanged();
 				}
 				
@@ -139,7 +141,7 @@ public class Stock {
 		};
 		asyncHttpPost.bundle.putDouble("remaining_cash",remaining_cash);
 		asyncHttpPost.bundle.putInt("id_stock",s.id_stock);
-		asyncHttpPost.exec(c.getString(R.string.base_url)+"stockmarket/sell/"+Main.current_player.id+"/"+s.id_stock+"/1/"+s.company.getTimeStamp());
+		asyncHttpPost.exec(c.getString(R.string.base_url)+"stockmarket/sell/"+Main.current_game.me.id+"/"+s.id_stock+"/1/"+s.company.getTimeStamp());
 		
 	}
 	

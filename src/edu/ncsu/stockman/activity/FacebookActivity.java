@@ -1,11 +1,12 @@
-package edu.ncsu.stockman;
+package edu.ncsu.stockman.activity;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import android.os.Bundle;
-import android.app.Activity;
-import android.content.Intent;
 
 abstract public class FacebookActivity extends Activity {
 

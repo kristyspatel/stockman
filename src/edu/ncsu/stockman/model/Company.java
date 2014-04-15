@@ -1,5 +1,10 @@
 package edu.ncsu.stockman.model;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -7,12 +12,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.util.Log;
+import android.util.SparseArray;
+
 import com.facebook.Session;
 
 import edu.ncsu.stockman.R;
-
-import android.content.Context;
-import android.util.SparseArray;
 
 public class Company {
 
@@ -98,34 +104,81 @@ public class Company {
 	
 	public static void getPrices(Context c){
 
-		// TODO check if local file exist. 
-		JSONObject data = new JSONObject();
-		try{		
-			data.put("access_token", Session.getActiveSession().getAccessToken());//post
-		}catch(JSONException e)
-		{
+		//check if there is a file in the device
+		
+		boolean isFileExist = false;
+		FileInputStream fos;
+		try {
+			fos = c.openFileInput("stocks");
+			String s = "";
+			byte[] buffer = new byte[1024]; 
+			while (fos.read(buffer,0,buffer.length)!=-1){
+				String str = new String(buffer, "UTF-8");
+				s+=str;
+			}
+			JSONArray j = new JSONArray(s);
+			for (int i = 0; i < j.length(); i++) {
+				Company company = new Company(j.getJSONObject(i));
+				Main.companies.put(company.id, company);
+			}
+			Log.i("StockMan", "Companies prices fetched from the local file in the device");
+			fos.close();
+			isFileExist = true;
+		} catch (FileNotFoundException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			isFileExist = false;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			System.err.println("The file stored in the local system for stockmarket is currupted (not in JSON format)");
 			e.printStackTrace();
 		}
-		
-		MidLayer asyncHttpPost2 = new MidLayer(data,c,true) {
-			@Override
-			protected void resultReady(MidLayer.Result result) {
-				if(result.info.code == 0){
-					
-					try {
-						JSONArray j = new JSONArray(result.info.text);
-						for (int i = 0; i < j.length(); i++) {
-							Company c = new Company(j.getJSONObject(i));
-							Main.companies.append(c.id, c);
+
+		if(!isFileExist){
+			JSONObject data = new JSONObject();
+			try{		
+				data.put("access_token", Session.getActiveSession().getAccessToken());//post
+			}catch(JSONException e)
+			{
+				e.printStackTrace();
+			}
+			
+			MidLayer asyncHttpPost2 = new MidLayer(data,c,true) {
+				@Override
+				protected void resultReady(MidLayer.Result result) {
+					if(result.info.code == 0){
+						
+						try {
+							FileOutputStream fos;
+							try {
+								fos = context.openFileOutput("stocks", Context.MODE_PRIVATE);
+								fos.write(result.info.text.getBytes());
+								fos.close();
+							} catch (FileNotFoundException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							Log.i("StockMan", "Companies prices stored in the device");
+							
+							JSONArray j = new JSONArray(result.info.text);
+							for (int i = 0; i < j.length(); i++) {
+								Company c = new Company(j.getJSONObject(i));
+								Main.companies.put(c.id, c);
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
 				}
-			}
-		};	
-		asyncHttpPost2.exec(c.getString(R.string.base_url)+"/stockmarket/get");
-
+			};	
+			asyncHttpPost2.exec(c.getString(R.string.base_url)+"/stockmarket/get");
+		}
 	}
 }

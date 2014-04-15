@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
@@ -15,10 +16,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -78,9 +81,10 @@ abstract public class MidLayer extends AsyncTask<String,Integer, JSONObject>{
             if(statusLine.getStatusCode() == HttpURLConnection.HTTP_OK){
                 result = EntityUtils.toByteArray(response.getEntity());
                 str = new String(result, "UTF-8");
-                if(false)
-                	System.out.println(str);
                 json= new JSONObject(str);
+            }
+            else{
+            	Log.e("ServerError", new String(EntityUtils.toByteArray(response.getEntity()),"UTF-8"));
             }
         }
         catch (UnsupportedEncodingException e) {
@@ -129,6 +133,12 @@ abstract public class MidLayer extends AsyncTask<String,Integer, JSONObject>{
 					result.optJSONObject("info").optString("context"),
 					result.optJSONObject("info").optString("text"),
 					TYPE.INFO);
+		if(result.optJSONObject("notify") != null){
+			Notification n = new Notification(result.optJSONObject("notify"));
+			Main.current_user.notifications.put(n.id_notification, n);
+			Main.current_user.new_notification = true;
+		}
+			
 		if(waiting)
 			progress.dismiss();
 		resultReady(r);

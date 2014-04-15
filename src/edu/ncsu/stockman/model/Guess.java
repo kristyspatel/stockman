@@ -3,6 +3,8 @@ package edu.ncsu.stockman.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class Guess {
 
 	public int id;
@@ -26,6 +28,8 @@ public class Guess {
 		
 			this.id = j.getInt("id_guess");
 			this.him = Main.current_game.players.get(j.getInt("him_player"));
+			if(him == null)
+				Log.d("StockMan",j.getInt("him_player")+" is not found");
 			this.me = Main.current_game.players.get(j.getInt("me_player"));
 			this.correct = j.getInt("correct") == 0 ? false: true;
 			this.letter = j.getString("letter").charAt(0);

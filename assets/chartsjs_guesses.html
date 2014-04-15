@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="Chart.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<style type="text/css" media="screen">
+			body, html{
+				margin: 0;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+
+		<canvas id="myChart"></canvas>
+
+		<script type="text/javascript">
+			function getPlayersNames() {
+				if ( typeof and_data != 'undefined')
+					return JSON.parse(and_data.getPlayersNames());
+				else
+					return ["Abdul", "Kristy"];
+			}
+
+			function getGameGuesses() {
+				if ( typeof and_data != 'undefined')
+					return JSON.parse(and_data.getGameGuesses());
+				else
+					return {"incorrect":[20, 9],"correct":[5,2]};
+			}
+
+			function getCorrectGuesses() {
+				if ( typeof and_data != 'undefined')
+					return JSON.parse(and_data.getCorrectGuesses());
+				else
+					return [4, 6];
+			}
+
+			function showAndroidToast(toast) {
+				if ( typeof and_data != 'undefined')
+					and_data.showToast(toast);
+				else
+					console.log(toast);
+			}
+		</script>
+
+		<script type="text/javascript">
+			var ctx = document.getElementById("myChart").getContext("2d");
+			ctx.canvas.width = window.innerWidth;
+			ctx.canvas.height = window.innerHeight-10;
+			
+			var d = getGameGuesses();
+
+			var data = {
+				labels : getPlayersNames(),
+				datasets : [{
+					fillColor : "rgba(220,220,220,0.5)",
+					strokeColor : "rgba(220,220,220,1)",
+					data : d.correct
+				}, {
+					fillColor : "rgba(151,187,205,0.5)",
+					strokeColor : "rgba(151,187,205,1)",
+					data : d.incorrect
+				}]
+			};
+			var options = {
+				animation:false
+			};
+			if(data.labels.length <=2)
+				new Chart(ctx).Bar(data, options);
+			else
+				new Chart(ctx).Radar(data, options);
+		</script>
+	</body>
+</html>

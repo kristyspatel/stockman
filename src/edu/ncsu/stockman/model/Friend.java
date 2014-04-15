@@ -7,9 +7,10 @@ public class Friend {
 
 	public String name;
 	public int id;
+	public User user;
 	
 	public long facebook_id;
-	public enum Friendship_status {REQUEST_SENT,PENDING,ACCEPTED,NOTINVITIED};
+	public enum Friendship_status {REQUEST_SENT,PENDING,ACCEPTED,NOTINVITIED,CANCELLED};
 	public Friendship_status friendship_status;
 
 	
@@ -18,6 +19,14 @@ public class Friend {
 		try {
 			this.name = info.getString("name");
 			this.id = info.getInt("id_user");
+			if(Main.users.get(id)==null){
+				user= new User(info);
+				Main.users.put(id, user);
+			}
+			else{
+				user= Main.users.get(id);
+			}
+			
 			this.facebook_id = info.getLong("facebook_id");
 			
 			int s = info.optInt("status");
@@ -35,6 +44,5 @@ public class Friend {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
+	}	
 }

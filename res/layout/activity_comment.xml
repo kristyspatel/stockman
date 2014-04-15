@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,59 +7,81 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".CommentActivity" 
-    android:background="@color/kulur_white"
-    android:gravity="center_horizontal">
+    android:background="@drawable/images"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/notification"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/comment_scroller"
-        android:layout_alignRight="@+id/comment_scroller" />
+        android:textColor="@color/kulur_white" />
 
+    <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:layout_marginBottom="2dp"
+			    android:background="#555"/>
+    
+    <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comments"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+	<View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:layout_marginBottom="2dp"
+			    android:background="@android:color/darker_gray"/>
+    
     <ScrollView
         android:id="@+id/comment_scroller"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/notification"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" 
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_weight="1" 
 		android:layout_marginBottom="60dp"        
         >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/comments_list" >
         </LinearLayout>
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/post"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_alignBaseline="@+id/comment_box"
-        android:layout_alignBottom="@+id/comment_box"
-        android:layout_alignRight="@+id/comment_scroller"
-        android:background="@color/button"
-        android:text="Post" 
-        android:onClick="postComment"/>
+    <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        
 
-    <EditText
+   		 <EditText
         android:id="@+id/comment_box"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/comment_scroller"
-        android:layout_alignParentBottom="true"
-        android:background="@color/kulur_white"
         android:ems="10"
+        android:layout_weight="1"
         android:hint="Comment"
+        android:textColor="@color/kulur_white"
         android:inputType="textMultiLine"
          android:focusableInTouchMode="true"
          android:focusable="true"
          />
+   		 <Button
+        android:id="@+id/post"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:background="@color/button"
+        android:text="Post" 
+        android:onClick="postComment"/>
+    </LinearLayout>
     
-</RelativeLayout>
+    
+</LinearLayout>
