@@ -23,7 +23,7 @@ public class Game {
 
 	public String name;
 	public int id;
-	public Player creator;
+	public int id_creator;
 	public Player me;
 	public SparseArray<Player> players = new SparseArray<Player>();;
 	
@@ -36,6 +36,7 @@ public class Game {
 			this.name = info.getString("name");
 			this.id = info.getInt("id_game");
 			this.me = new Player(info,this);
+			this.id_creator = info.getInt("creator_id_user");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,6 +53,8 @@ public class Game {
 			try {
 				JSONObject player = players.getJSONObject(i);
 				Player p = new Player(player,this);
+				if(p.user.id == Main.current_user.id)
+					me = p;
 				this.players.put(p.id, p);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -95,7 +98,9 @@ public class Game {
 					JSONObject data;
 					try {
 						data = new JSONObject(result.info.text);
-						Main.current_user.games.put(data.getInt("id_game"), new Game(data.getInt("id_game"), data.getString("name")));
+						Game g =  new Game(data.getJSONObject("info"));
+						g.setPlayers(data.getJSONArray("players"));
+						Main.current_user.games.put(g.id,g);
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

@@ -193,7 +193,7 @@ public class CommentActivity extends Activity {
 		//tv.setId(comments.get(0).getId());
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
 			     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		layoutParams.setMargins(5, 0, 0, 0);		
+		layoutParams.setMargins(5, 0, 0, 0);
 		tv.setLayoutParams(layoutParams);
 		tv.setPadding(5, 5, 2, 0);
 		tv.setText("No Comments");
@@ -220,7 +220,7 @@ public class CommentActivity extends Activity {
 			user_name.setPadding(5, 5, 2, 0);
 			user_name.setText(notification.comments.get(i).getUser().name+":");
 			
-			user_name.setTextColor(this.getResources().getColor(edu.ncsu.stockman.R.color.kulur_purple));
+			user_name.setTextColor(this.getResources().getColor(edu.ncsu.stockman.R.color.kulur_white));
 			user_name.setTypeface(null, Typeface.BOLD);
 			TextView comment = new TextView(this);
 			LinearLayout.LayoutParams commentParams = new LinearLayout.LayoutParams(
@@ -229,6 +229,7 @@ public class CommentActivity extends Activity {
 			comment.setLayoutParams(commentParams);
 			comment.setPadding(5, 5, 2, 0);
 			comment.setText(notification.comments.get(i).getComment());
+			comment.setTextColor(getResources().getColor(R.color.kulur_lightgrey));
 			lv.addView(user_name);
 			lv.addView(comment);			
 		}
@@ -293,7 +294,7 @@ public class CommentActivity extends Activity {
 		user_name.setPadding(5, 5, 2, 0);
 		user_name.setText(Main.current_user.name);
 		
-		user_name.setTextColor(this.getResources().getColor(edu.ncsu.stockman.R.color.kulur_purple));
+		user_name.setTextColor(this.getResources().getColor(edu.ncsu.stockman.R.color.kulur_white));
 		user_name.setTypeface(null, Typeface.BOLD);
 		TextView comment = new TextView(this);
 		//tv.setId(comments.get(0).getId());
@@ -303,6 +304,7 @@ public class CommentActivity extends Activity {
 		comment.setLayoutParams(commentParams);
 		comment.setPadding(5, 5, 2, 0);
 		comment.setText(comment_text);
+		comment.setTextColor(getResources().getColor(R.color.kulur_lightgrey));
 		lv.addView(user_name);
 		lv.addView(comment);
 		EditText et = (EditText)findViewById(R.id.comment_box);

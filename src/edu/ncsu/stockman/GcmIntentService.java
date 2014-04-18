@@ -148,22 +148,39 @@ public class GcmIntentService extends IntentService {
 	        
 	        else if(action.equals("ACCEPT_FRIEND")){
 	        	if(data.getInt("id_user1")==Main.current_user.id){
-	        		Main.current_user.facebook_friends.get(data.getInt("id_user2")).friendship_status = Friendship_status.ACCEPTED;
 	        		Friend f = Main.current_user.facebook_friends.get(data.getInt("id_user2"));
-	        		Main.current_user.friends.put(f.id, f.user);
-	        		Main.current_user.new_friend = true;
+	        		if (f!=null){
+		        		f.friendship_status = Friendship_status.ACCEPTED;
+		        		Main.current_user.friends.put(f.id, f.user);
+		        		Main.current_user.new_friend = true;
+	        		}
 	        	}
 	        }
 	        else if(action.equals("CANCEL_FRIEND")){
 	        	if(data.getInt("id_user1")==Main.current_user.id){
-	        		Main.current_user.facebook_friends.get(data.getInt("id_user2")).friendship_status = Friendship_status.CANCELLED;
-	        		Main.current_user.new_friend = true;
+	        		Friend f = Main.current_user.facebook_friends.get(data.getInt("id_user2"));
+	        		if (f!=null){
+	        			f.friendship_status = Friendship_status.CANCELLED;
+	        			Main.current_user.new_friend = true;
+	        		}
+	        	}
+	        }
+	        else if(action.equals("ADD_FRIEND")){
+	        	if(data.getInt("id_user2")==Main.current_user.id){
+	        		Friend f = Main.current_user.facebook_friends.get(data.getInt("id_user1"));
+	        		if (f!=null){
+	        			f.friendship_status = Friendship_status.PENDING;
+	        			Main.current_user.new_friend = true;
+	        		}
 	        	}
 	        }
 	        
 	        else if(action.equals("CREATE_GAME")){
 	        	//TODO
-	        	//Main.current_user.games.put(b.getInt("id_game"), new Game(b.getInt("id_game"), b.getString("name")));
+	        	Game g = new Game(data.getJSONObject("info"));
+	        	g.setPlayers(data.getJSONArray("players"));
+	        	Main.current_user.games.put(g.id,g);
+	        	Main.current_user.new_game = true;
 	        }
 	        
 	        else if(action.equals("GUESS")){
@@ -199,6 +216,7 @@ public class GcmIntentService extends IntentService {
 			
 			e.printStackTrace();
 		}
+		Log.i(TAG, "New Notification:"+extras.toString());
         
     }
     // Put the message into a notification and post it.

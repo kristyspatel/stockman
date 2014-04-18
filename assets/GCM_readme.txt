@@ -17,11 +17,8 @@ CANCEL_FRIEND
 	id_user2
 
 CREATE_GAME
-	name
-	members
-	id_game
-	id_players
-
+	Like Game.Get
+	
 GUESS
 	me
 		id_player
