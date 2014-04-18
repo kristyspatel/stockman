@@ -119,7 +119,7 @@ public class New_Game extends Activity {
         s = new String(stringArray);
         
 		Game.createGame(this, members_array, s);
-		finish();
+		//finish();
 	}
 	
 }

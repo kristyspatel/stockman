@@ -8,4 +8,11 @@
     <string name="n_sell">%1$s sold %2$d shares of %3$s.</string>
     <string name="n_accept_game">%1$s accepted the %2$s game invitation.</string>
     <string name="n_decline_game">%1$s decline the %2$s game invitation.</string>
+    <string name="n_create_game_for_creator">You created a new game: %1$s.</string>
+    <string name="n_create_game_for_other">%2$s created a new game: %1$s.</string>
+    <string name="n_pick_word">%2$s picked a word for game: %1$s.</string>
+    <string name="n_comment">%1$s added a new comment.</string>
+    <string name="n_accept_friend">%1$s accepted your friendship request.</string>
+    <string name="n_add_friend">%1$s request to be your friend.</string>
+    
 </resources>

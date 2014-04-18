@@ -6,7 +6,7 @@ import org.json.JSONObject;
 public class Friend {
 
 	public String name;
-	public int id;
+	public int id; // be careful, this id is not id_friend, as there is no such thing. It is id_user of the friend
 	public User user;
 	
 	public long facebook_id;

@@ -128,7 +128,7 @@ public class Timeline extends MainActivity {
 		//Fetch User's info, games, notifications, invitations
 		//User.fetchUserInfo(this);
 		if(Main.current_user==null)
-			User.fetchUserInfo(this);
+			User.fetchUserInfo(this,regid);
 		else{
 			setName(Main.current_user.name);
 			setGames();
@@ -158,6 +158,7 @@ public class Timeline extends MainActivity {
 				if(Main.current_user.new_game){
 					setName(Main.current_user.name);
 					setGames();
+					//User.fetchUserInfo(Timeline.this);
 					Main.current_user.new_game = false;
 				}
 				if(Main.current_user.new_notification){
@@ -186,6 +187,14 @@ public class Timeline extends MainActivity {
             itemData.add(new NewsFeedRow(Main.current_user.notifications.valueAt(i))); 
         }
         adapter.notifyDataSetChanged();
+        if(Main.current_user.notifications.size()==0){
+        	TextView t = new TextView(this);
+        	t.setText(R.string.noNotification);
+        	t.setTextColor(getResources().getColor(R.color.kulur_lightgrey));
+        	LinearLayout l = (LinearLayout) findViewById(R.id.notificationLayout);
+        	l.addView(t);
+        }
+        	
 	}
 	public void setName(String s) {
 		TextView t = (TextView) findViewById(R.id.welcome);

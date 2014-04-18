@@ -142,6 +142,7 @@ public class ManageFriendsActivity extends Activity {
 					  	   		else if(f.friendship_status == Friendship_status.PENDING){
 					  	   			f.friendship_status = Friendship_status.ACCEPTED;
 					  	   			setStatusStyle(t, f);
+					  	   			Main.current_user.friends.put(f.id, f.user);
 					  	   		}
 					  	   		else if(f.friendship_status == Friendship_status.NOTINVITIED){
 					  	   			f.friendship_status = Friendship_status.REQUEST_SENT;

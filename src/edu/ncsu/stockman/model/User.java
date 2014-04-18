@@ -13,6 +13,7 @@ import com.facebook.Session;
 
 import edu.ncsu.stockman.R;
 import edu.ncsu.stockman.activity.Timeline;
+import edu.ncsu.stockman.model.Player.Player_status;
 
 public class User {
 
@@ -97,7 +98,10 @@ public class User {
 			try {
 				JSONObject notif = notifications.getJSONObject(i);
 				Notification g = new Notification(notif);
-				this.notifications.put(g.id_notification, g);
+				if(g.type.equals("CREATE_GAME"))
+					this.notifications.put(g.id_notification, g);
+				else if(g.game.me.status == Player_status.ENROLLED || g.game.me.status == Player_status.WAITING_FOR_WORD)
+					this.notifications.put(g.id_notification, g);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -124,7 +128,8 @@ public class User {
 		for (int i = 0; i < games.length(); i++) {
 			try {
 				JSONObject game = games.getJSONObject(i);
-				Game g = new Game(game);
+				Game g = new Game(game.getJSONObject("info"));
+				g.setPlayers(game.getJSONArray("players"));
 				this.games.put(g.id, g);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -141,7 +146,7 @@ public class User {
 	/**
 	 * Fetch User's info, games, notifications, invitations
 	 */
-	public static void fetchUserInfo(Context c){
+	public static void fetchUserInfo(Context c, String google_id){
 		JSONObject data = new JSONObject();
 		try{		
 			data.put("access_token", Session.getActiveSession().getAccessToken());//post
@@ -164,9 +169,9 @@ public class User {
 						me.setGames(j.optJSONArray("games"));
 						me.setFriends(j.optJSONArray("friends"));
 						me.setNotifications(j.optJSONArray("notifications"));
-						
+						if(j.optJSONObject("info").getString("google_id").isEmpty() && !bundle.getString("google_id").isEmpty())
+							registerGoogleId(context, bundle.getString("google_id"));
 						//Change the activity components
-						// TODO maybe change this to an adaptor
 						me.new_game = true;
 						me.new_friend = true;
 						me.new_notification=true;
@@ -179,6 +184,7 @@ public class User {
 			
 			}
 		};		
+		asyncHttpPost.bundle.putString("google_id", google_id);
 		asyncHttpPost.exec(c.getString(R.string.base_url)+"/user/get");
 	}
 	/**

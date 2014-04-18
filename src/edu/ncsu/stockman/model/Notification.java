@@ -16,6 +16,7 @@ public class Notification {
 	public JSONObject text;
 	public boolean seen;
 	public int id_notification;
+	public Game game;
 	public ArrayList<Comment> comments = new ArrayList<Comment>();
 	
 	//this to allow activity to update the comments
@@ -30,9 +31,17 @@ public class Notification {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		this.type = j.optString("type");
 		this.seen = (j.optString("seen") == "1"?true : false);
 		this.id_notification = j.optInt("id_notification");
+
+		try {
+			game = Main.current_user.games.get(j.getInt("id_game"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public String getText(Context c){
 		return getText(c, type, text);
@@ -42,16 +51,8 @@ public class Notification {
 			Game g;
 			try {
 				g = Main.current_user.games.get(text.getInt("id_game"));
-				if(g==null)
-					return "Game is null!";
-
 				Player me = g.players.get(text.getJSONObject("me").getInt("id_player"));
-				if(me==null)
-					return "me is null!";
-
 				Player him = g.players.get(text.getJSONObject("him").getInt("id_player"));
-				if(him==null)
-					return "him is null!";
 				
 				if(text.getBoolean("correct"))
 					if(Player.getStatus(text.getJSONObject("him").getInt("status"))==Player_status.OUT)
@@ -108,9 +109,74 @@ public class Notification {
 				e.printStackTrace();
 			}
 		}
+		if(type.equals("CREATE_GAME")){
+			
+			try {
+				Game g = Main.current_user.games.get(text.getJSONObject("info").getInt("id_game"));
+				Main.current_user.games.put(g.id, g);
+				if(g.id_creator == Main.current_user.id)
+					return c.getString(R.string.n_create_game_for_creator,g.name);
+				else if(Main.users.get(g.id_creator)!= null)
+					return c.getString(R.string.n_create_game_for_other,g.name,Main.users.get(g.id_creator).name);
+				else
+					return c.getString(R.string.n_create_game_for_other,g.name,text.get("creator_name"));
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("PICK_WORD")){
+			
+			try {
+				Game g = Main.current_user.games.get(text.getInt("id_game"));
+				Player p = g.players.get(text.getInt("id_player"));
+				return c.getString(R.string.n_pick_word,g.name,p.name);
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("COMMENT")){
+			
+			try {
+				User u = Main.users.get(text.getInt("id_user"));
+				return c.getString(R.string.n_comment,u.name);
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("ACCEPT_FRIEND")){
+			
+			try {
+				User u = Main.users.get(text.getInt("id_user2"));
+				
+				return c.getString(R.string.n_accept_friend,u.name);
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("ADD_FRIEND")){
+			
+			try {
+				Friend f = Main.current_user.facebook_friends.get(text.getInt("id_user1"));
+				
+				return c.getString(R.string.n_add_friend,f.name);
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 		
 		
-		return "";
+		return "Debug:"+type + ":"+text;
 	}
 
 	
