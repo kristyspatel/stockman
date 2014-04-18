@@ -190,7 +190,7 @@ public class Timeline extends MainActivity {
         if(Main.current_user.notifications.size()==0){
         	TextView t = new TextView(this);
         	t.setText(R.string.noNotification);
-        	t.setTextColor(getResources().getColor(R.color.kulur_lightgrey));
+        	t.setTextColor(getResources().getColor(R.color.kulur_white));
         	LinearLayout l = (LinearLayout) findViewById(R.id.notificationLayout);
         	l.addView(t);
         }

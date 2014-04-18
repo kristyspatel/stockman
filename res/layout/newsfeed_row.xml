@@ -8,7 +8,7 @@
             android:layout_width = "fill_parent"
        		android:layout_height="fill_parent"
        		android:gravity = "right"
-       		android:background="@color/kulur_white">
+       		android:background="@color/grey">
        		
         <Button
             android:id="@+id/swipe_button1"
@@ -29,7 +29,7 @@
             android:layout_width="fill_parent"
        		android:layout_height="fill_parent"
        		android:padding="8dp"
-       		android:background="@color/kulur_beige">
+       		android:background="@drawable/row_background">
  
             <TextView
             android:layout_width="fill_parent"

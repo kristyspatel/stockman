@@ -19,13 +19,13 @@ import edu.ncsu.stockman.model.Player.Player_status;
 
 public class ChooseHangFriendActivity extends Activity {
 
-	// Timer to update comments if new comment from server
+	 // Timer to update comments if new comment from server
 	Handler timerHandler = new Handler();
 	Runnable timerRunnable = new Runnable() {
 
 		@Override
 		public void run() {
-
+ 
 			if(Main.current_game.player_status_change){
 				addPlayers();
 				Main.current_game.player_status_change= false;
