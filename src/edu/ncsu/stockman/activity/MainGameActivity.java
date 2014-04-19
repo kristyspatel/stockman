@@ -1,6 +1,7 @@
 package edu.ncsu.stockman.activity;
 
 import java.util.PriorityQueue;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -11,12 +12,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.facebook.Session;
+
 import edu.ncsu.stockman.ChartsInterface;
+import edu.ncsu.stockman.DownloadImageTask;
 import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.RoundedImageView;
 import edu.ncsu.stockman.model.Main;
 import edu.ncsu.stockman.model.Player;
 import edu.ncsu.stockman.model.Player.Player_status;
@@ -120,10 +124,9 @@ public class MainGameActivity extends Activity {
 			View view = getLayoutInflater().inflate(R.layout.player_in_standing, main,false);
 			
 			Player p = sorted.poll();
-			System.out.println(p.user.name);
 			
-			Button b = (Button) view.findViewById(R.id.player_item);
-			
+			RoundedImageView b = (RoundedImageView) view.findViewById(R.id.player_item);
+			DownloadImageTask.setFacebookImage(b, p.user);
 			TextView t = (TextView) view.findViewById(R.id.player_desc);
 
 			t.setText(p.user.name);
@@ -140,17 +143,24 @@ public class MainGameActivity extends Activity {
 			});
 			
 			main.addView(view);
+			RoundedImageView crossing = (RoundedImageView) view.findViewById(R.id.forcrossing);
+			//crossing.setVisibility(View.VISIBLE);
+			crossing.setImageResource(R.drawable.crossing_image);
 			if(p.status == Player_status.OUT){
-				b.setText(i +1 +"");
+				DownloadImageTask.setFacebookImage(b, p.user);
+				//crossing.setBackgroundColor(Color.TRANSPARENT);
+				//b.setImageAlpha(50);
+				System.out.println("I am out");
+				//b.setText(i +1 +"");
 			}
 			else if(p.status == Player_status.INVITED){
-				b.setText("!");
+				b.setImageResource(R.drawable.invited_standing);;
 			}
 			else if(p.status == Player_status.WAITING_FOR_WORD){
-				b.setText("!!");
+				b.setImageResource(R.drawable.invited_standing);;
 			}
 			else{
-				b.setText("?");
+				DownloadImageTask.setFacebookImage(b, p.user);
 			}
 		}
 	}
@@ -195,7 +205,7 @@ public class MainGameActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main_game, menu);
+		getMenuInflater().inflate(R.menu.activity_timeline, menu);
 		return true;
 	}
 	
@@ -216,6 +226,10 @@ public class MainGameActivity extends Activity {
 	}
 	public void goToSettings(MenuItem c){
 		SettingsActivity.goToSettings(this);
+	}
+	public void manageFriends(MenuItem c){
+		Intent intent = new Intent(getBaseContext(), ManageFriendsActivity.class);
+		startActivity(intent);
 	}
 
 }

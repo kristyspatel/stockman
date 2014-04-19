@@ -55,7 +55,7 @@ public class Splash_screen extends FacebookActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_splash_screen, menu);
+		getMenuInflater().inflate(R.menu.nomenu, menu);
 		return true;
 	}
 	

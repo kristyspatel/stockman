@@ -230,7 +230,7 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-        .setSmallIcon(R.drawable.stockman_icon)
+        .setSmallIcon(R.drawable.stockman_notification_icon)
         .setContentTitle("StockMan")
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))

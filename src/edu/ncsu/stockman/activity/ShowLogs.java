@@ -34,12 +34,12 @@ public class ShowLogs extends Activity {
 		me = Main.current_game.players.get(getIntent().getExtras().getInt("player_id"));
 		
 
-		WebView guesses = (WebView)findViewById(R.id.gusses); 
-		guesses.getSettings().setJavaScriptEnabled(true);
-		guesses.setPadding(0, 0, 0, 0);
-		guesses.addJavascriptInterface(new ChartsInterface(this,Main.current_game), "and_data");
-		//priceFluctuationGraph.loadUrl("file:///android_asset/googlecharts.html");
-		guesses.loadUrl("file:///android_asset/chartsjs_guesses.html");
+//		WebView guesses = (WebView)findViewById(R.id.gusses); 
+//		guesses.getSettings().setJavaScriptEnabled(true);
+//		guesses.setPadding(0, 0, 0, 0);
+//		guesses.addJavascriptInterface(new ChartsInterface(this,Main.current_game), "and_data");
+//		//priceFluctuationGraph.loadUrl("file:///android_asset/googlecharts.html");
+//		guesses.loadUrl("file:///android_asset/chartsjs_guesses.html");
 		
 		//commented just to try charts here
 		Player.getLogs(this, me.id);
@@ -49,7 +49,7 @@ public class ShowLogs extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.show_logs, menu);
+		getMenuInflater().inflate(R.menu.nomenu, menu);
 		return true;
 	}
 	

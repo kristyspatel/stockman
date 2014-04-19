@@ -7,6 +7,7 @@ import edu.ncsu.stockman.model.Main;
 import edu.ncsu.stockman.model.User;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
@@ -30,6 +31,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     	}
     }
 
+    
     @Override
 	protected Bitmap doInBackground(String... urls) {
         String urldisplay = urls[0];

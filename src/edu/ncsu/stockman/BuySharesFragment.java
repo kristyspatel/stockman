@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import edu.ncsu.stockman.model.Company;
 import edu.ncsu.stockman.model.Main;
 import edu.ncsu.stockman.model.Stock;
@@ -96,10 +97,14 @@ public class BuySharesFragment extends Fragment {
 
 		// get the amount of shares
 		TextView tv = (TextView) rootView.findViewById(R.id.NoOfShares);
-		amount = Integer.parseInt(tv.getText().toString());
-		tv.setSelected(false);
-
-		
-		Stock.buyShares(getActivity(),selected_company,amount);
+		try{
+			amount = Integer.parseInt(tv.getText().toString());
+			tv.setSelected(false);
+	
+			
+			Stock.buyShares(getActivity(),selected_company,amount);
+		} catch (NumberFormatException e){
+			Toast.makeText(rootView.getContext(), "Amount must be nonempty, and integer.", Toast.LENGTH_SHORT).show();
+		}
 	}
 }

@@ -10,13 +10,6 @@
     android:orientation="vertical"
     tools:context=".ShowLogs" >
 
-        <WebView 
-    android:id="@+id/gusses"
-    android:layout_width="fill_parent"
-    android:layout_height="200dp"
-	/>
-    
-    
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"

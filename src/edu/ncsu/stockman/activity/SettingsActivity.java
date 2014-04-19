@@ -31,7 +31,7 @@ public class SettingsActivity extends FacebookActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.settings, menu);
+		getMenuInflater().inflate(R.menu.nomenu, menu);
 		return true;
 	}
 	public static void goToSettings(Activity c){
@@ -54,6 +54,8 @@ public class SettingsActivity extends FacebookActivity {
 	public static void logout(Activity c){
 		Session.getActiveSession().closeAndClearTokenInformation();
 		Intent intent = new Intent(c, Splash_screen.class);
+		Main.current_user = null;
+		Main.current_game = null;
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		c.startActivity(intent);
 	}
@@ -64,6 +66,8 @@ public class SettingsActivity extends FacebookActivity {
 	    if (state.isClosed()) {
 	    	Intent intent = new Intent(this, Splash_screen.class);
 	    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    	Main.current_user = null;
+	    	Main.current_game = null;
 	    	startActivity(intent);
 	    }
 	}

@@ -357,6 +357,10 @@ public class Timeline extends MainActivity {
 	public void logout(MenuItem c){
 		SettingsActivity.logout(this);
 	}
+	public void manageFriends(MenuItem c){
+		Intent intent = new Intent(getBaseContext(), ManageFriendsActivity.class);
+		startActivity(intent);
+	}
 
 	public void goToSettings(MenuItem c){
 		SettingsActivity.goToSettings(this);
