@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,10 @@ public View getView(int position, View convertView, ViewGroup parent) {
            row = inflater.inflate(layoutResID, parent, false);
            holder = new NewsHolder();
            holder.itemName = (TextView)row.findViewById(R.id.example_itemname);           
+           holder.itemName.setTextColor(getContext().getResources().getColor(R.color.kulur_white));           
+           Typeface externalFont = Typeface.createFromAsset(getContext().getAssets(), "fonts/Comic Sans.ttf");
+           holder.itemName.setTypeface(externalFont);
+           holder.itemName.setTextSize(20);
            holder.button1=(Button)row.findViewById(R.id.swipe_button1);
            row.setTag(holder);
            Notification n = (data.get(position)).getItemName();

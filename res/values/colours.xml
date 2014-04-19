@@ -14,6 +14,10 @@
 <color name="friend">#FFFCE8</color>
 <color name="notinvitied">#CC3B37</color>
 <color name="orange">#F87217</color>
+<color name="light_grey">#E5E4E2</color>
+<color name="fluorescent_green">#99FF33</color>
+<color name="grey">#444441</color>
+<color name="transparent_grey">#80444441</color>
 
 <!-- for the graphs -->
 <color name="graphs_orange">#F38630</color>

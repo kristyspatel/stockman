@@ -2,11 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/images"
+    android:background="@color/light_grey"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    
     tools:context=".Splash_screen" >
 
     <LinearLayout
@@ -21,13 +22,25 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/stockmanlogo"
             android:src="@drawable/stockman" />
-
+		<TextView 
+		    android:id="@+id/tagline"
+		    android:text="@string/tagline"
+		    android:textStyle="bold"
+		    android:layout_width="325dp"
+		    android:layout_height="wrap_content"
+		    android:textSize="20sp"
+		    android:gravity="center_horizontal"/>
+		
         <com.facebook.widget.LoginButton
+            xmlns:fb="http://schemas.android.com/apk/res-auto"
             android:id="@+id/authButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="325dp"
+        	android:layout_height="60dp"
+        	fb:login_text="Connect with facebook"
+        	android:textStyle="bold"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="90dp" />
+        
 
     </LinearLayout>
 
