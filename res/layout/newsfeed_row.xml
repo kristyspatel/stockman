@@ -29,7 +29,8 @@
             android:layout_width="fill_parent"
        		android:layout_height="fill_parent"
        		android:padding="8dp"
-       		android:background="@color/kulur_beige">
+       		android:background="@drawable/row_background">
+        
  			<edu.ncsu.stockman.RoundedImageView
  			    android:id="@+id/profile_pic"
 	            android:layout_width="48dp"
