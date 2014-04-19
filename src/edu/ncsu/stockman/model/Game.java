@@ -35,7 +35,7 @@ public class Game {
 		try {
 			this.name = info.getString("name");
 			this.id = info.getInt("id_game");
-			this.me = new Player(info,this);
+			//this.me = new Player(info,this);
 			this.id_creator = info.getInt("creator_id_user");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -61,6 +61,8 @@ public class Game {
 				e.printStackTrace();
 			}
 		}
+		if(me==null)
+			Log.d("Model","me in a game is null?!");
 		//setting guesses needs all players to be set up.
 		for (int i = 0; i < players.length(); i++) {
 			try {
@@ -126,7 +128,7 @@ public class Game {
 					try {
 						JSONObject j = new JSONObject(result.info.text);
 						
-						Main.current_game.setPlayers(j.getJSONArray("players"));
+						//Main.current_game.setPlayers(j.getJSONArray("players"));
 						//Main.current_game.me = Main.current_game.players.get(j.getInt("me_id"));
 						//Main.current_player = me;
 						

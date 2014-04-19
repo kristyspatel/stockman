@@ -15,7 +15,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import edu.ncsu.stockman.activity.MainActivity;
+import edu.ncsu.stockman.activity.Timeline;
 import edu.ncsu.stockman.model.Comment;
 import edu.ncsu.stockman.model.Friend;
 import edu.ncsu.stockman.model.Friend.Friendship_status;
@@ -206,7 +206,7 @@ public class GcmIntentService extends IntentService {
 	        			g.player_status_change =true;
 	        		}
 	        		
-	        		p.setRevealedWord(data.getInt("word_revealed"));
+	        		p.word_revealed = p.getRevealedWord(data.getInt("word_revealed"));
 	        		p.new_letter_revealed = true;
 	        	}
 	        }
@@ -217,7 +217,6 @@ public class GcmIntentService extends IntentService {
 			e.printStackTrace();
 		}
 		Log.i(TAG, "New Notification:"+extras.toString());
-        
     }
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
@@ -227,7 +226,7 @@ public class GcmIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
+                new Intent(this, Timeline.class), 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)

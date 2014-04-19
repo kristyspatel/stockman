@@ -148,11 +148,14 @@ public class User {
 	 */
 	public static void fetchUserInfo(Context c, String google_id){
 		JSONObject data = new JSONObject();
-		try{		
+		if(Session.getActiveSession()==null)
+			return;
+		try{
 			data.put("access_token", Session.getActiveSession().getAccessToken());//post
 		}catch(JSONException e)
 		{
 			e.printStackTrace();
+			return;
 		}
 		
 		MidLayer asyncHttpPost = new MidLayer(data,c,Main.current_user==null?true:false) {

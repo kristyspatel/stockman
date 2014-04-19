@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import edu.ncsu.stockman.activity.CommentActivity;
+import edu.ncsu.stockman.model.Notification;
 
 public class NewsFeedAdapter extends ArrayAdapter<NewsFeedRow> {
 	 List<NewsFeedRow>   data;
@@ -44,7 +45,11 @@ public View getView(int position, View convertView, ViewGroup parent) {
            holder.itemName = (TextView)row.findViewById(R.id.example_itemname);           
            holder.button1=(Button)row.findViewById(R.id.swipe_button1);
            row.setTag(holder);
+           Notification n = (data.get(position)).getItemName();
            holder.button1.setTag((data.get(position)).getItemName().id_notification);
+
+           holder.profile_pic = (RoundedImageView) row.findViewById(R.id.profile_pic);
+           Notification.setPic(context, n.type, n.text, holder.profile_pic);
        }
        else
        {
@@ -71,6 +76,7 @@ public View getView(int position, View convertView, ViewGroup parent) {
 static class NewsHolder{
      TextView itemName;
      Button button1;
+     RoundedImageView profile_pic;
      }
 
 

@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
@@ -25,7 +24,9 @@ import android.widget.TextView;
 
 import com.facebook.Session;
 
+import edu.ncsu.stockman.DownloadImageTask;
 import edu.ncsu.stockman.R;
+import edu.ncsu.stockman.RoundedImageView;
 import edu.ncsu.stockman.model.Comment;
 import edu.ncsu.stockman.model.Main;
 import edu.ncsu.stockman.model.MidLayer;
@@ -212,26 +213,21 @@ public class CommentActivity extends Activity {
 		lv.removeAllViews();
 		for(int i=0;i<notification.comments.size();i++)	
 		{
-			TextView user_name = new TextView(this);
-			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-				     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			layoutParams.setMargins(5, 2, 0, 0);		
-			user_name.setLayoutParams(layoutParams);
-			user_name.setPadding(5, 5, 2, 0);
-			user_name.setText(notification.comments.get(i).getUser().name+":");
+			View v = getLayoutInflater().inflate(
+					   R.layout.comment, lv,false);
+
+			v.getBackground().setAlpha(200);
 			
-			user_name.setTextColor(this.getResources().getColor(edu.ncsu.stockman.R.color.kulur_white));
-			user_name.setTypeface(null, Typeface.BOLD);
-			TextView comment = new TextView(this);
-			LinearLayout.LayoutParams commentParams = new LinearLayout.LayoutParams(
-				     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			commentParams.setMargins(5, 0, 0, 0);		
-			comment.setLayoutParams(commentParams);
-			comment.setPadding(5, 5, 2, 0);
+			TextView comment = (TextView) v.findViewById(R.id.comment_text);
 			comment.setText(notification.comments.get(i).getComment());
-			comment.setTextColor(getResources().getColor(R.color.kulur_lightgrey));
-			lv.addView(user_name);
-			lv.addView(comment);			
+			
+			TextView user_name = (TextView) v.findViewById(R.id.comment_user);
+			user_name.setText(notification.comments.get(i).getUser().name+":");
+
+			RoundedImageView user_pic = (RoundedImageView) v.findViewById(R.id.profile_img);
+			DownloadImageTask.setFacebookImage(user_pic, notification.comments.get(i).getUser());
+			
+			lv.addView(v);
 		}
 	}
 
@@ -286,27 +282,22 @@ public class CommentActivity extends Activity {
 	public void add_comment(String comment_text)
 	{
 		LinearLayout lv = (LinearLayout)findViewById(R.id.comments_list);
-		TextView user_name = new TextView(this);
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-			     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		layoutParams.setMargins(5, 2, 0, 0);		
-		user_name.setLayoutParams(layoutParams);
-		user_name.setPadding(5, 5, 2, 0);
-		user_name.setText(Main.current_user.name);
+		View v = getLayoutInflater().inflate(
+				   R.layout.comment, lv,false);
+
+		v.getBackground().setAlpha(200);
 		
-		user_name.setTextColor(this.getResources().getColor(edu.ncsu.stockman.R.color.kulur_white));
-		user_name.setTypeface(null, Typeface.BOLD);
-		TextView comment = new TextView(this);
-		//tv.setId(comments.get(0).getId());
-		LinearLayout.LayoutParams commentParams = new LinearLayout.LayoutParams(
-			     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		commentParams.setMargins(5, 0, 0, 0);		
-		comment.setLayoutParams(commentParams);
-		comment.setPadding(5, 5, 2, 0);
+		TextView comment = (TextView) v.findViewById(R.id.comment_text);
 		comment.setText(comment_text);
-		comment.setTextColor(getResources().getColor(R.color.kulur_lightgrey));
-		lv.addView(user_name);
-		lv.addView(comment);
+		
+		TextView user_name = (TextView) v.findViewById(R.id.comment_user);
+		user_name.setText(Main.current_user.name);
+
+		RoundedImageView user_pic = (RoundedImageView) v.findViewById(R.id.profile_img);
+		DownloadImageTask.setFacebookImage(user_pic, Main.current_user);
+		
+		lv.addView(v);
+
 		EditText et = (EditText)findViewById(R.id.comment_box);
 		et.setText("");
 	}

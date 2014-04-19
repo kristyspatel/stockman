@@ -54,19 +54,60 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/cash_group"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/cash"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="$500"
+            android:textColor="@color/kulur_lightgrey"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/cash_group"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/hang_player_word_is"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="@string/hang_friend_desc"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/kulur_green" />
+            android:text="Your Word"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:id="@+id/friend_word"

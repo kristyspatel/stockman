@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.ncsu.stockman.DownloadImageTask;
 import edu.ncsu.stockman.R;
 import edu.ncsu.stockman.model.Player.Player_status;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.widget.ImageView;
 
 public class Notification {
 
@@ -46,6 +49,85 @@ public class Notification {
 	public String getText(Context c){
 		return getText(c, type, text);
 	}
+	public static void setPic(Context c, String type, JSONObject text, ImageView img){
+		if(type.equals("GUESS")){
+			try {
+				Game g = Main.current_user.games.get(text.getInt("id_game"));
+				Player me = g.players.get(text.getJSONObject("me").getInt("id_player"));
+				DownloadImageTask.setFacebookImage(img, me.user);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("BUY") || type.equals("SELL")){
+			try {
+				Game g = Main.current_user.games.get(text.getInt("id_game"));
+				Player p = g.players.get(text.getInt("id_player"));
+				DownloadImageTask.setFacebookImage(img, p.user);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("ACCEPT") || type.equals("DECLINE")){
+			try {
+				Game g = Main.current_user.games.get(text.getInt("id_game"));
+				Player p = g.players.get(text.getInt("id_player"));
+				DownloadImageTask.setFacebookImage(img, p.user);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("CREATE_GAME")){
+			
+			try {
+				Game g = Main.current_user.games.get(text.getJSONObject("info").getInt("id_game"));
+				if(Main.users.get(g.id_creator)!= null)
+					DownloadImageTask.setFacebookImage(img, Main.users.get(g.id_creator));
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("PICK_WORD")){
+			
+			try {
+				Game g = Main.current_user.games.get(text.getInt("id_game"));
+				Player p = g.players.get(text.getInt("id_player"));
+				DownloadImageTask.setFacebookImage(img, p.user);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("ACCEPT_FRIEND")){
+			
+			try {
+				User u = Main.users.get(text.getInt("id_user2"));
+				DownloadImageTask.setFacebookImage(img, u);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(type.equals("ADD_FRIEND")){
+			
+			try {
+				Friend f = Main.current_user.facebook_friends.get(text.getInt("id_user1"));
+				DownloadImageTask.setFacebookImage(img, f.user);				
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		
+		
+	}
 	public static String getText(Context c, String type, JSONObject text){
 		if(type.equals("GUESS")){
 			Game g;
@@ -56,11 +138,11 @@ public class Notification {
 				
 				if(text.getBoolean("correct"))
 					if(Player.getStatus(text.getJSONObject("him").getInt("status"))==Player_status.OUT)
-						return c.getString(R.string.n_guess_out,him.name,me.name,him.hideWord());
+						return c.getString(R.string.n_guess_out,him.name,me.name,him.hideWord(text.getInt("word_revealed")));
 					else
-						return c.getString(R.string.n_guess_correctly,him.name,me.name,him.hideWord());
+						return c.getString(R.string.n_guess_correctly,him.name,me.name,him.hideWord(text.getInt("word_revealed")));
 				else
-					return c.getString(R.string.n_guess_incorrectly,him.name,me.name,him.hideWord());
+					return c.getString(R.string.n_guess_incorrectly,him.name,me.name,him.hideWord(text.getInt("word_revealed")));
 			
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -71,15 +153,8 @@ public class Notification {
 			
 			try {
 				Game g = Main.current_user.games.get(text.getInt("id_game"));
-				if(g==null)
-					return "Game is null!";
 				Player p = g.players.get(text.getInt("id_player"));
-				if(p==null)
-					return "Player is null!";
-				
 				Company company = Main.companies.get(text.getInt("id_company"));
-				if(company==null)
-					return "Company is null!";
 				
 				
 				if(type.equals("BUY"))
@@ -113,7 +188,6 @@ public class Notification {
 			
 			try {
 				Game g = Main.current_user.games.get(text.getJSONObject("info").getInt("id_game"));
-				Main.current_user.games.put(g.id, g);
 				if(g.id_creator == Main.current_user.id)
 					return c.getString(R.string.n_create_game_for_creator,g.name);
 				else if(Main.users.get(g.id_creator)!= null)

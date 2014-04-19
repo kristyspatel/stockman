@@ -57,8 +57,13 @@ public class MainGameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if(Main.current_game == null || Main.current_game.me == null){
-			System.err.println("MainGameActivity current_game.me or current_game is null");
+		if(Main.current_game.me == null){
+			System.err.println("MainGameActivity current_game.me is null");
+			finish();
+			return;
+		}
+		if(Main.current_game == null){
+			System.err.println("MainGameActivity current_game is null");
 			finish();
 			return;
 		}
@@ -83,7 +88,10 @@ public class MainGameActivity extends Activity {
 		for (int i = 0; i < Main.wordLength; i++) {
 			TextView t = new TextView(this);
 			t.setEnabled(false);
-			t.setPadding(40, 0, 40, 0);
+			t.setLayoutParams(new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.WRAP_CONTENT,
+					LinearLayout.LayoutParams.WRAP_CONTENT,
+					1));
 			if(Main.current_game.me.word_revealed[i]){
 				t.setTextAppearance(this, R.style.letter_revealed);
 				t.setPaintFlags(t.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

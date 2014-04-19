@@ -79,7 +79,7 @@ public class Player implements Comparable<Player>{
 			status = getStatus(s);
 			
 			this.game = g;
-			setRevealedWord(info.getInt("word_revealed"));
+			this.word_revealed=  getRevealedWord(info.getInt("word_revealed"));
 			
 			if(info.has("stocks"))
 				setStocks(info.getJSONArray("stocks"));
@@ -110,7 +110,8 @@ public class Player implements Comparable<Player>{
 		}
 		return current_possissions;
 	}
-	public void setRevealedWord(int word_r){
+	public boolean[] getRevealedWord(int word_r){
+		boolean[] word_revealed = new boolean[6];
 		for (int i = word_revealed.length-1; i >= 0; i--) {
 			if(word_r%2 == 0)
 				word_revealed[i] = false;
@@ -118,6 +119,7 @@ public class Player implements Comparable<Player>{
 				word_revealed[i] = true;
 			word_r /= 2;
 		}
+		return word_revealed;
 	}
 	public void setWord(String w){
 		if (w.length() == 6)
@@ -193,7 +195,17 @@ public class Player implements Comparable<Player>{
 		}
 		return s;
 	}
-	
+	public String hideWord(int wordi){
+		boolean[] word_revealed = getRevealedWord(wordi);
+		String s = "";
+		for (int i = 0; i < Main.wordLength; i++) {
+			if(word_revealed[i])
+				s += word[i]+" ";
+			else
+				s += "_ ";
+		}
+		return s;
+	}	
 	public void setStocks(JSONArray stocks){
 		this.stocks = new ArrayList<Stock>();
 		for (int i = 0; i < stocks.length(); i++) {
@@ -213,7 +225,7 @@ public class Player implements Comparable<Player>{
 		for (int i = 0; i < gusses.length(); i++) {
 			try {
 				JSONObject guess = gusses.getJSONObject(i);
-				Guess s = new Guess(guess);
+				Guess s = new Guess(guess, this);
 				this.guesses.add(s);
 			} catch (JSONException e) {
 				e.printStackTrace();

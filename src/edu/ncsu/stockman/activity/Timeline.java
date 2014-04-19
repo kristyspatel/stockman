@@ -230,6 +230,9 @@ public class Timeline extends MainActivity {
 			
 			//get game from model
 			Game g = Main.current_user.games.valueAt(i);
+			if(g ==null){
+				Log.d("Activity", "Timeline: game is null");
+			}
 			//use the template
 			v = getLayoutInflater().inflate(R.layout.game_in_timeline, main,false);
 			l.put(g.id, (LinearLayout) v);
@@ -247,7 +250,7 @@ public class Timeline extends MainActivity {
 			
 			if(g.me.status == Player_status.INVITED){
 				t.setTextAppearance(this, R.style.game_button_inviatation);
-				b.setBackgroundResource(R.color.kulur_purple_dark);
+				b.setBackgroundResource(R.drawable.circle_button_pending);
 				b.setTextAppearance(this, R.style.game_button_inviatation);
 				b.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -258,7 +261,7 @@ public class Timeline extends MainActivity {
 			}
 			else if(g.me.status == Player_status.OUT){
 				t.setTextAppearance(this, R.style.game_button_inviatation);
-				b.setBackgroundResource(R.color.kulur_purple_dark);
+				b.setBackgroundResource(R.drawable.circle_button_out);
 				b.setTextAppearance(this, R.style.game_button_inviatation);
 				b.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -296,7 +299,7 @@ public class Timeline extends MainActivity {
             		Game g = (Game) Timeline.this.button.getTag();
             		LinearLayout ll = Timeline.this.l.get(g.id);
             		Button b = (Button) ll.findViewById(R.id.game_item);
-            		b.setBackgroundResource(R.color.button);
+            		b.setBackgroundResource(R.drawable.circle_button_pending);
             		b.setTextAppearance(Timeline.this, R.style.game_button);
             		TextView t = (TextView) ll.findViewById(R.id.game_desc);
             		t.setTextAppearance(Timeline.this, R.style.game_button);
@@ -347,7 +350,7 @@ public class Timeline extends MainActivity {
 		Main.current_game = (Game) v.getTag();
 		
 		//TODO use cache
-		//server request, and if it's sucessful, it will start Main Activity
+		//server request, and if it's sucessful, it will start Main Game Activity
 		Game.fetchGame(this);
 		
 	}

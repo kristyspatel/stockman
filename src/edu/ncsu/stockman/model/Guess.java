@@ -22,15 +22,15 @@ public class Guess {
 	}
 	
 	
-	public Guess(JSONObject j) {
+	public Guess(JSONObject j, Player me) {
 		super();
 		try {
 		
+			this.me = me;
 			this.id = j.getInt("id_guess");
-			this.him = Main.current_game.players.get(j.getInt("him_player"));
+			this.him = me.game.players.get(j.getInt("him_player"));
 			if(him == null)
 				Log.d("StockMan",j.getInt("him_player")+" is not found");
-			this.me = Main.current_game.players.get(j.getInt("me_player"));
 			this.correct = j.getInt("correct") == 0 ? false: true;
 			this.letter = j.getString("letter").charAt(0);
 			

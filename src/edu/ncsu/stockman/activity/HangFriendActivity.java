@@ -23,6 +23,7 @@ public class HangFriendActivity extends Activity {
 	boolean[] characters = new boolean[26];
 	private int buttonPerRow = 6;
 	
+	TextView cash;
 	// Timer to update comments if new comment from server
 	Handler timerHandler = new Handler();
 	Runnable timerRunnable = new Runnable() {
@@ -61,6 +62,7 @@ public class HangFriendActivity extends Activity {
 		if(him==null)
 			Log.d("StockMan", getIntent().getExtras().getInt("player_id")+"is null");
 
+		cash = (TextView) findViewById(R.id.cash);
 		TextView t = (TextView) findViewById(R.id.hang_player_word_is);
 		t.setText(him.name + "'s Word is:");
 		
@@ -141,7 +143,10 @@ public class HangFriendActivity extends Activity {
 						return;
 					}
 
-					Main.current_game.me.guess(him, ((String) v.getTag()).charAt(0),v.getContext());
+					boolean correct = Main.current_game.me.guess(him, ((String) v.getTag()).charAt(0),v.getContext());
+					if(!correct){
+						cash.setText("$"+Main.current_game.me.cash);
+					}
 					((Button) v).setTextAppearance(v.getContext(), R.style.hang_letter_button_disabled);
 					v.setEnabled(false);
 				}

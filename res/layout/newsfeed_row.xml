@@ -30,13 +30,18 @@
        		android:layout_height="fill_parent"
        		android:padding="8dp"
        		android:background="@color/kulur_beige">
- 
+ 			<edu.ncsu.stockman.RoundedImageView
+ 			    android:id="@+id/profile_pic"
+	            android:layout_width="48dp"
+	            android:layout_height="48dp"
+ 			    />
             <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
        		android:textSize="17sp"
        		android:textStyle="bold"
+       		android:paddingLeft="48dp"
        		android:maxLines="2"
        		android:ellipsize="end"            
             android:id="@+id/example_itemname"/>
