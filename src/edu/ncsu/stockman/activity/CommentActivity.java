@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.facebook.Session;
@@ -36,6 +37,7 @@ public class CommentActivity extends Activity {
 
 	Notification notification;
 	Button postButton;
+	ScrollView comments_scroller;
 	
 	// Timer to update comments if new comment from server
 	Handler timerHandler = new Handler();
@@ -73,7 +75,7 @@ public class CommentActivity extends Activity {
 		postButton.setVisibility(View.GONE);
 		EditText et = (EditText)findViewById(R.id.comment_box);
 		
-		
+		comments_scroller = (ScrollView) findViewById(R.id.comment_scroller);
 		et.addTextChangedListener(new TextWatcher() {
 			
 			
@@ -229,6 +231,7 @@ public class CommentActivity extends Activity {
 			
 			lv.addView(v);
 		}
+		comments_scroller.fullScroll(ScrollView.FOCUS_DOWN);
 	}
 
 	public void setComments(JSONArray comments)
@@ -300,6 +303,7 @@ public class CommentActivity extends Activity {
 
 		EditText et = (EditText)findViewById(R.id.comment_box);
 		et.setText("");
+		comments_scroller.fullScroll(ScrollView.FOCUS_DOWN);
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

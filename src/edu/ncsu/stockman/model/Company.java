@@ -90,7 +90,7 @@ public class Company {
 		return -1;
 	}
 	public int getTimeStamp(){
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		int h = c.get(Calendar.HOUR_OF_DAY);
 		int m = c.get(Calendar.MINUTE);
 		int s = c.get(Calendar.SECOND);

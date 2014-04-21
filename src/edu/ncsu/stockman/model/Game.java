@@ -18,6 +18,7 @@ import com.facebook.Session;
 import edu.ncsu.stockman.R;
 import edu.ncsu.stockman.activity.MainGameActivity;
 import edu.ncsu.stockman.activity.PickWordActivity;
+import edu.ncsu.stockman.model.Player.Player_status;
 
 public class Game {
 
@@ -47,8 +48,20 @@ public class Game {
 		this.name = name;
 		this.id = id;
 	}
+	public boolean isOver(){
+		int over = 0;
+		for (int i = 0; i < players.size(); i++) {
+			Player p = players.valueAt(i);
+			if(p.status==Player_status.LOST || p.status == Player_status.DECLINED){
+				over++;
+			}
+		}
+		if(over == players.size()-1){
+			return true;
+		}
+		return false;
+	}
 	public void setPlayers(JSONArray players){
-		Log.i("StockMan","setPlayers");
 		for (int i = 0; i < players.length(); i++) {
 			try {
 				JSONObject player = players.getJSONObject(i);
@@ -62,7 +75,7 @@ public class Game {
 			}
 		}
 		if(me==null)
-			Log.d("Model","me in a game is null?!");
+			Log.e("Model","me in a game is null?!");
 		//setting guesses needs all players to be set up.
 		for (int i = 0; i < players.length(); i++) {
 			try {
@@ -96,6 +109,7 @@ public class Game {
 					Toast toast = Toast.makeText(context, "A new game has been created.", Toast.LENGTH_LONG);
 					toast.show();
 					((Activity) context).finish();
+					
 					Main.current_user.new_game = true;
 					JSONObject data;
 					try {
@@ -103,6 +117,9 @@ public class Game {
 						Game g =  new Game(data.getJSONObject("info"));
 						g.setPlayers(data.getJSONArray("players"));
 						Main.current_user.games.put(g.id,g);
+						Main.current_game = g;
+						Intent intent = new Intent(context, PickWordActivity.class);
+						context.startActivity(intent);
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -113,6 +130,7 @@ public class Game {
 		asyncHttpPost.exec(c.getString(R.string.base_url)+"/game/create");
 
 	}
+	@Deprecated
 	public static void fetchGame(Context c){
 		// fetch the game information before switching to the activity.
 		JSONObject data = new JSONObject();
@@ -125,8 +143,8 @@ public class Game {
 			@Override
 			protected void resultReady(MidLayer.Result result) {
 				if(result.info.code == 10){
-					try {
-						JSONObject j = new JSONObject(result.info.text);
+					//try {
+						//JSONObject j = new JSONObject(result.info.text);
 						
 						//Main.current_game.setPlayers(j.getJSONArray("players"));
 						//Main.current_game.me = Main.current_game.players.get(j.getInt("me_id"));
@@ -140,7 +158,7 @@ public class Game {
 							Intent intent = new Intent(context, MainGameActivity.class);
 							context.startActivity(intent);
 						}
-						else if(Main.current_game.me.status == Player.Player_status.OUT){
+						else if(Main.current_game.me.status == Player.Player_status.LOST || Main.current_game.me.status == Player.Player_status.WON){
 							//TODO lang
 							Intent intent = new Intent(context, MainGameActivity.class);
 							context.startActivity(intent);
@@ -148,10 +166,10 @@ public class Game {
 							toast.show();
 						}
 						
-					} catch (JSONException e) {
+					//} catch (JSONException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						//e.printStackTrace();
+					//}
 				}
 			}
 		};

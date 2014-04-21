@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Notification -->
-    <string name="n_guess_out" >%2$s is out. His secret word is: %3$s.</string>
-    <string name="n_guess_correctly">%1$s guessed %2$s\'s word. His word is: %3$s.</string>
-    <string name="n_guess_incorrectly">%1$s guessed %2$s\'s word but incorrectly.</string>
+    <string name="n_guess_won" >%2$s won the game! He revealed last letter of %2$s: %3$s.</string>
+    <string name="n_guess_out" >%1$s is out. His secret word is: %3$s.</string>
+    <string name="n_guess_out_me" >You are out. Your secret word is: %3$s.</string>
+    <string name="n_guess_correctly">%2$s guessed %1$s word. His word is: %3$s.</string>
+    <string name="n_guess_incorrectly">%2$s guessed %1$s word but incorrectly.</string>
     <string name="n_buy">%1$s bought %2$d shares of %3$s.</string>
     <string name="n_sell">%1$s sold %2$d shares of %3$s.</string>
     <string name="n_accept_game">%1$s accepted the %2$s game invitation.</string>
-    <string name="n_decline_game">%1$s decline the %2$s game invitation.</string>
+    <string name="n_decline_game">%1$s declined the %2$s game invitation.</string>
     <string name="n_create_game_for_creator">You created a new game: %1$s.</string>
-    <string name="n_create_game_for_other">%2$s created a new game: %1$s.</string>
+    <string name="n_create_game_for_other">%2$s invited you to a new game: %1$s.</string>
     <string name="n_pick_word">%2$s picked a word for game: %1$s.</string>
     <string name="n_comment">%1$s added a new comment.</string>
     <string name="n_accept_friend">%1$s accepted your friendship request.</string>
-    <string name="n_add_friend">%1$s request to be your friend.</string>
+    <string name="n_add_friend">%1$s requested to be your friend.</string>
+    <string name="n_add_friend_no">You have a new friend request.</string>
     
 </resources>

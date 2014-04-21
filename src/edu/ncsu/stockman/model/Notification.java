@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.util.Log;
+import android.widget.ImageView;
 import edu.ncsu.stockman.DownloadImageTask;
 import edu.ncsu.stockman.R;
 import edu.ncsu.stockman.model.Player.Player_status;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
-import android.widget.ImageView;
 
 public class Notification {
 
@@ -137,12 +136,30 @@ public class Notification {
 				Player him = g.players.get(text.getJSONObject("him").getInt("id_player"));
 				
 				if(text.getBoolean("correct"))
-					if(Player.getStatus(text.getJSONObject("him").getInt("status"))==Player_status.OUT)
-						return c.getString(R.string.n_guess_out,him.name,me.name,him.hideWord(text.getInt("word_revealed")));
+					if(Player.getStatus(text.getJSONObject("him").getInt("status"))==Player_status.LOST)
+						if(Player.getStatus(text.getJSONObject("me").getInt("status"))==Player_status.LOST)
+							return c.getString(R.string.n_guess_won,
+									him.user.id == Main.current_user.id ? "you":him.name,
+								    me.user.id == Main.current_user.id ? "you":me.name,
+									String.valueOf(him.word));
+						else
+							if(him.user.id != Main.current_user.id)
+								return c.getString(R.string.n_guess_out,him.name,me.name,String.valueOf(him.word));
+							else
+								return c.getString(R.string.n_guess_out_me,
+										"",
+									    "",
+										String.valueOf(him.word));
 					else
-						return c.getString(R.string.n_guess_correctly,him.name,me.name,him.hideWord(text.getInt("word_revealed")));
+						return c.getString(R.string.n_guess_correctly,
+								him.user.id == Main.current_user.id ? "your":him.name+"'s",
+							    me.user.id == Main.current_user.id ? "you":me.name,
+								him.hideWord(text.getInt("word_revealed")));
 				else
-					return c.getString(R.string.n_guess_incorrectly,him.name,me.name,him.hideWord(text.getInt("word_revealed")));
+					return c.getString(R.string.n_guess_incorrectly,
+							him.user.id == Main.current_user.id ? "your":him.name+"'s",
+						    me.user.id == Main.current_user.id ? "you":me.name,
+							him.hideWord(text.getInt("word_revealed")));
 			
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -177,7 +194,7 @@ public class Notification {
 				if(type.equals("ACCEPT"))
 					return c.getString(R.string.n_accept_game,p.name,g.name);
 				else if(type.equals("DECLINE"))
-					return c.getString(R.string.n_accept_game,p.name,g.name);
+					return c.getString(R.string.n_decline_game,p.name,g.name);
 				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -239,8 +256,11 @@ public class Notification {
 			
 			try {
 				Friend f = Main.current_user.facebook_friends.get(text.getInt("id_user1"));
+				if(f!=null)
+					return c.getString(R.string.n_add_friend,f.name);
+				else
+					return c.getString(R.string.n_add_friend_no);
 				
-				return c.getString(R.string.n_add_friend,f.name);
 				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

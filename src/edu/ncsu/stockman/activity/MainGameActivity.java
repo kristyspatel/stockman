@@ -75,7 +75,8 @@ public class MainGameActivity extends Activity {
 		
 		setTitle(Main.current_game.name);
 
-		if(Main.current_game.me.status==Player_status.OUT){
+		if(Main.current_game.me.status==Player_status.LOST ||
+				Main.current_game.me.status==Player_status.WON){
 			LinearLayout v = (LinearLayout) findViewById(R.id.action_group);
 			v.setVisibility(LinearLayout.GONE);
 		}
@@ -126,7 +127,7 @@ public class MainGameActivity extends Activity {
 			Player p = sorted.poll();
 			
 			RoundedImageView b = (RoundedImageView) view.findViewById(R.id.player_item);
-			DownloadImageTask.setFacebookImage(b, p.user);
+			//DownloadImageTask.setFacebookImage(b, p.user);
 			TextView t = (TextView) view.findViewById(R.id.player_desc);
 
 			t.setText(p.user.name);
@@ -142,26 +143,32 @@ public class MainGameActivity extends Activity {
 				}
 			});
 			
-			main.addView(view);
-			RoundedImageView crossing = (RoundedImageView) view.findViewById(R.id.forcrossing);
-			//crossing.setVisibility(View.VISIBLE);
-			crossing.setImageResource(R.drawable.crossing_image);
-			if(p.status == Player_status.OUT){
+			
+			if(p.status == Player_status.LOST){
 				DownloadImageTask.setFacebookImage(b, p.user);
-				//crossing.setBackgroundColor(Color.TRANSPARENT);
-				//b.setImageAlpha(50);
-				System.out.println("I am out");
-				//b.setText(i +1 +"");
+				RoundedImageView crossing = (RoundedImageView) view.findViewById(R.id.forcrossing);
+				crossing.setVisibility(View.VISIBLE);
+				crossing.setImageResource(R.drawable.crossing_image);
+			}
+			else if(p.status == Player_status.WON){
+				DownloadImageTask.setFacebookImage(b, p.user);
+				RoundedImageView crossing = (RoundedImageView) view.findViewById(R.id.forcrossing);
+				crossing.setVisibility(View.VISIBLE);
+				crossing.setImageResource(R.drawable.won);
 			}
 			else if(p.status == Player_status.INVITED){
-				b.setImageResource(R.drawable.invited_standing);;
+				b.setImageResource(R.drawable.invited_standing);
 			}
 			else if(p.status == Player_status.WAITING_FOR_WORD){
-				b.setImageResource(R.drawable.invited_standing);;
+				b.setImageResource(R.drawable.invited_standing);
 			}
-			else{
+			else if(p.status == Player_status.ENROLLED){
 				DownloadImageTask.setFacebookImage(b, p.user);
 			}
+			else if(p.status == Player_status.DECLINED){
+				continue;
+			}
+			main.addView(view);
 		}
 	}
 	

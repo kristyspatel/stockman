@@ -53,6 +53,7 @@
 				var values = [];
 				var step = (timestamp - from) / 10;
 
+				var date = new Date();
 				for (var i = from; i <= timestamp; i += step) {
 					var price = 0;
 					for (var j = 0; j < step; j++) {
@@ -60,21 +61,24 @@
 					}
 					values.push(price / step);
 
-					var time = i * 30;
-					labelss.push((Math.floor(time / 60 / 60) % 24) + ":" + (Math.floor(time / 60) % 60));
+
+					var time = (i-from) * 30;
+					var t = new Date(date.getTime()+time*1000);
+					labelss.push(t.getHours() + ":" + t.getMinutes());
 				}
 				values.pop();
 				values.push(x[timestamp]);
 				
 				labelss.pop();
-				var time = timestamp * 30;
-				labelss.push((Math.floor(time / 60 / 60) % 24) + ":" + (Math.floor(time / 60) % 60));
+				var time = (timestamp-from) * 30;
+				var t = new Date(date.getTime()+time*1000);
+				labelss.push(t.getHours() + ":" + t.getMinutes());
 				var data = {
 					labels : labelss,
 					datasets : [{
 						fillColor : "rgba(220,220,220,0.5)",
-						strokeColor : "rgba(220,220,220,1)",
-						pointColor : "rgba(220,220,220,1)",
+						strokeColor : "rgba(0,0,0,1)",
+						pointColor : "rgba(0,0,0,1)",
 						pointStrokeColor : "#fff",
 						data : values
 					}]

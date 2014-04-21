@@ -1,7 +1,10 @@
 package edu.ncsu.stockman;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -109,6 +112,10 @@ public class ChartsInterface {
 	@JavascriptInterface
 	public int getTimeStamp() {
 		return company.getTimeStamp();
+	}
+	@JavascriptInterface
+	public long getDiffTime() {
+		return TimeZone.getDefault().getOffset(new Date().getTime())/1000;
 	}
 
 	@JavascriptInterface

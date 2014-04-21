@@ -33,7 +33,7 @@ We simply embed this for each player in the game
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:scaleType="fitXY"
-            android:visibility="visible" />
+            android:visibility="invisible" />
         
     </RelativeLayout>
 
@@ -42,7 +42,7 @@ We simply embed this for each player in the game
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/kulur_beige" />
 

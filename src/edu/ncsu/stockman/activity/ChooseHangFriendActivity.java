@@ -85,12 +85,15 @@ public class ChooseHangFriendActivity extends Activity {
 				   //get his profile picture
 				   DownloadImageTask.setFacebookImage(img,p.user);
 			   }
-			   else if(p.status == Player_status.OUT){
+			   else if(p.status == Player_status.DECLINED){
+				   continue;
+			   }
+			   else if(p.status == Player_status.LOST){
 				   t.setText(p.name);
 				   img.setEnabled(false);
 				   img.setImageResource(R.drawable.hangman_dead_stage);
 			   }
-			   else{
+			   else if(p.status == Player_status.ENROLLED){
 				   int counter = 0;
 				   for (int j = 0; j < Main.wordLength; j++) {
 					   if(p.word_revealed[j])
@@ -112,11 +115,11 @@ public class ChooseHangFriendActivity extends Activity {
 			   // set the pic
 			   main.addView(v);
 		   }
-		   if (i == 2){
+		   if (i == 1){
 			   main = (LinearLayout)findViewById(R.id.row2);
 			   main.removeAllViews();
 		   }
-		   if (i == 5){
+		   if (i == 3){
 			   main = (LinearLayout)findViewById(R.id.row3);
 			   main.removeAllViews();
 		   }

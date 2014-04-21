@@ -26,6 +26,7 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
 		
 		
 		super.onCreate(savedInstanceState);
+		setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
 		setContentView(R.layout.activity_stock_market);
 		viewPager = (ViewPager) findViewById(R.id.buySellTabPager);
         actionBar = getActionBar();

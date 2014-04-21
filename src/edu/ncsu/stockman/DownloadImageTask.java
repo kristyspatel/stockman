@@ -26,7 +26,6 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     	if(user.picture!=null)
     		bmImage.setImageBitmap(user.picture);
     	else{
-    		Log.i("DownloadFacebookImage", "Profile picture of "+user.name+" is downloading."+user.facebook_id);
     		new DownloadImageTask(bmImage, user).execute("https://graph.facebook.com/"+user.facebook_id+"/picture?type=square");
     	}
     }

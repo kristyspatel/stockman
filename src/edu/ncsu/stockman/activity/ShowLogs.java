@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -115,9 +116,9 @@ public class ShowLogs extends Activity {
 			else if(log.subject.equals("OPEN"))
 				continue;
 			
-			Calendar c = Calendar.getInstance();
-			Timestamp stamp = new Timestamp(log.date);
-			c.setTimeInMillis(stamp.getTime());
+			Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			c.setTimeInMillis((long)log.date*1000);
+			c.setTimeZone(TimeZone.getDefault());
 			
 			TextView t = (TextView) v.findViewById(R.id.log_time);
 			t.setText(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) );
