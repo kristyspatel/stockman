@@ -63,6 +63,8 @@ public class HangFriendActivity extends Activity {
 			Log.d("StockMan", getIntent().getExtras().getInt("player_id")+"is null");
 
 		cash = (TextView) findViewById(R.id.cash);
+		cash.setText("$"+String.format("%.2f",Main.current_game.me.cash));
+		
 		TextView t = (TextView) findViewById(R.id.hang_player_word_is);
 		t.setText(him.name + "'s Word is:");
 		
@@ -145,7 +147,7 @@ public class HangFriendActivity extends Activity {
 
 					boolean correct = Main.current_game.me.guess(him, ((String) v.getTag()).charAt(0),v.getContext());
 					if(!correct){
-						cash.setText("$"+Main.current_game.me.cash);
+						cash.setText("$"+String.format("%.2f",Main.current_game.me.cash));
 					}
 					((Button) v).setTextAppearance(v.getContext(), R.style.hang_letter_button_disabled);
 					v.setEnabled(false);
@@ -180,7 +182,7 @@ public class HangFriendActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.hang_friend, menu);
+		getMenuInflater().inflate(R.menu.nomenu, menu);
 		return true;
 	}
 	public void logout(MenuItem c){

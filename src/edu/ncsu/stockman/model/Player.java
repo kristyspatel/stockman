@@ -1,7 +1,6 @@
 package edu.ncsu.stockman.model;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +28,7 @@ public class Player implements Comparable<Player>{
 	public double cash;
 	public String name;
 	public int die_date ;
-	public enum Player_status {INVITED,WAITING_FOR_WORD,ENROLLED,OUT};
+	public enum Player_status {INVITED,WAITING_FOR_WORD,ENROLLED,LOST,WON,DECLINED};
 	public Player_status status;
 	
 	public ArrayList<Activityy> logs = new ArrayList<Activityy>();
@@ -49,22 +48,14 @@ public class Player implements Comparable<Player>{
 	 * @param word: picked word
 	 * @param g: game he is belonging to
 	 */
-	public Player(int id, User u, float cash, String word, Game g) {
-		user = u;
-		this.id = id;
-		this.cash = cash;
-		game = g;
-		this.stocks = new ArrayList<Stock>();
-		if (word.length()==6)
-			this.word = word.toUpperCase(Locale.ENGLISH).toCharArray();
-	}
 	public Player(JSONObject info,Game g) {
 		try {
 			this.id = info.getInt("id_player");
 			int s = info.getInt("player_status");
 			
 			this.die_date = info.getInt("die_date");
-			this.word = info.getString("word").toCharArray();
+			if(!info.getString("word").equals(""))
+				this.word = info.getString("word").toCharArray();
 			this.cash = info.getDouble("cash");
 			
 			if(Main.current_user != null && Main.current_user.id == info.getInt("id_user")){
@@ -97,7 +88,11 @@ public class Player implements Comparable<Player>{
 		else if (s == 3)
 			return Player_status.ENROLLED;
 		else if (s == 4)
-			return Player_status.OUT;
+			return Player_status.LOST;
+		else if (s == 5)
+			return Player_status.WON;
+		else if (s == 6)
+			return Player_status.DECLINED;
 
 		return Player_status.INVITED;//default :/
 	}
@@ -153,7 +148,12 @@ public class Player implements Comparable<Player>{
 			if (count_revealed == Main.wordLength){
 				//notifyOthers(p.user.name +" is dead. "+user.name+"'s just revealed his last letter. His word is:"+String.copyValueOf(p.word));
 				error.setText(p.user.name +" is dead. You just revealed his last letter. His word is:"+String.copyValueOf(p.word));
-				p.status = Player_status.OUT;
+				p.status = Player_status.LOST;
+				p.game.player_status_change = true;
+				if(p.game.isOver()){
+					Main.current_user.new_game = true;
+					p.status = Player_status.WON;
+				}
 				p.die_date = (int) System.currentTimeMillis() / 1000;
 				error.setVisibility(View.VISIBLE);
 			}
@@ -278,6 +278,7 @@ public class Player implements Comparable<Player>{
 					t.show();
 					//TODO maybe I need the player id to check
 					Main.current_game.me.status = Player_status.ENROLLED;
+					Main.current_game.player_status_change = true;
 					Intent intent = new Intent(context, MainGameActivity.class);
 					context.startActivity(intent);
 				}
@@ -397,7 +398,7 @@ public class Player implements Comparable<Player>{
 				}
 			}
 		};
-		if(new_status == Player_status.OUT)
+		if(new_status == Player_status.DECLINED)
 			asyncHttpPost.exec(c.getString(R.string.base_url)+"user/decline_invitation/"+g.id);
 		else if(new_status == Player_status.WAITING_FOR_WORD)
 			asyncHttpPost.exec(c.getString(R.string.base_url)+"user/accept_invitation/"+g.id);

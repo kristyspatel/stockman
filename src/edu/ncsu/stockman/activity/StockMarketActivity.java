@@ -26,6 +26,7 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
 		
 		
 		super.onCreate(savedInstanceState);
+		setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
 		setContentView(R.layout.activity_stock_market);
 		viewPager = (ViewPager) findViewById(R.id.buySellTabPager);
         actionBar = getActionBar();
@@ -63,7 +64,7 @@ public class StockMarketActivity extends FragmentActivity implements ActionBar.T
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.stock_market, menu);
+		getMenuInflater().inflate(R.menu.nomenu, menu);
 		return true;
 	}
 

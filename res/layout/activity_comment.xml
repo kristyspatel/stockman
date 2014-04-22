@@ -11,36 +11,6 @@
     tools:context=".CommentActivity" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/rounded_box_comment"
-        android:orientation="horizontal" >
-
-        <EditText
-            android:id="@+id/comment_box"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:hint="Comment"
-            android:inputType="textMultiLine"/>
-
-        <Button
-            android:id="@+id/post"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginRight="3dp"
-            android:background="@color/button"
-            android:onClick="postComment"
-            android:text="Post" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -52,13 +22,13 @@
             android:id="@+id/notification"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            
             android:background="@drawable/rounded_box_comment"
             android:paddingBottom="14dp"
             android:paddingLeft="13dp"
             android:paddingRight="13dp"
             android:paddingTop="14dp"
-            android:text="hjghghgh" />
+            android:text="hjghghgh"
+            android:textColor="@color/kulur_darkgrey" />
 
         <View
             android:layout_width="fill_parent"
@@ -79,10 +49,10 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:text="Comments"
             android:textAllCaps="true"
-            android:textAppearance="?android:attr/textAppearanceSmallInverse"
-            android:layout_marginTop="6dp" />
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <View
             android:layout_width="fill_parent"
@@ -96,15 +66,48 @@
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="4dp"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:paddingBottom="70dp" >
 
             <LinearLayout
                 android:id="@+id/comments_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
+
             </LinearLayout>
         </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_box_comment"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/comment_box"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="Comment"
+            android:inputType="textMultiLine"
+            android:textColor="@color/kulur_darkgrey" />
+
+        <Button
+            android:id="@+id/post"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginRight="3dp"
+            android:background="@color/button"
+            android:onClick="postComment"
+            android:text="Post" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:text="Choose Friend To hang"
                 android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
 			<View
 			    android:layout_width="fill_parent"

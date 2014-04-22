@@ -1,5 +1,7 @@
 package edu.ncsu.stockman;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -93,6 +95,7 @@ public class GcmIntentService extends IntentService {
 	        		Log.w(TAG, "The player is not available."+data.getInt("id_player"));
 	        		return;
 	        	}
+	        	p.word = data.getString("word").toCharArray();
 	        	p.status = Player_status.ENROLLED;
 	        	g.player_status_change = true;
 	        	Log.i(TAG, "The player status has been changed");
@@ -125,8 +128,17 @@ public class GcmIntentService extends IntentService {
 	        		Log.w(TAG, "The player is not available."+data.getInt("id_player"));
 	        		return;
 	        	}
-	        	p.status = Player_status.OUT;
+	        	p.status = Player_status.DECLINED;
+
+	        	//check if the creator is the only one playing.
+	        	if(g.isOver())
+		        	for (int i = 0; i < g.players.size(); i++) {
+		        		Player pla = g.players.valueAt(i);
+		        		if(g.id_creator == pla.user.id)
+		        			pla.status = Player_status.DECLINED;;
+					}
 	        	g.player_status_change = true;
+	        	Main.current_user.new_game = true;
 	        	Log.i(TAG, "The player status has been changed");
 	        }
 	        
@@ -193,17 +205,19 @@ public class GcmIntentService extends IntentService {
 	        	}
 	        	if(data.getBoolean("correct")){
 	        		Player p = g.players.get(him.getInt("id_player"));
-	        		if(him.getInt("status")==4){
+	        		if(Player.getStatus(him.getInt("status"))==Player_status.LOST){
 	        			p.die_date = him.getInt("die_date");
-	        			p.status= Player_status.OUT;
+	        			p.status= Player_status.LOST;
 	        			g.player_status_change =true;
+	        			Main.current_user.new_game = true;
 	        		}
 	        		
 	        		Player pp = g.players.get(me.getInt("id_player"));
-	        		if(me.getInt("status")==4){
+	        		if(Player.getStatus(me.getInt("status"))==Player_status.WON){
 	        			pp.die_date = me.getInt("die_date");
-	        			pp.status= Player_status.OUT;
+	        			pp.status= Player_status.WON;
 	        			g.player_status_change =true;
+	        			Main.current_user.new_game = true;
 	        		}
 	        		
 	        		p.word_revealed = p.getRevealedWord(data.getInt("word_revealed"));
@@ -221,6 +235,7 @@ public class GcmIntentService extends IntentService {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
+    AtomicInteger uniqueGenereator = new AtomicInteger();
     private void sendNotification(String msg) {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -230,7 +245,7 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-        .setSmallIcon(R.drawable.stockman_icon)
+        .setSmallIcon(R.drawable.stockman_notification_icon)
         .setContentTitle("StockMan")
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))
@@ -238,6 +253,6 @@ public class GcmIntentService extends IntentService {
 
         Log.i(TAG,msg); 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(uniqueGenereator.addAndGet(1), mBuilder.build());
     }
 }

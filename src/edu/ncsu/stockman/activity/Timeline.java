@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Session;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
@@ -40,13 +41,16 @@ public class Timeline extends MainActivity {
 	NewsFeedAdapter adapter;
 	List<NewsFeedRow> itemData;
 
+	TextView noNotification;
 	SparseArray<LinearLayout> l;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+//		setTheme(android.R.style.Theme_Holo);
 		setContentView(R.layout.activity_timeline);
 
+		noNotification = (TextView) findViewById(R.id.noNotifications);
 		swipelistview=(SwipeListView)findViewById(R.id.example_swipe_lv_list);
 		itemData=new ArrayList<NewsFeedRow>();
 		adapter=new NewsFeedAdapter(this,R.layout.newsfeed_row,itemData);
@@ -165,6 +169,13 @@ public class Timeline extends MainActivity {
 					setNotifications();
 					Main.current_user.new_notification = false;
 				}
+				for (int i = 0; i < Main.current_user.games.size(); i++) {
+					if(Main.current_user.games.valueAt(i).player_status_change){
+						setGames();
+						break;
+					}
+						
+				}
 			}
 			timerHandler.postDelayed(this, 1000);
 		}
@@ -182,18 +193,19 @@ public class Timeline extends MainActivity {
 	}
 	
 	public void setNotifications() {
+    	if(Main.current_user.notifications.size()==0){
+    		noNotification.setVisibility(View.VISIBLE);
+        }
+        else{
+        	noNotification.setVisibility(View.GONE);
+        }
+    	
 		itemData.clear();
-		for (int i = 0; i < Main.current_user.notifications.size(); i++) {
+		for (int i = Main.current_user.notifications.size()-1; i >= 0; i--) {
             itemData.add(new NewsFeedRow(Main.current_user.notifications.valueAt(i))); 
         }
         adapter.notifyDataSetChanged();
-        if(Main.current_user.notifications.size()==0){
-        	TextView t = new TextView(this);
-        	t.setText(R.string.noNotification);
-        	t.setTextColor(getResources().getColor(R.color.kulur_white));
-        	LinearLayout l = (LinearLayout) findViewById(R.id.notificationLayout);
-        	l.addView(t);
-        }
+        
         	
 	}
 	public void setName(String s) {
@@ -259,7 +271,11 @@ public class Timeline extends MainActivity {
 					}
 				});
 			}
-			else if(g.me.status == Player_status.OUT){
+			else if(g.me.status == Player_status.DECLINED){
+				continue;
+			}
+			else if(g.me.status == Player_status.WON || 
+					g.me.status == Player_status.LOST){
 				t.setTextAppearance(this, R.style.game_button_inviatation);
 				b.setBackgroundResource(R.drawable.circle_button_out);
 				b.setTextAppearance(this, R.style.game_button_inviatation);
@@ -299,7 +315,7 @@ public class Timeline extends MainActivity {
             		Game g = (Game) Timeline.this.button.getTag();
             		LinearLayout ll = Timeline.this.l.get(g.id);
             		Button b = (Button) ll.findViewById(R.id.game_item);
-            		b.setBackgroundResource(R.drawable.circle_button_pending);
+            		b.setBackgroundResource(R.drawable.circle_button);
             		b.setTextAppearance(Timeline.this, R.style.game_button);
             		TextView t = (TextView) ll.findViewById(R.id.game_desc);
             		t.setTextAppearance(Timeline.this, R.style.game_button);
@@ -310,9 +326,33 @@ public class Timeline extends MainActivity {
             			}
             		});
             		
+            		Main.current_game = g;
+            		
+            		//TODO use cache
+            		//server request, and if it's sucessful, it will start Main Game Activity
+            		//Game.fetchGame(Timeline.this);
+            		
+            		
             		//model 
             		g.me.status = Player_status.WAITING_FOR_WORD;
             		Player.changeStatus(Timeline.this, g, Player_status.WAITING_FOR_WORD);
+            		
+
+            		if(Main.current_game.me.status == Player.Player_status.WAITING_FOR_WORD){
+            			Intent intent = new Intent(Timeline.this, PickWordActivity.class);
+            			startActivity(intent);
+            		}
+            		else if(Main.current_game.me.status == Player.Player_status.ENROLLED){
+            			Intent intent = new Intent(Timeline.this, MainGameActivity.class);
+            			startActivity(intent);
+            		}
+            		else if(Main.current_game.me.status == Player.Player_status.LOST || Main.current_game.me.status == Player.Player_status.WON){
+            			//TODO lang
+            			Intent intent = new Intent(Timeline.this, MainGameActivity.class);
+            			startActivity(intent);
+            			Toast toast = Toast.makeText(context, "This game is now over.", Toast.LENGTH_LONG);
+            			toast.show();
+            		}
             	}
             	else{
             		//UI
@@ -321,8 +361,8 @@ public class Timeline extends MainActivity {
             		ll.setVisibility(View.GONE);
 
             		//model
-            		g.me.status = Player_status.OUT;
-            		Player.changeStatus(Timeline.this, g, Player_status.OUT);
+            		g.me.status = Player_status.DECLINED;
+            		Player.changeStatus(Timeline.this, g, Player_status.DECLINED);
             	}
                 return true;
             }
@@ -351,11 +391,30 @@ public class Timeline extends MainActivity {
 		
 		//TODO use cache
 		//server request, and if it's sucessful, it will start Main Game Activity
-		Game.fetchGame(this);
+		//Game.fetchGame(this);
 		
+		if(Main.current_game.me.status == Player.Player_status.WAITING_FOR_WORD){
+			Intent intent = new Intent(this, PickWordActivity.class);
+			startActivity(intent);
+		}
+		else if(Main.current_game.me.status == Player.Player_status.ENROLLED){
+			Intent intent = new Intent(this, MainGameActivity.class);
+			startActivity(intent);
+		}
+		else if(Main.current_game.me.status == Player.Player_status.LOST || Main.current_game.me.status == Player.Player_status.WON){
+			//TODO lang
+			Intent intent = new Intent(this, MainGameActivity.class);
+			startActivity(intent);
+			Toast toast = Toast.makeText(context, "This game is now over.", Toast.LENGTH_LONG);
+			toast.show();
+		}
 	}
 	public void logout(MenuItem c){
 		SettingsActivity.logout(this);
+	}
+	public void manageFriends(MenuItem c){
+		Intent intent = new Intent(getBaseContext(), ManageFriendsActivity.class);
+		startActivity(intent);
 	}
 
 	public void goToSettings(MenuItem c){

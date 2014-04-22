@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -34,12 +35,12 @@ public class ShowLogs extends Activity {
 		me = Main.current_game.players.get(getIntent().getExtras().getInt("player_id"));
 		
 
-		WebView guesses = (WebView)findViewById(R.id.gusses); 
-		guesses.getSettings().setJavaScriptEnabled(true);
-		guesses.setPadding(0, 0, 0, 0);
-		guesses.addJavascriptInterface(new ChartsInterface(this,Main.current_game), "and_data");
-		//priceFluctuationGraph.loadUrl("file:///android_asset/googlecharts.html");
-		guesses.loadUrl("file:///android_asset/chartsjs_guesses.html");
+//		WebView guesses = (WebView)findViewById(R.id.gusses); 
+//		guesses.getSettings().setJavaScriptEnabled(true);
+//		guesses.setPadding(0, 0, 0, 0);
+//		guesses.addJavascriptInterface(new ChartsInterface(this,Main.current_game), "and_data");
+//		//priceFluctuationGraph.loadUrl("file:///android_asset/googlecharts.html");
+//		guesses.loadUrl("file:///android_asset/chartsjs_guesses.html");
 		
 		//commented just to try charts here
 		Player.getLogs(this, me.id);
@@ -49,7 +50,7 @@ public class ShowLogs extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.show_logs, menu);
+		getMenuInflater().inflate(R.menu.nomenu, menu);
 		return true;
 	}
 	
@@ -115,9 +116,9 @@ public class ShowLogs extends Activity {
 			else if(log.subject.equals("OPEN"))
 				continue;
 			
-			Calendar c = Calendar.getInstance();
-			Timestamp stamp = new Timestamp(log.date);
-			c.setTimeInMillis(stamp.getTime());
+			Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			c.setTimeInMillis((long)log.date*1000);
+			c.setTimeZone(TimeZone.getDefault());
 			
 			TextView t = (TextView) v.findViewById(R.id.log_time);
 			t.setText(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) );

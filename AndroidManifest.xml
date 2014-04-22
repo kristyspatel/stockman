@@ -22,7 +22,7 @@
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.Holo" >
         
         <!-- For Google Cloud Messaging -->
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
@@ -99,8 +99,7 @@
 
         <activity 
         	android:name="edu.ncsu.stockman.activity.ManageFriendsActivity"
-            android:label="@string/title_activity_manage_friends"
-            android:parentActivityName="edu.ncsu.stockman.activity.SettingsActivity" >
+            android:label="@string/title_activity_manage_friends">
         </activity>
         <activity
             android:name="edu.ncsu.stockman.activity.ShowLogs"

@@ -12,7 +12,6 @@ import android.util.SparseArray;
 import com.facebook.Session;
 
 import edu.ncsu.stockman.R;
-import edu.ncsu.stockman.activity.Timeline;
 import edu.ncsu.stockman.model.Player.Player_status;
 
 public class User {
@@ -100,7 +99,7 @@ public class User {
 				Notification g = new Notification(notif);
 				if(g.type.equals("CREATE_GAME"))
 					this.notifications.put(g.id_notification, g);
-				else if(g.game.me.status == Player_status.ENROLLED || g.game.me.status == Player_status.WAITING_FOR_WORD)
+				else if(g.game.me.status != Player_status.DECLINED && g.game.me.status != Player_status.INVITED)
 					this.notifications.put(g.id_notification, g);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -172,7 +171,7 @@ public class User {
 						me.setGames(j.optJSONArray("games"));
 						me.setFriends(j.optJSONArray("friends"));
 						me.setNotifications(j.optJSONArray("notifications"));
-						if(j.optJSONObject("info").getString("google_id").isEmpty() && !bundle.getString("google_id").isEmpty())
+						if(!j.optJSONObject("info").getString("google_id").equals(bundle.getString("google_id").isEmpty()))
 							registerGoogleId(context, bundle.getString("google_id"));
 						//Change the activity components
 						me.new_game = true;

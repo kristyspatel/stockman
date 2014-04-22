@@ -41,6 +41,7 @@ public class BuySharesListAdapter extends ArrayAdapter<Company>{
 		rowView.setTag(companies[position]);
 		radioList.add(cardRadio);
 		//cardRadio.set
+		cardRadio.setClickable(false);
 		rowView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

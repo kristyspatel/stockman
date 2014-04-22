@@ -12,7 +12,8 @@
     
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp" >
         
     <TextView
         android:id="@+id/gamelabel"
@@ -36,14 +37,14 @@
         tools:ignore="HardcodedText" />
     </LinearLayout>
     
-
     <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Members"
-                android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Members"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
 	<View
 			    android:layout_marginBottom="2dp"
 			    android:layout_width="fill_parent"
